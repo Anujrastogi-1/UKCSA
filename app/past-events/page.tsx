@@ -1,7 +1,8 @@
 import { Award, Bell, CheckCircle2, Download, MapPin, Users, type LucideIcon } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import type { ReactNode } from "react";
-import { Footer, Header, PageHero } from "../components";
+import { PageHero } from "../components";
 
 const stats = [
   ["2+", "Major Conferences"],
@@ -93,84 +94,87 @@ const events: EventItem[] = [
 
 export default function PastEventsPage() {
   return (
-    <>
-      <Header />
-      <main>
-        <PageHero title="Past Events" />
-        <section className="stats-band">
-          <div className="container stats-grid">
-            {stats.map(([value, label]) => (
-              <div className="stat-item" key={label}>
-                <h2>{value}</h2>
-                <p>{label}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-        <section className="events-list">
-          <div className="container">
-            {events.map((event) => (
-              <article className="event-row" key={event.title}>
-                <Image src={event.image} alt={event.alt} width={520} height={330} />
-                <div className="event-content">
-                  <span className="event-date">{event.date}</span>
-                  <div className="event-badges">
-                    {event.badges.map((badge) => (
-                      <span key={badge}>{badge}</span>
-                    ))}
-                  </div>
-                  <h2>{event.title}</h2>
-                  <p className="event-place">
-                    <MapPin size={18} />
-                    {event.place}
+    <main>
+      <PageHero title="Past Events" />
+      <section className="stats-band">
+        <div className="container stats-grid">
+          {stats.map(([value, label]) => (
+            <div className="stat-item" key={label}>
+              <h2>{value}</h2>
+              <p>{label}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+      <section className="events-list">
+        <div className="container">
+          {events.map((event) => (
+            <article className="event-row" key={event.title}>
+              <Image src={event.image} alt={event.alt} width={520} height={330} />
+              <div className="event-content">
+                <span className="event-date">{event.date}</span>
+                <div className="event-badges">
+                  {event.badges.map((badge) => (
+                    <span key={badge}>{badge}</span>
+                  ))}
+                </div>
+                <h2>{event.title}</h2>
+                <p className="event-place">
+                  <MapPin size={18} />
+                  {event.place}
+                </p>
+                <p>{event.intro}</p>
+                <strong>{event.highlightsTitle}</strong>
+                <ul className="check-list">
+                  {event.highlights.map((highlight) => (
+                    <li key={highlight}>
+                      <CheckCircle2 size={18} />
+                      <span>{highlight}</span>
+                    </li>
+                  ))}
+                </ul>
+                {event.about ? (
+                  <p className="event-about">
+                    <strong>About the Organizer: </strong>
+                    {event.about}
                   </p>
-                  <p>{event.intro}</p>
-                  <strong>{event.highlightsTitle}</strong>
-                  <ul className="check-list">
-                    {event.highlights.map((highlight) => (
-                      <li key={highlight}>
-                        <CheckCircle2 size={18} />
-                        <span>{highlight}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  {event.about ? (
-                    <p className="event-about">
-                      <strong>About the Organizer: </strong>
-                      {event.about}
-                    </p>
-                  ) : null}
-                  <div className="event-actions">
-                    {event.actions.map(([label, href, Icon]) => (
+                ) : null}
+                <div className="event-actions">
+                  {event.actions.map(([label, href, Icon]) =>
+                    href.startsWith("/") ? (
+                      <Link href={href} key={label}>
+                        <Icon size={18} />
+                        {label}
+                      </Link>
+                    ) : (
                       <a href={href} key={label}>
                         <Icon size={18} />
                         {label}
                       </a>
-                    ))}
-                  </div>
+                    )
+                  )}
                 </div>
-              </article>
-            ))}
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+      <section className="event-cta">
+        <div className="container">
+          <h2>Don't Miss Our Next Event!</h2>
+          <p>Join 500+ cybersecurity professionals at our upcoming cloud security events in Uttarakhand.</p>
+          <div className="event-actions centered">
+            <a href="https://www.linkedin.com/groups/8409109/">
+              <Users size={18} />
+              Follow on LinkedIn
+            </a>
+            <Link href="/contact">
+              <Bell size={18} />
+              Get Notified
+            </Link>
           </div>
-        </section>
-        <section className="event-cta">
-          <div className="container">
-            <h2>Don't Miss Our Next Event!</h2>
-            <p>Join 500+ cybersecurity professionals at our upcoming cloud security events in Uttarakhand.</p>
-            <div className="event-actions centered">
-              <a href="https://www.linkedin.com/groups/8409109/">
-                <Users size={18} />
-                Follow on LinkedIn
-              </a>
-              <a href="/contact">
-                <Bell size={18} />
-                Get Notified
-              </a>
-            </div>
-          </div>
-        </section>
-      </main>
-      <Footer />
-    </>
+        </div>
+      </section>
+    </main>
   );
 }

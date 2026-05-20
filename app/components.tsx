@@ -1,29 +1,40 @@
-import { ChevronDown, Facebook, Linkedin, Menu, Twitter, Youtube } from "lucide-react";
+"use client";
+
+import { Facebook, Linkedin, Menu, Twitter, X, Youtube } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const navItems = [
-  { label: "Home", href: "/" },
-  { label: "About Us", href: "/board-of-directors", dropdown: true },
+  { label: "About Us", href: "/about-us" },
   { label: "Board Members", href: "/board-of-directors" },
-  { label: "Membership", href: "/membership-info" },
-  { label: "Events", href: "/past-events", dropdown: true },
+  { label: "Events", href: "/past-events" },
   { label: "Contact Us", href: "/contact" }
 ];
 
 const footerLinks = [
   ["Home", "/"],
-  ["About Us", "/board-of-directors"],
-  ["Board Members", "/board-of-directors"],
+  ["About Us", "/about-us"],
   ["Membership", "/membership-info"],
   ["Events", "/past-events"],
   ["Contact Us", "/contact"]
 ];
 
 export function Header() {
+  const pathname = usePathname();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [pathname]);
+
+  const closeMenu = () => setIsMenuOpen(false);
+
   return (
-    <header className="site-header">
+    <header className={`site-header${isMenuOpen ? " is-menu-open" : ""}`}>
       <div className="container nav-row">
-        <a className="brand" href="/" aria-label="Cloud Security Alliance Uttarakhand Chapter Logo - CSA Dehradun">
+        <Link className="brand" href="/" aria-label="Cloud Security Alliance Uttarakhand Chapter Logo - CSA Dehradun" onClick={closeMenu}>
           <Image
             src="/assets/img/logo.png"
             alt="Cloud Security Alliance Uttarakhand Chapter Logo - CSA Dehradun"
@@ -31,19 +42,40 @@ export function Header() {
             height={75}
             priority
           />
-        </a>
+        </Link>
         <nav className="main-nav" aria-label="Main navigation">
           {navItems.map((item) => (
-            <a href={item.href} key={item.label}>
+            <Link href={item.href} key={item.label} onClick={closeMenu}>
               <span>{item.label}</span>
-              {item.dropdown ? <ChevronDown size={14} strokeWidth={1.8} /> : null}
-            </a>
+            </Link>
           ))}
         </nav>
-        <button className="menu-button" aria-label="Open navigation">
-          <Menu size={26} />
+        <Link className="nav-cta" href="/membership-info" onClick={closeMenu}>
+          Join Now
+        </Link>
+        <button
+          className="menu-button"
+          type="button"
+          aria-label={isMenuOpen ? "Close navigation" : "Open navigation"}
+          aria-controls="mobile-navigation"
+          aria-expanded={isMenuOpen}
+          onClick={() => setIsMenuOpen((open) => !open)}
+        >
+          {isMenuOpen ? <X size={26} /> : <Menu size={26} />}
         </button>
       </div>
+      <nav id="mobile-navigation" className="mobile-nav" aria-label="Mobile navigation">
+        <div className="container mobile-nav-inner">
+          {navItems.map((item) => (
+            <Link href={item.href} key={item.label} onClick={closeMenu}>
+              {item.label}
+            </Link>
+          ))}
+          <Link className="mobile-nav-cta" href="/membership-info" onClick={closeMenu}>
+            Join Now
+          </Link>
+        </div>
+      </nav>
     </header>
   );
 }
@@ -63,11 +95,17 @@ export function Footer() {
     <footer className="site-footer">
       <div className="container footer-inner">
         <nav className="footer-links" aria-label="Footer navigation">
-          {footerLinks.map(([label, href]) => (
-            <a key={label} href={href}>
-              {label}
-            </a>
-          ))}
+          {footerLinks.map(([label, href]) =>
+            href.startsWith("/") ? (
+              <Link key={label} href={href}>
+                {label}
+              </Link>
+            ) : (
+              <a key={label} href={href}>
+                {label}
+              </a>
+            )
+          )}
         </nav>
         <div className="social-links" aria-label="Social links">
           <a href="https://www.facebook.com/CSA.Dehradun" aria-label="Facebook">
@@ -83,7 +121,7 @@ export function Footer() {
             <Youtube size={34} fill="currentColor" />
           </a>
         </div>
-        <p>Copyright © 2025 CSA Uttarakhand Chapter, All Rights Reserved</p>
+        <p>Copyright &copy; 2025 CSA Uttarakhand Chapter, All Rights Reserved</p>
       </div>
     </footer>
   );
