@@ -1,14 +1,23 @@
+"use client";
+
 import {
+  BrainCircuit,
+  Building2,
+  CalendarDays,
   ChevronRight,
+  GraduationCap,
+  Handshake,
+  Lightbulb,
+  Network,
   ShieldCheck,
-  Users,
-  BookOpen,
+  Sparkles,
   TrendingUp,
-  Lock,
-  MessageCircle
+  Users,
+  BookOpen
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 
 const stats = [
   { value: "250+", label: "Active Members" },
@@ -17,22 +26,82 @@ const stats = [
   { value: "100%", label: "Knowledge Share" }
 ];
 
-const benefits = [
+const focusAreas = [
+  { title: "Cloud Security & Governance", icon: ShieldCheck },
+  { title: "AI Security & Responsible AI", icon: BrainCircuit },
+  { title: "Cybersecurity Awareness & Education", icon: GraduationCap },
+  { title: "Research & Innovation", icon: Lightbulb },
+  { title: "Industry-Academia Collaboration", icon: Handshake },
+  { title: "Professional Networking & Community Building", icon: Network },
+  { title: "Security Training, Certifications & Events", icon: CalendarDays }
+];
+
+const benefitCards = [
   {
-    icon: ShieldCheck,
-    title: "Global Networking",
-    description: "Connect with world-class security professionals and CISOs across the global CSA network."
+    title: "Global Community Access",
+    description:
+      "Become part of the globally recognized Cloud Security Alliance network and connect with cybersecurity professionals, researchers, and industry leaders around the world.",
+    icon: Users
   },
   {
-    icon: BookOpen,
-    title: "Expert Training",
-    description: "Access exclusive workshops, certifications, and research papers on emerging cloud threats."
+    title: "Learning & Skill Development",
+    description:
+      "Access cybersecurity workshops, webinars, expert-led training, cloud security insights, AI security discussions, and hands-on learning opportunities.",
+    icon: GraduationCap
   },
   {
-    icon: TrendingUp,
-    title: "Lead Trends",
-    description: "Participate in working groups and help define the future of secure cloud computing."
+    title: "Networking Opportunities",
+    description:
+      "Build meaningful connections with cybersecurity professionals, industry experts, university faculty, researchers, students, and tech communities.",
+    icon: Network
+  },
+  {
+    title: "Access to Industry Knowledge",
+    description:
+      "Stay updated with cybersecurity trends, cloud security best practices, threat intelligence, risk management, security frameworks, and compliance updates.",
+    icon: ShieldCheck
+  },
+  {
+    title: "Events & Conferences",
+    description:
+      "Participate in cybersecurity conferences, hackathons, CTF competitions, meetups, panel sessions, awareness campaigns, and technical events.",
+    icon: CalendarDays
+  },
+  {
+    title: "Research & Collaboration",
+    description:
+      "Collaborate on security research initiatives, whitepapers, case studies, academic-industry projects, innovation, and technology discussions.",
+    icon: Lightbulb
+  },
+  {
+    title: "Career Growth & Visibility",
+    description:
+      "Enhance your profile through leadership opportunities, speaking engagements, volunteer roles, industry exposure, internships, and career networking.",
+    icon: Sparkles
+  },
+  {
+    title: "Student-Focused Opportunities",
+    description:
+      "Students can access mentorship, career guidance, certification awareness, real-world cybersecurity exposure, and technical leadership opportunities.",
+    icon: GraduationCap
+  },
+  {
+    title: "Secure Digital Future",
+    description:
+      "Be part of initiatives that promote cybersecurity awareness, secure cloud adoption, and digital resilience across Uttarakhand and beyond.",
+    icon: Building2
   }
+];
+
+const joinTypes = [
+  "Students",
+  "Cybersecurity Professionals",
+  "Researchers",
+  "Faculty Members",
+  "Cloud Architects",
+  "IT Professionals",
+  "Technology Enthusiasts",
+  "Board Members"
 ];
 
 const leadershipTeam = [
@@ -60,7 +129,7 @@ function Hero() {
             <strong> Uttarakhand Chapter</strong>
           </h1>
           <p>
-            Join Uttarakhand&apos;s premier hub for cybersecurity excellence. We bridge the gap between global cloud standards and local expertise.
+            Join Uttarakhand&apos;s premier hub for cybersecurity excellence.
           </p>
           <div className="hero-actions">
             <Link className="btn btn-primary" href="/membership-info">
@@ -91,26 +160,161 @@ function StatsBand() {
   );
 }
 
-function BenefitsSection() {
+function ChapterProgramSection() {
   return (
-    <section className="join-benefits" id="membership">
+    <section className="chapter-program">
+      <div className="container">
+        <div className="program-hero">
+          <div>
+            <p className="eyebrow">CSA Uttarakhand Chapter</p>
+            <h2>Build skills, connections, and visibility in a future-ready security community.</h2>
+            <p>
+              Joining the CSA Uttarakhand Chapter opens the door to a dynamic cybersecurity community where learning,
+              networking, and innovation come together for students, professionals, researchers, and organizations.
+            </p>
+            <div className="hero-actions">
+              <a className="btn btn-primary" href="https://www.linkedin.com/groups/8409109/">
+                Join LinkedIn Group
+              </a>
+              <Link className="btn btn-secondary dark-btn" href="/contact">
+                Contact Us
+              </Link>
+            </div>
+          </div>
+          <div className="program-metrics" aria-label="Chapter impact">
+            {stats.slice(0, 3).map((item) => (
+              <article key={item.label}>
+                <strong>{item.value}</strong>
+                <span>{item.label}</span>
+              </article>
+            ))}
+          </div>
+        </div>
+
+        <div className="mission-grid">
+          <article className="mission-card mission-card--dark">
+            <span>Vision</span>
+            <h3>Uttarakhand as a cybersecurity growth hub.</h3>
+            <p>
+              To establish Uttarakhand as a growing hub for cybersecurity awareness, innovation, research, and talent
+              development by building an inclusive and future-ready security community.
+            </p>
+          </article>
+          <article className="mission-card">
+            <span>Mission</span>
+            <h3>Practical skills for secure digital resilience.</h3>
+            <p>
+              To empower individuals and organizations with cybersecurity knowledge, practical skills, and collaborative
+              opportunities that promote secure cloud adoption and digital resilience.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FocusSection() {
+  return (
+    <section className="focus-section">
+      <div className="container">
+        <div className="section-intro section-intro--center">
+          <p className="eyebrow">Our focus areas</p>
+          <h2>Where the chapter creates momentum.</h2>
+        </div>
+        <div className="focus-grid">
+          {focusAreas.map((item) => (
+            <article className="focus-card" key={item.title}>
+              <item.icon />
+              <h3>{item.title}</h3>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function BenefitCardsSection() {
+  return (
+    <section className="benefit-section">
       <div className="container">
         <div className="section-intro">
-          <p className="eyebrow">Why join our chapter?</p>
-          <h2>Elevate your career and contribute to the evolution of cloud security standards in the region.</h2>
-          <p className="section-copy">
-            We bring together practitioners, researchers, and decision makers to share knowledge, grow influence, and make cloud operations safer for Uttarakhand.
-          </p>
+          <p className="eyebrow">Benefits of joining</p>
+          <h2>Learning, networking, events, research, and career growth in one chapter.</h2>
         </div>
-        <div className="feature-grid">
-          {benefits.map((item) => (
-            <article className="feature-card" key={item.title}>
+        <div className="benefit-card-grid">
+          {benefitCards.map((item) => (
+            <article className="benefit-card" key={item.title}>
               <item.icon />
               <h3>{item.title}</h3>
               <p>{item.description}</p>
             </article>
           ))}
         </div>
+      </div>
+    </section>
+  );
+}
+
+function JoinPathSection() {
+  const [selectedType, setSelectedType] = useState(joinTypes[0]);
+
+  return (
+    <section className="join-path-section">
+      <div className="container join-path-grid">
+        <div>
+          <p className="eyebrow">Who can join?</p>
+          <h2>Anyone passionate about cybersecurity and secure digital transformation is welcome.</h2>
+          <p>
+            Select a member type to see how the chapter can help you get involved. The community is open, practical, and
+            built for people who want to learn and contribute.
+          </p>
+        </div>
+        <div className="join-type-panel">
+          <div className="join-type-list" role="tablist" aria-label="Membership audiences">
+            {joinTypes.map((type) => (
+              <button
+                type="button"
+                role="tab"
+                aria-selected={selectedType === type}
+                className={selectedType === type ? "is-active" : ""}
+                key={type}
+                onClick={() => setSelectedType(type)}
+              >
+                {type}
+              </button>
+            ))}
+          </div>
+          <div className="join-type-detail">
+            <span>Selected path</span>
+            <h3>{selectedType}</h3>
+            <p>
+              Join chapter discussions, attend events, build practical cybersecurity awareness, and connect with people
+              working toward a safer digital ecosystem in Uttarakhand.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function WhyJoinBand() {
+  return (
+    <section className="why-join-band">
+      <div className="container why-join-inner">
+        <div>
+          <p className="eyebrow">Why join?</p>
+          <h2>Stay informed, connected, and future-ready.</h2>
+          <p>
+            Cybersecurity is evolving faster than a browser tab explosion at a hacker conference. The CSA Uttarakhand
+            Chapter helps you become part of a collaborative community working toward a safer digital ecosystem.
+          </p>
+        </div>
+        <a className="btn btn-primary" href="https://www.linkedin.com/groups/8409109/">
+          Join the Community
+        </a>
       </div>
     </section>
   );
@@ -147,9 +351,7 @@ function ResourcesSection() {
         <article className="resource-card resource-card--vault">
           <div className="resource-label">MEMBER-ONLY CONTENT</div>
           <h2>Exclusive Resource Vault</h2>
-          <p>
-            Access chapter-exclusive whitepapers, compliance templates, and full recordings of our monthly webinars.
-          </p>
+          <p>Access chapter-exclusive whitepapers, compliance templates, and full recordings of our monthly webinars.</p>
           <Link className="btn btn-primary" href="/contact">
             Login to Access
           </Link>
@@ -159,9 +361,7 @@ function ResourcesSection() {
             <div className="community-pill">Stay Connected</div>
             <h2>Join Our Community</h2>
           </div>
-          <p>
-            Get real-time updates on local meetups, job opportunities, and breaking news in the cloud security domain.
-          </p>
+          <p>Get real-time updates on local meetups, job opportunities, and breaking news in the cloud security domain.</p>
           <a className="btn btn-secondary" href="https://www.linkedin.com/groups/8409109/">
             Connect on LinkedIn
           </a>
@@ -175,8 +375,12 @@ export default function Home() {
   return (
     <main>
       <Hero />
-      <StatsBand />
-      <BenefitsSection />
+      {/* <StatsBand /> */}
+      <ChapterProgramSection />
+      <FocusSection />
+      <BenefitCardsSection />
+      <JoinPathSection />
+      <WhyJoinBand />
       <LeadershipSection />
       <ResourcesSection />
     </main>

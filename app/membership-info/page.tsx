@@ -30,7 +30,8 @@ export default function MembershipPage() {
             <p className="eyebrow">Join the chapter</p>
             <h2>Become part of a local community shaping safer cloud adoption.</h2>
             <p className="section-copy">
-              CSA Uttarakhand Chapter membership gives you a place to learn, network, collaborate, and contribute to cloud security awareness in the region.
+              CSA Uttarakhand Chapter membership gives you a place to learn, network, collaborate, and contribute to cloud
+              security awareness in the region.
             </p>
           </div>
           <div className="feature-grid">

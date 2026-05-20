@@ -1,15 +1,19 @@
-import { Award, Bell, CheckCircle2, Download, MapPin, Users, type LucideIcon } from "lucide-react";
+"use client";
+
+import {
+  ArrowLeft,
+  ArrowRight,
+  Award,
+  CheckCircle2,
+  Download,
+  MapPin,
+  Users,
+  type LucideIcon
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { PageHero } from "../components";
-
-const stats = [
-  ["2+", "Major Conferences"],
-  ["500+", "Attendees"],
-  ["50+", "Expert Speakers"],
-  ["2016", "Since Year"]
-];
+import { useEffect, useMemo, useState } from "react";
 
 type EventAction = [label: string, href: string, Icon: LucideIcon];
 
@@ -66,7 +70,7 @@ const events: EventItem[] = [
         A <strong>historic milestone</strong> for cybersecurity in Uttarakhand! The{" "}
         <strong>Cloud Security Alliance International Information Security Summit 2016</strong> was organized by{" "}
         <strong>Mr. Satyam Rastogi</strong> in association with the Department of IT at DIT University on{" "}
-        <strong>10th April 2016</strong> — marking the <strong>FIRST</strong> international-level cybersecurity summit ever held in
+        <strong>10th April 2016</strong> - marking the <strong>FIRST</strong> international-level cybersecurity summit ever held in
         Dehradun.
       </>
     ),
@@ -93,32 +97,96 @@ const events: EventItem[] = [
 ];
 
 export default function PastEventsPage() {
+  const [activeEvent, setActiveEvent] = useState(0);
+  const featuredEvents = useMemo(() => {
+    const slots = [-1, 0, 1];
+
+    return slots.map((offset) => {
+      const eventIndex = (activeEvent + offset + events.length) % events.length;
+      return { event: events[eventIndex], eventIndex, position: offset };
+    });
+  }, [activeEvent]);
+
+  useEffect(() => {
+    const interval = window.setInterval(() => {
+      setActiveEvent((current) => (current + 1) % events.length);
+    }, 3000);
+
+    return () => window.clearInterval(interval);
+  }, []);
+
+  const moveEvents = (direction: number) => {
+    setActiveEvent((current) => (current + direction + events.length) % events.length);
+  };
+
   return (
-    <main>
-      <PageHero title="Past Events" />
-      <section className="stats-band">
-        <div className="container stats-grid">
-          {stats.map(([value, label]) => (
-            <div className="stat-item" key={label}>
-              <h2>{value}</h2>
-              <p>{label}</p>
+    <main className="events-page">
+      <section className="events-showcase">
+        <div className="container events-shell">
+          <div className="events-heading-row">
+            <div>
+              <h1>Recent Events</h1>
+              <p>Ongoing awareness and specialized training sessions from the CSA Uttarakhand Chapter.</p>
             </div>
-          ))}
+            <div className="event-slider-controls" aria-label="Recent event controls">
+              <button type="button" aria-label="Previous event" onClick={() => moveEvents(-1)}>
+                <ArrowLeft size={18} />
+              </button>
+              <button type="button" aria-label="Next event" onClick={() => moveEvents(1)}>
+                <ArrowRight size={18} />
+              </button>
+            </div>
+          </div>
+
+          <div className="recent-events-grid">
+            {featuredEvents.map(({ event, eventIndex, position }) => (
+              <article
+                className={`recent-event-card${position === 0 ? " is-active" : ""}`}
+                key={`${event.title}-${position}`}
+              >
+                <div className="recent-event-media">
+                  <Image
+                    src={event.image}
+                    alt={event.alt}
+                    fill
+                    priority={position === 0}
+                    sizes="(max-width: 920px) 100vw, 33vw"
+                  />
+                  <span>{event.date}</span>
+                </div>
+                <div className="recent-event-copy">
+                  <h2>{event.title}</h2>
+                  <p>
+                    <MapPin size={15} />
+                    {event.place}
+                  </p>
+                  <a href={`#event-${eventIndex}`}>View Details <ArrowRight size={14} /></a>
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
-      <section className="events-list">
+
+      <section className="major-conferences">
         <div className="container">
-          {events.map((event) => (
-            <article className="event-row" key={event.title}>
-              <Image src={event.image} alt={event.alt} width={520} height={330} />
-              <div className="event-content">
-                <span className="event-date">{event.date}</span>
+          <div className="major-heading">
+            <h2>Major Conferences</h2>
+          </div>
+
+          {events.map((event, index) => (
+            <article className={`conference-row${index % 2 === 1 ? " conference-row--reverse" : ""}`} id={`event-${index}`} key={event.title}>
+              <div className="conference-media">
+                <Image src={event.image} alt={event.alt} fill sizes="(max-width: 920px) 100vw, 45vw" />
+                <span>{event.date}</span>
+              </div>
+              <div className="conference-content">
                 <div className="event-badges">
                   {event.badges.map((badge) => (
                     <span key={badge}>{badge}</span>
                   ))}
                 </div>
-                <h2>{event.title}</h2>
+                <h3>{event.title}</h3>
                 <p className="event-place">
                   <MapPin size={18} />
                   {event.place}
@@ -159,6 +227,7 @@ export default function PastEventsPage() {
           ))}
         </div>
       </section>
+
       <section className="event-cta">
         <div className="container">
           <h2>Don't Miss Our Next Event!</h2>
@@ -168,10 +237,6 @@ export default function PastEventsPage() {
               <Users size={18} />
               Follow on LinkedIn
             </a>
-            <Link href="/contact">
-              <Bell size={18} />
-              Get Notified
-            </Link>
           </div>
         </div>
       </section>

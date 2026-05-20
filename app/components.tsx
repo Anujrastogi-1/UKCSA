@@ -30,6 +30,7 @@ export function Header() {
   }, [pathname]);
 
   const closeMenu = () => setIsMenuOpen(false);
+  const isActive = (href: string) => pathname === href;
 
   return (
     <header className={`site-header${isMenuOpen ? " is-menu-open" : ""}`}>
@@ -45,7 +46,7 @@ export function Header() {
         </Link>
         <nav className="main-nav" aria-label="Main navigation">
           {navItems.map((item) => (
-            <Link href={item.href} key={item.label} onClick={closeMenu}>
+            <Link className={isActive(item.href) ? "is-active" : ""} href={item.href} key={item.label} onClick={closeMenu}>
               <span>{item.label}</span>
             </Link>
           ))}
