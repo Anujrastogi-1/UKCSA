@@ -1,104 +1,16 @@
-"use client";
-
-import {
-  Award,
-  CheckCircle2,
-  Download,
-  MapPin,
-  Users,
-  type LucideIcon
-} from "lucide-react";
+import { CheckCircle2, Images, MapPin, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import type { ReactNode } from "react";
+import { events } from "./events-data";
 
-type EventAction = [label: string, href: string, Icon: LucideIcon];
-
-type EventItem = {
-  image: string;
-  alt: string;
-  date: string;
-  title: string;
-  place: string;
-  intro: ReactNode;
-  badges: string[];
-  highlightsTitle: string;
-  highlights: string[];
-  about?: string;
-  actions: EventAction[];
-};
-
-const events: EventItem[] = [
-  {
-    image: "/assets/img/events/2017-CSA-28.png",
-    alt: "Conference on Cloud Computing and Cyber Security CSA 2017 - Amrapali Group Dehradun",
-    date: "Sept 16, 2017",
-    title: "Conference on Cloud Computing & Cyber Security (CSA 2017)",
-    place: "Amrapali Group of Institutes, Haldwani, Uttarakhand",
-    intro: (
-      <>
-        FCSA, Amrapali Group of Institutes organized a landmark one-day conference on <strong>&ldquo;Cloud Security&rdquo;</strong> in
-        collaboration with <strong>Cloud Security Alliance (CSA)</strong> and <strong>Open Web Application Security Project (OWASP)</strong>{" "}
-        on 16th September, 2017. The conference featured expert sessions on cloud computing security, penetration testing,
-        and cybersecurity awareness for BCA, MCA and B.Tech (CS) students.
-      </>
-    ),
-    badges: ["Completed", "500+ Attendees"],
-    highlightsTitle: "Key Highlights:",
-    highlights: [
-      "Cloud Security Best Practices Workshop",
-      "OWASP Top 10 Vulnerabilities Session",
-      "Live Hacking Demonstrations",
-      "Networking with Industry Experts"
-    ],
-    actions: [
-      ["Download Report", "https://uk.cloudsecurityalliance.in/assets/img/events/2016%20CSA.pdf", Download],
-      ["Join Community", "https://www.linkedin.com/groups/8409109/", Users]
-    ]
-  },
-  {
-    image: "/assets/img/events/events-dit.webp",
-    alt: "Cloud Security Alliance International Information Security Summit 2016 - Satyam Rastogi DIT University Dehradun",
-    date: "April 10, 2016",
-    title: "Cloud Security Alliance International Information Security Summit 2016",
-    place: "DIT University, Dehradun, Uttarakhand, India",
-    intro: (
-      <>
-        A <strong>historic milestone</strong> for cybersecurity in Uttarakhand! The{" "}
-        <strong>Cloud Security Alliance International Information Security Summit 2016</strong> was organized by{" "}
-        <strong>Mr. Satyam Rastogi</strong> in association with the Department of IT at DIT University on{" "}
-        <strong>10th April 2016</strong> — marking the <strong>FIRST</strong> international-level cybersecurity summit ever held in
-        Dehradun.
-      </>
-    ),
-    badges: ["Flagship Event", "Historic Event", "First in Dehradun", "Organized by Satyam Rastogi"],
-    highlightsTitle: "Summit Highlights:",
-    highlights: [
-      "First International Security Summit in Dehradun",
-      "Keynote by Industry Leaders & CSA Experts",
-      "Cloud Security Trends & Threat Landscape 2016",
-      "Hands-on Workshops on Ethical Hacking",
-      "Career Guidance in Cybersecurity"
-    ],
-    about:
-      "Satyam Rastogi pioneered cloud security awareness in Uttarakhand by bringing this landmark event to DIT University, establishing the foundation for CSA Uttarakhand Chapter.",
-    actions: [
-      [
-        "Official Coverage",
-        "https://www.dituniversity.edu.in/workshop-conference-seminars/cloud-security-alliance-international-information-security-summit-2016-was-organized-by-the-department-of-it-",
-        Award
-      ],
-      ["Meet Satyam Rastogi", "/board-of-directors", Users]
-    ]
-  }
-];
-
-// Duplicate cards so the infinite loop is seamless
+// 4× duplication for seamless infinite loop
 const scrollerItems = [...events, ...events, ...events, ...events];
 
 export default function PastEventsPage() {
   return (
     <main className="events-page">
+
+      {/* ── Showcase / scroller ───────────────────────── */}
       <section className="events-showcase">
         <div className="container events-shell">
           <div className="events-heading-row">
@@ -106,26 +18,19 @@ export default function PastEventsPage() {
               <h1>Events</h1>
               <p>Ongoing awareness and specialized training sessions from the CSA Uttarakhand Chapter.</p>
             </div>
-            
           </div>
 
-          {/* Infinite horizontal auto-scroll */}
           <div className="events-scroller-wrap" aria-label="Event image gallery">
             <div className="events-scroller-track">
               {scrollerItems.map((event, i) => (
-                <a
+                <Link
                   className="scroll-event-card"
-                  href={`#event-${i % events.length}`}
+                  href={`/past-events/${event.slug}`}
                   key={`scroll-${i}`}
-                  aria-label={event.title}
+                  aria-label={`View ${event.gallery.length} photos — ${event.title}`}
                 >
                   <div className="scroll-event-media">
-                    <Image
-                      src={event.image}
-                      alt={event.alt}
-                      fill
-                      sizes="300px"
-                    />
+                    <Image src={event.image} alt={event.alt} fill sizes="300px" />
                     <span className="scroll-event-badge">{event.date}</span>
                   </div>
                   <div className="scroll-event-copy">
@@ -135,13 +40,18 @@ export default function PastEventsPage() {
                       {event.place}
                     </p>
                   </div>
-                </a>
+                  <div className="scroll-card-gallery-hint" aria-hidden="true">
+                    <Images size={13} />
+                    {event.gallery.length} photos
+                  </div>
+                </Link>
               ))}
             </div>
           </div>
         </div>
       </section>
 
+      {/* ── Conference detail rows ────────────────────── */}
       <section className="major-conferences">
         <div className="container">
           <div className="major-heading">
@@ -152,18 +62,18 @@ export default function PastEventsPage() {
             <article
               className={`conference-row${index % 2 === 1 ? " conference-row--reverse" : ""}`}
               id={`event-${index}`}
-              key={event.title}
+              key={event.slug}
             >
               <div className="conference-media">
-                <Image src={event.image} alt={event.alt} fill sizes="(max-width: 920px) 100vw, 45vw" />
+                <Image
+                  src={event.image}
+                  alt={event.alt}
+                  fill
+                  sizes="(max-width: 920px) 100vw, 45vw"
+                />
                 <span>{event.date}</span>
               </div>
               <div className="conference-content">
-                <div className="event-badges">
-                  {event.badges.map((badge) => (
-                    <span key={badge}>{badge}</span>
-                  ))}
-                </div>
                 <h3>{event.title}</h3>
                 <p className="event-place">
                   <MapPin size={16} />
@@ -179,13 +89,20 @@ export default function PastEventsPage() {
                     </li>
                   ))}
                 </ul>
-                {event.about ? (
+                {event.about && (
                   <p className="event-about">
                     <strong>About the Organizer: </strong>
                     {event.about}
                   </p>
-                ) : null}
+                )}
                 <div className="event-actions">
+                  <Link
+                    href={`/past-events/${event.slug}`}
+                    className="gallery-open-btn"
+                  >
+                    <Images size={15} />
+                    View {event.gallery.length} Photos
+                  </Link>
                   {event.actions.map(([label, href, Icon]) =>
                     href.startsWith("/") ? (
                       <Link href={href} key={label}>
@@ -193,7 +110,7 @@ export default function PastEventsPage() {
                         {label}
                       </Link>
                     ) : (
-                      <a href={href} key={label}>
+                      <a href={href} key={label} target="_blank" rel="noopener noreferrer">
                         <Icon size={16} />
                         {label}
                       </a>
@@ -206,6 +123,7 @@ export default function PastEventsPage() {
         </div>
       </section>
 
+      {/* ── CTA ───────────────────────────────────────── */}
       <section className="event-cta">
         <div className="container">
           <h2>Don&apos;t Miss Our Next Event!</h2>
@@ -219,6 +137,5 @@ export default function PastEventsPage() {
         </div>
       </section>
     </main>
-    // adh
   );
 }

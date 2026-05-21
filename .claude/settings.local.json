@@ -1,7 +1,10 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npx next *)"
+      "Bash(npx next *)",
+      "Bash(dir C:\\\\Users\\\\Win11\\\\Desktop\\\\UKCSA\\\\public\\\\assets\\\\img *)",
+      "Bash(Get-ChildItem \"C:\\\\Users\\\\Win11\\\\Desktop\\\\UKCSA\\\\public\\\\assets\\\\img\\\\events\")",
+      "Bash(Select-Object Name, Length)"
     ]
   }
 }
