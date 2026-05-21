@@ -14,9 +14,10 @@ import {
   TrendingUp,
   Users,
   BookOpen,
-  Linkedin,
   type LucideIcon
 } from "lucide-react";
+import { BoardMemberGrid } from "./BoardMemberGrid";
+import { boardMembers } from "./board-members-data";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -174,51 +175,6 @@ const joinTypes = [
   }
 ];
 
-const leadershipTeam = [
-  {
-    name: "Satyam Rastogi",
-    role: "Chapter Leader",
-    image: "/assets/img/board-of-directors/SatyamRastogi.jpeg",
-    linkedin: "https://www.linkedin.com/in/hackersatyamrastogi/",
-    description: "Leads chapter strategy, cybersecurity awareness, and regional community-building initiatives."
-  },
-  {
-    name: "Devjeet Singh",
-    role: "Board Member",
-    image: "/assets/img/board-of-directors/Devjeet.jpg",
-    linkedin: "https://www.linkedin.com/in/devjeethacker/",
-    description: "Supports security programs, practitioner outreach, and technical community engagement."
-  },
-  {
-    name: "Avita Katal",
-    role: "Board Member",
-    image: "/assets/img/board-of-directors/female_dummy.png",
-    linkedin: "https://www.linkedin.com/in/avita-katal/",
-    description: "Contributes to awareness, academic collaboration, and inclusive cybersecurity participation."
-  },
-  {
-    name: "Naveen Pal",
-    role: "Board Member",
-    image: "/assets/img/board-of-directors/naveen_pal.png",
-    linkedin: "https://www.linkedin.com/in/haxornaveenpal",
-    description: "Guides community programs, security learning, and professional networking initiatives."
-  },
-  {
-    name: "Kush Kaushik",
-    role: "Board Member",
-    image: "/assets/img/board-of-directors/kush_kaushik.jpg",
-    linkedin: "https://in.linkedin.com/in/kushkaushik",
-    description: "Supports cloud security knowledge-sharing, events, and industry collaboration."
-  },
-  {
-    name: "Ankit Giri",
-    role: "Board Member",
-    image: "/assets/img/board-of-directors/Ankit_Giri.png",
-    linkedin: "https://www.linkedin.com/in/ankitgiri/",
-    description: "Helps drive chapter visibility, technology discussions, and member engagement."
-  }
-];
-
 function Hero() {
   return (
     <section className="hero" aria-label="Cloud Security Alliance Uttarakhand Chapter Hero">
@@ -360,8 +316,10 @@ function BenefitCardsSection() {
         <div className="benefit-card-grid">
           {benefitCards.map((item) => (
             <article className="benefit-card" key={item.title}>
-              <item.icon />
-              <h3>{item.title}</h3>
+              <div className="benefit-card-head">
+                <item.icon />
+                <h3>{item.title}</h3>
+              </div>
               <p>{item.description}</p>
               {item.points?.length ? (
                 <ul>
@@ -423,35 +381,19 @@ function WhyJoinBand() {
   );
 }
 
-function BoardMembersSection() {
-  return (
-    <section className="leadership" id="chapters">
-      <div className="container">
-        <div className="section-intro section-intro--center">
-          <p className="eyebrow">Board Members</p>
-          <h2>Guided by industry veterans committed to fostering a secure digital ecosystem in Uttarakhand.</h2>
-        </div>
-        <div className="leadership-grid">
-          {leadershipTeam.map((member) => (
-            <article className="leader-card" key={member.name}>
-              <div className="leader-media">
-                <Image src={member.image} alt={member.name} fill sizes="(max-width: 920px) 100vw, 33vw" />
-              </div>
-              <div className="leader-copy">
-                <h4>{member.name}</h4>
-                <span>{member.role}</span>
-                <p>{member.description}</p>
-                <a href={member.linkedin} aria-label={`${member.name} LinkedIn profile`}>
-                  <Linkedin size={18} />
-                </a>
-              </div>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
+// function BoardMembersSection() {
+//   return (
+//     <section className="leadership" id="chapters">
+//       <div className="container">
+//         <div className="section-intro section-intro--center">
+//           <p className="eyebrow">Board Members</p>
+//           <h2>Guided by industry veterans committed to fostering a secure digital ecosystem in Uttarakhand.</h2>
+//         </div>
+//         <BoardMemberGrid members={boardMembers} />
+//       </div>
+//     </section>
+//   );
+// }
 
 function ResourcesSection() {
   return (
@@ -490,7 +432,7 @@ export default function Home() {
       <BenefitCardsSection />
       <JoinPathSection />
       <WhyJoinBand />
-      <BoardMembersSection />
+      {/* <BoardMembersSection /> */}
       <ResourcesSection />
     </main>
   );
