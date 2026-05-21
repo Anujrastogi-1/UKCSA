@@ -1,6 +1,6 @@
 "use client";
 
-import { Facebook, Linkedin, Mail, MapPin, Menu, Send, ShieldCheck, Twitter, X, Youtube } from "lucide-react";
+import { Facebook, Linkedin, Mail, MapPin, Menu, ShieldCheck, Twitter, X, Youtube } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -117,10 +117,10 @@ export function Footer() {
           <p>
             Advancing cloud security awareness, research, and community collaboration across Uttarakhand.
           </p>
-          <div className="footer-cert">
-            <ShieldCheck size={18} />
-            <span>Cloud security community chapter</span>
-          </div>
+          <p className="footer-cert">
+            <ShieldCheck size={14} />
+            Cloud Security Community Chapter
+          </p>
         </div>
 
         <div className="footer-column">
@@ -161,10 +161,6 @@ export function Footer() {
         <div className="footer-column footer-community">
           <h2>Join the Community</h2>
           <p>Get event updates, security discussions, and chapter opportunities through our professional network.</p>
-          <a className="footer-cta" href="https://www.linkedin.com/groups/8409109/">
-            <Send size={17} />
-            Connect on LinkedIn
-          </a>
           <div className="social-links" aria-label="Social links">
             {socialLinks.map((item) => (
               <a href={item.href} aria-label={item.label} key={item.label}>
@@ -175,7 +171,7 @@ export function Footer() {
         </div>
       </div>
       <div className="container footer-bottom">
-        <p>Copyright &copy; 2025 CSA Uttarakhand Chapter. All Rights Reserved.</p>
+        <p>Copyright &copy; 2026 CSA Uttarakhand Chapter. All Rights Reserved.</p>
       </div>
     </footer>
   );
