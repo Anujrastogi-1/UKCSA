@@ -1,6 +1,6 @@
 "use client";
 
-import { Facebook, Linkedin, Menu, Twitter, X, Youtube } from "lucide-react";
+import { Facebook, Linkedin, Mail, MapPin, Menu, Send, ShieldCheck, Twitter, X, Youtube } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -16,9 +16,17 @@ const navItems = [
 const footerLinks = [
   ["Home", "/"],
   ["About Us", "/about-us"],
+  ["Board Members", "/board-of-directors"],
   ["Membership", "/membership-info"],
   ["Events", "/past-events"],
   ["Contact Us", "/contact"]
+];
+
+const socialLinks = [
+  { label: "Facebook", href: "https://www.facebook.com/CSA.Dehradun", icon: Facebook },
+  { label: "Twitter", href: "#", icon: Twitter },
+  { label: "LinkedIn", href: "https://www.linkedin.com/groups/8409109/", icon: Linkedin },
+  { label: "YouTube", href: "#", icon: Youtube }
 ];
 
 export function Header() {
@@ -94,35 +102,80 @@ export function PageHero({ title }: { title: string }) {
 export function Footer() {
   return (
     <footer className="site-footer">
-      <div className="container footer-inner">
-        <nav className="footer-links" aria-label="Footer navigation">
-          {footerLinks.map(([label, href]) =>
-            href.startsWith("/") ? (
-              <Link key={label} href={href}>
-                {label}
-              </Link>
-            ) : (
-              <a key={label} href={href}>
-                {label}
-              </a>
-            )
-          )}
-        </nav>
-        <div className="social-links" aria-label="Social links">
-          <a href="https://www.facebook.com/CSA.Dehradun" aria-label="Facebook">
-            <Facebook size={32} fill="currentColor" />
-          </a>
-          <a href="#" aria-label="Twitter">
-            <Twitter size={32} fill="currentColor" />
-          </a>
-          <a href="https://www.linkedin.com/groups/8409109/" aria-label="LinkedIn">
-            <Linkedin size={32} fill="currentColor" />
-          </a>
-          <a href="#" aria-label="YouTube">
-            <Youtube size={34} fill="currentColor" />
-          </a>
+      <div className="footer-glow footer-glow--left" aria-hidden="true" />
+      <div className="footer-glow footer-glow--right" aria-hidden="true" />
+      <div className="container footer-shell">
+        <div className="footer-brand-panel">
+          <Link className="footer-brand" href="/" aria-label="CSA Uttarakhand Chapter home">
+            <Image
+              src="/assets/img/logo.png"
+              alt="Cloud Security Alliance Uttarakhand Chapter Logo"
+              width={207}
+              height={75}
+            />
+          </Link>
+          <p>
+            Advancing cloud security awareness, research, and community collaboration across Uttarakhand.
+          </p>
+          <div className="footer-cert">
+            <ShieldCheck size={18} />
+            <span>Cloud security community chapter</span>
+          </div>
         </div>
-        <p>Copyright &copy; 2025 CSA Uttarakhand Chapter, All Rights Reserved</p>
+
+        <div className="footer-column">
+          <h2>Quick Links</h2>
+          <nav className="footer-links" aria-label="Footer navigation">
+            {footerLinks.map(([label, href]) =>
+              href.startsWith("/") ? (
+                <Link key={label} href={href}>
+                  {label}
+                </Link>
+              ) : (
+                <a key={label} href={href}>
+                  {label}
+                </a>
+              )
+            )}
+          </nav>
+        </div>
+
+        <div className="footer-column">
+          <h2>Contact</h2>
+          <div className="footer-contact">
+            <Link href="/contact">
+              <Mail size={17} />
+              Contact form
+            </Link>
+            <a href="https://www.linkedin.com/groups/8409109/">
+              <Linkedin size={17} />
+              LinkedIn community
+            </a>
+            <span>
+              <MapPin size={17} />
+              Dehradun, Uttarakhand, India
+            </span>
+          </div>
+        </div>
+
+        <div className="footer-column footer-community">
+          <h2>Join the Community</h2>
+          <p>Get event updates, security discussions, and chapter opportunities through our professional network.</p>
+          <a className="footer-cta" href="https://www.linkedin.com/groups/8409109/">
+            <Send size={17} />
+            Connect on LinkedIn
+          </a>
+          <div className="social-links" aria-label="Social links">
+            {socialLinks.map((item) => (
+              <a href={item.href} aria-label={item.label} key={item.label}>
+                <item.icon size={20} />
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div className="container footer-bottom">
+        <p>Copyright &copy; 2025 CSA Uttarakhand Chapter. All Rights Reserved.</p>
       </div>
     </footer>
   );

@@ -13,11 +13,12 @@ import {
   Sparkles,
   TrendingUp,
   Users,
-  BookOpen
+  BookOpen,
+  Linkedin,
+  type LucideIcon
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
 
 const stats = [
   { value: "250+", label: "Active Members" },
@@ -36,57 +37,102 @@ const focusAreas = [
   { title: "Security Training, Certifications & Events", icon: CalendarDays }
 ];
 
-const benefitCards = [
+type BenefitCard = {
+  title: string;
+  description: string;
+  icon: LucideIcon;
+  points?: string[];
+};
+
+const benefitCards: BenefitCard[] = [
   {
     title: "Global Community Access",
     description:
-      "Become part of the globally recognized Cloud Security Alliance network and connect with cybersecurity professionals, researchers, and industry leaders around the world.",
+      "Become a part of the globally recognized Cloud Security Alliance network and connect with cybersecurity professionals, researchers, and industry leaders from around the world.",
     icon: Users
   },
   {
     title: "Learning & Skill Development",
-    description:
-      "Access cybersecurity workshops, webinars, expert-led training, cloud security insights, AI security discussions, and hands-on learning opportunities.",
+    description: "Gain access to:",
+    points: [
+      "Cybersecurity workshops and webinars",
+      "Expert-led training sessions",
+      "Industry insights on cloud security, AI security, Zero Trust, and emerging technologies",
+      "Hands-on learning opportunities and practical exposure"
+    ],
     icon: GraduationCap
   },
   {
     title: "Networking Opportunities",
-    description:
-      "Build meaningful connections with cybersecurity professionals, industry experts, university faculty, researchers, students, and tech communities.",
+    description: "Build meaningful connections with:",
+    points: [
+      "Cybersecurity professionals",
+      "Industry experts",
+      "University faculty and researchers",
+      "Students and tech communities"
+    ],
     icon: Network
   },
   {
     title: "Access to Industry Knowledge",
-    description:
-      "Stay updated with cybersecurity trends, cloud security best practices, threat intelligence, risk management, security frameworks, and compliance updates.",
+    description: "Stay updated with:",
+    points: [
+      "Latest cybersecurity trends",
+      "Cloud security best practices",
+      "Threat intelligence and risk management strategies",
+      "Security frameworks and compliance updates"
+    ],
     icon: ShieldCheck
   },
   {
-    title: "Events & Conferences",
-    description:
-      "Participate in cybersecurity conferences, hackathons, CTF competitions, meetups, panel sessions, awareness campaigns, and technical events.",
+    title: "Participation in Events & Conferences",
+    description: "Get opportunities to participate in:",
+    points: [
+      "Cybersecurity conferences",
+      "Hackathons and Capture The Flag (CTF) competitions",
+      "Community meetups",
+      "Research discussions and panel sessions",
+      "Awareness campaigns and technical events"
+    ],
     icon: CalendarDays
   },
   {
-    title: "Research & Collaboration",
-    description:
-      "Collaborate on security research initiatives, whitepapers, case studies, academic-industry projects, innovation, and technology discussions.",
+    title: "Research & Collaboration Opportunities",
+    description: "Collaborate on:",
+    points: [
+      "Security research initiatives",
+      "Whitepapers and case studies",
+      "Academic-industry projects",
+      "Innovation and technology discussions"
+    ],
     icon: Lightbulb
   },
   {
-    title: "Career Growth & Visibility",
-    description:
-      "Enhance your profile through leadership opportunities, speaking engagements, volunteer roles, industry exposure, internships, and career networking.",
+    title: "Career Growth & Professional Visibility",
+    description: "Enhance your professional profile through:",
+    points: [
+      "Community leadership opportunities",
+      "Speaking engagements",
+      "Volunteer roles",
+      "Industry exposure",
+      "Internship and career networking opportunities"
+    ],
     icon: Sparkles
   },
   {
     title: "Student-Focused Opportunities",
-    description:
-      "Students can access mentorship, career guidance, certification awareness, real-world cybersecurity exposure, and technical leadership opportunities.",
+    description: "Students can benefit from:",
+    points: [
+      "Mentorship from industry experts",
+      "Career guidance in cybersecurity",
+      "Certification awareness",
+      "Exposure to real-world cybersecurity domains",
+      "Opportunities to build technical and leadership skills"
+    ],
     icon: GraduationCap
   },
   {
-    title: "Secure Digital Future",
+    title: "Contribute to a Secure Digital Future",
     description:
       "Be part of initiatives that promote cybersecurity awareness, secure cloud adoption, and digital resilience across Uttarakhand and beyond.",
     icon: Building2
@@ -94,21 +140,83 @@ const benefitCards = [
 ];
 
 const joinTypes = [
-  "Students",
-  "Cybersecurity Professionals",
-  "Researchers",
-  "Faculty Members",
-  "Cloud Architects",
-  "IT Professionals",
-  "Technology Enthusiasts",
-  "Board Members"
+  {
+    title: "Students",
+    description: "Mentorship, career guidance, certification awareness, and exposure to real cybersecurity domains."
+  },
+  {
+    title: "Cybersecurity Professionals",
+    description: "Peer learning, speaking opportunities, community visibility, and collaboration with security leaders."
+  },
+  {
+    title: "Researchers",
+    description: "Research discussions, whitepapers, case studies, and academic-industry project opportunities."
+  },
+  {
+    title: "Faculty Members",
+    description: "Industry connections, awareness programs, student enablement, and curriculum-focused collaboration."
+  },
+  {
+    title: "Cloud Architects",
+    description: "Cloud governance, secure adoption patterns, Zero Trust conversations, and practical best practices."
+  },
+  {
+    title: "IT Professionals",
+    description: "Security awareness, risk management learning, compliance updates, and professional networking."
+  },
+  {
+    title: "Technology Enthusiasts",
+    description: "Community access, events, meetups, and a practical path into cybersecurity participation."
+  },
+  {
+    title: "Board Members",
+    description: "Leadership contribution, strategic guidance, and chapter-building opportunities."
+  }
 ];
 
 const leadershipTeam = [
-  { initials: "SR", name: "Satyam Rastogi", role: "Chapter Chair & Strategic Advisor" },
-  { initials: "AS", name: "Ananya Sharma", role: "Vice Chair, Operations" },
-  { initials: "VR", name: "Vikram Rawat", role: "Director of Research" },
-  { initials: "DN", name: "Deepak Negi", role: "Treasurer & Membership Head" }
+  {
+    name: "Satyam Rastogi",
+    role: "Chapter Leader",
+    image: "/assets/img/board-of-directors/SatyamRastogi.jpeg",
+    linkedin: "https://www.linkedin.com/in/hackersatyamrastogi/",
+    description: "Leads chapter strategy, cybersecurity awareness, and regional community-building initiatives."
+  },
+  {
+    name: "Devjeet Singh",
+    role: "Board Member",
+    image: "/assets/img/board-of-directors/Devjeet.jpg",
+    linkedin: "https://www.linkedin.com/in/devjeethacker/",
+    description: "Supports security programs, practitioner outreach, and technical community engagement."
+  },
+  {
+    name: "Avita Katal",
+    role: "Board Member",
+    image: "/assets/img/board-of-directors/female_dummy.png",
+    linkedin: "https://www.linkedin.com/in/avita-katal/",
+    description: "Contributes to awareness, academic collaboration, and inclusive cybersecurity participation."
+  },
+  {
+    name: "Naveen Pal",
+    role: "Board Member",
+    image: "/assets/img/board-of-directors/naveen_pal.png",
+    linkedin: "https://www.linkedin.com/in/haxornaveenpal",
+    description: "Guides community programs, security learning, and professional networking initiatives."
+  },
+  {
+    name: "Kush Kaushik",
+    role: "Board Member",
+    image: "/assets/img/board-of-directors/kush_kaushik.jpg",
+    linkedin: "https://in.linkedin.com/in/kushkaushik",
+    description: "Supports cloud security knowledge-sharing, events, and industry collaboration."
+  },
+  {
+    name: "Ankit Giri",
+    role: "Board Member",
+    image: "/assets/img/board-of-directors/Ankit_Giri.png",
+    linkedin: "https://www.linkedin.com/in/ankitgiri/",
+    description: "Helps drive chapter visibility, technology discussions, and member engagement."
+  }
 ];
 
 function Hero() {
@@ -241,7 +349,13 @@ function BenefitCardsSection() {
       <div className="container">
         <div className="section-intro">
           <p className="eyebrow">Benefits of joining</p>
-          <h2>Learning, networking, events, research, and career growth in one chapter.</h2>
+          <h2>Benefits of Joining the CSA Uttarakhand Chapter</h2>
+          <p className="section-copy">
+            Joining the CSA Uttarakhand Chapter opens the door to a dynamic cybersecurity community where learning,
+            networking, and innovation come together. Whether you are a student, working professional, researcher, or
+            organization, the chapter provides opportunities to grow in the rapidly evolving world of cybersecurity and
+            cloud security.
+          </p>
         </div>
         <div className="benefit-card-grid">
           {benefitCards.map((item) => (
@@ -249,6 +363,13 @@ function BenefitCardsSection() {
               <item.icon />
               <h3>{item.title}</h3>
               <p>{item.description}</p>
+              {item.points?.length ? (
+                <ul>
+                  {item.points.map((point) => (
+                    <li key={point}>{point}</li>
+                  ))}
+                </ul>
+              ) : null}
             </article>
           ))}
         </div>
@@ -258,42 +379,24 @@ function BenefitCardsSection() {
 }
 
 function JoinPathSection() {
-  const [selectedType, setSelectedType] = useState(joinTypes[0]);
-
   return (
     <section className="join-path-section">
-      <div className="container join-path-grid">
-        <div>
+      <div className="container">
+        <div className="section-intro section-intro--center join-path-intro">
           <p className="eyebrow">Who can join?</p>
           <h2>Anyone passionate about cybersecurity and secure digital transformation is welcome.</h2>
           <p>
-            Select a member type to see how the chapter can help you get involved. The community is open, practical, and
-            built for people who want to learn and contribute.
+            The chapter is open, practical, and built for people who want to learn, contribute, and grow with the
+            cybersecurity community.
           </p>
         </div>
-        <div className="join-type-panel">
-          <div className="join-type-list" role="tablist" aria-label="Membership audiences">
-            {joinTypes.map((type) => (
-              <button
-                type="button"
-                role="tab"
-                aria-selected={selectedType === type}
-                className={selectedType === type ? "is-active" : ""}
-                key={type}
-                onClick={() => setSelectedType(type)}
-              >
-                {type}
-              </button>
-            ))}
-          </div>
-          <div className="join-type-detail">
-            <span>Selected path</span>
-            <h3>{selectedType}</h3>
-            <p>
-              Join chapter discussions, attend events, build practical cybersecurity awareness, and connect with people
-              working toward a safer digital ecosystem in Uttarakhand.
-            </p>
-          </div>
+        <div className="join-audience-grid">
+          {joinTypes.map((type) => (
+            <article className="join-audience-card" key={type.title}>
+              <span>{type.title}</span>
+              <p>{type.description}</p>
+            </article>
+          ))}
         </div>
       </div>
     </section>
@@ -320,21 +423,27 @@ function WhyJoinBand() {
   );
 }
 
-function LeadershipSection() {
+function BoardMembersSection() {
   return (
     <section className="leadership" id="chapters">
       <div className="container">
-        <div className="section-intro">
-          <p className="eyebrow">Chapter Leadership</p>
+        <div className="section-intro section-intro--center">
+          <p className="eyebrow">Board Members</p>
           <h2>Guided by industry veterans committed to fostering a secure digital ecosystem in Uttarakhand.</h2>
         </div>
         <div className="leadership-grid">
           {leadershipTeam.map((member) => (
             <article className="leader-card" key={member.name}>
-              <div className="leader-avatar">{member.initials}</div>
-              <div>
+              <div className="leader-media">
+                <Image src={member.image} alt={member.name} fill sizes="(max-width: 920px) 100vw, 33vw" />
+              </div>
+              <div className="leader-copy">
                 <h4>{member.name}</h4>
-                <p>{member.role}</p>
+                <span>{member.role}</span>
+                <p>{member.description}</p>
+                <a href={member.linkedin} aria-label={`${member.name} LinkedIn profile`}>
+                  <Linkedin size={18} />
+                </a>
               </div>
             </article>
           ))}
@@ -381,7 +490,7 @@ export default function Home() {
       <BenefitCardsSection />
       <JoinPathSection />
       <WhyJoinBand />
-      <LeadershipSection />
+      <BoardMembersSection />
       <ResourcesSection />
     </main>
   );
