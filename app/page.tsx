@@ -178,15 +178,7 @@ const joinTypes = [
 function Hero() {
   return (
     <section className="hero" aria-label="Cloud Security Alliance Uttarakhand Chapter Hero">
-      <Image
-        src="/assets/img/Chapters-hero.jpg"
-        alt="Cloud Security Alliance Uttarakhand Chapter"
-        fill
-        priority
-        sizes="100vw"
-        className="hero-image"
-      />
-      <div className="container hero-content">
+      <div className="container hero-inner">
         <div className="hero-copy">
           <h1>
             Cloud Security Alliance
@@ -203,6 +195,16 @@ function Hero() {
               View Events <ChevronRight size={18} />
             </Link>
           </div>
+        </div>
+        <div className="hero-visual" aria-hidden="true">
+          <Image
+            src="/assets/img/hero-bg.png"
+            alt=""
+            fill
+            priority
+            sizes="(max-width: 920px) 0px, 50vw"
+            className="hero-bg-img"
+          />
         </div>
       </div>
     </section>
