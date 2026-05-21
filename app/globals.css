@@ -508,9 +508,12 @@ a {
 }
 
 /* ── Focus Section ───────────────────────────────────── */
+.Focus-heading{
+  margin: -12px 0 -20px;
+}
 
 .focus-section {
-  padding: 36px 0;
+  padding: 5px 0;
   background: #fff;
 }
 
@@ -563,7 +566,7 @@ a {
 /* ── Benefit Section ─────────────────────────────────── */
 
 .benefit-section {
-  padding: 36px 0;
+  padding: 30px 0;
   background: #f5f7fb;
 }
 
@@ -867,7 +870,7 @@ a {
 /* ── Resources Section ───────────────────────────────── */
 
 .resources {
-  padding: 44px 0 52px;
+  padding: 25px 0 25px;
 }
 
 .resource-grid {
@@ -2131,7 +2134,7 @@ a {
   .focus-section,
   .benefit-section,
   .why-join-band {
-    padding: 24px 0;
+    padding: 15px 0;
   }
 
   .join-path-section {

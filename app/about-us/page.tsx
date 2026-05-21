@@ -45,7 +45,7 @@ export default function AboutPage() {
         <div className="container about-hero-grid">
           <div className="about-hero-copy">
             <p className="eyebrow">About CSA Uttarakhand Chapter</p>
-            <h1>Building a future-ready cybersecurity community for Uttarakhand.</h1>
+            <h2>Building a future-ready cybersecurity community for Uttarakhand.</h2>
             <p>
               The CSA Uttarakhand Chapter serves as a platform where industry experts, academic institutions, startups,
               and security enthusiasts come together to explore emerging technologies, discuss evolving cyber threats,

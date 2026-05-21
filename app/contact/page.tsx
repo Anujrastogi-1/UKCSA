@@ -13,21 +13,21 @@ export default function ContactPage() {
               <div className="contact-form-row">
                 <label>
                   <span>First Name</span>
-                  <input type="text" aria-label="Your First Name" placeholder="e.g. Rahul" />
+                  <input type="text" aria-label="Your First Name" required placeholder="First Name" />
                 </label>
                 <label>
                   <span>Last Name</span>
-                  <input type="text" aria-label="Your Last Name" placeholder="e.g. Sharma" />
+                  <input type="text" aria-label="Your Last Name" placeholder="Last Name" />
                 </label>
               </div>
               <div className="contact-form-row">
                 <label>
                   <span>Email Address</span>
-                  <input type="email" aria-label="Your Email Address" placeholder="you@example.com" />
+                  <input type="email" aria-label="Your Email Address" required placeholder="you@example.com" />
                 </label>
                 <label>
-                  <span>Phone <span style={{ fontWeight: 400, color: "#9ca3af" }}>(optional)</span></span>
-                  <input type="tel" aria-label="Your Phone Number (optional)" placeholder="+91 98765 43210" />
+                  <span>Phone</span>
+                  <input type="tel" aria-label="Your Phone Number (optional)"required placeholder="+91 XXXXX XXXXX" />
                 </label>
               </div>
               <label>

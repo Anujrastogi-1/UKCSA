@@ -284,7 +284,7 @@ function FocusSection() {
       <div className="container">
         <div className="section-intro section-intro--center">
           <p className="eyebrow">Our focus areas</p>
-          <h2>Where the chapter creates momentum.</h2>
+          <h2 className="Focus-heading">Where the chapter creates momentum.</h2>
         </div>
         <div className="focus-grid">
           {focusAreas.map((item) => (
