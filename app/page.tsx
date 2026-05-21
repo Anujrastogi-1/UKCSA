@@ -286,7 +286,7 @@ function FocusSection() {
       <div className="container">
         <div className="section-intro section-intro--center">
           <p className="eyebrow">Our focus areas</p>
-          <h2>Where the chapter creates momentum.</h2>
+          <h2 className="Focus-heading">Where the chapter creates momentum.</h2>
         </div>
         <div className="focus-grid">
           {focusAreas.map((item) => (
@@ -344,7 +344,7 @@ function JoinPathSection() {
       <div className="container">
         <div className="section-intro section-intro--center join-path-intro">
           <p className="eyebrow">Who can join?</p>
-          <h2>Anyone passionate about cybersecurity and secure digital transformation is welcome.</h2>
+          <h2 style={{ margin: 'auto' }}>Anyone passionate about cybersecurity and secure digital transformation is welcome.</h2>
           <p>
             The chapter is open, practical, and built for people who want to learn, contribute, and grow with the
             cybersecurity community.
@@ -411,7 +411,7 @@ function ResourcesSection() {
         </article>
         <article className="resource-card resource-card--community">
           <div className="community-top">
-            <div className="community-pill">Stay Connected</div>
+            {/* <div className="community-pill">Stay Connected</div> */}
             <h2>Join Our Community</h2>
           </div>
           <p>Get real-time updates on local meetups, job opportunities, and breaking news in the cloud security domain.</p>
