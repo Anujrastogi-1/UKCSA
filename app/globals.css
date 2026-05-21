@@ -192,36 +192,52 @@ a {
 
 .hero {
   position: relative;
-  min-height: calc(100vh - 70px);
   min-height: min(calc(100vh - 70px), 640px);
-  display: grid;
+  display: flex;
   align-items: center;
   overflow: hidden;
+  background-color: #172A52;
   color: #fff;
-}
-
-.hero-image {
-  object-fit: cover;
-  object-position: center;
-  filter: saturate(1.05) contrast(1.05);
 }
 
 .hero::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.12), transparent 28%),
-    linear-gradient(180deg, rgba(4, 19, 53, 0.70), rgba(4, 19, 53, 0.86));
+  background:
+    radial-gradient(ellipse 60% 80% at -5% 50%, rgba(7, 88, 150, 0.5), transparent),
+    radial-gradient(ellipse 35% 45% at 105% 0%, rgba(22, 169, 187, 0.15), transparent);
+  pointer-events: none;
 }
 
-.hero-content {
+.hero-inner {
   position: relative;
   z-index: 1;
-  padding: 64px 0 56px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  padding: 56px 0 0;
+  width: 100%;
 }
 
 .hero-copy {
-  max-width: 640px;
+  max-width: 580px;
+}
+
+.hero-visual {
+  position: relative;
+  height: 560px;
+  align-self: flex-end;
+  margin-bottom: -2px;
+  opacity: 0.22;
+}
+
+.hero-bg-img {
+  object-fit: contain;
+  object-position: center bottom;
+  scale: 1.08;
+  transform-origin: center bottom;
+  filter: drop-shadow(0 24px 48px rgba(0, 0, 0, 0.28));
 }
 
 .hero-badge {
@@ -275,7 +291,7 @@ a {
 
 .section-intro {
   max-width: 720px;
-  margin-bottom: 32px;
+  margin-bottom: 20px;
 }
 
 .section-intro--center {
@@ -285,7 +301,7 @@ a {
 }
 
 .eyebrow {
-  margin: 0 0 6px;
+  margin: 0 0 2px;
   color: var(--orange);
   text-transform: uppercase;
   letter-spacing: 0.14em;
@@ -294,10 +310,10 @@ a {
 }
 
 .section-copy {
-  margin: 14px 0 0;
+  margin: 8px 0 0;
   color: #4f5768;
-  font-size: 1rem;
-  line-height: 1.75;
+  font-size: 0.97rem;
+  line-height: 1.7;
 }
 
 /* ── Buttons ─────────────────────────────────────────── */
@@ -563,128 +579,163 @@ a {
 /* ── Benefit Section ─────────────────────────────────── */
 
 .benefit-section {
-  padding: 36px 0;
+  padding: 24px 0 30px;
   background: #f5f7fb;
+}
+
+.benefit-section .section-intro h2 {
+  margin: 0;
+  font-size: clamp(1.4rem, 2.4vw, 1.9rem);
+  line-height: 1.2;
+  color: var(--text);
 }
 
 .benefit-card-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
+  gap: 10px;
+  align-items: stretch;
 }
 
 .benefit-card {
-  padding: 20px;
-  border: 1px solid rgba(15, 42, 70, 0.08);
-  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  padding: 14px 15px;
+  border: 1px solid rgba(15, 42, 70, 0.09);
+  border-radius: 10px;
   background: #fff;
-  box-shadow: 0 8px 24px rgba(15, 42, 70, 0.06);
+  box-shadow: 0 3px 12px rgba(15, 42, 70, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.benefit-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(7, 88, 150, 0.22);
+  box-shadow: 0 10px 28px rgba(15, 42, 70, 0.1);
 }
 
 .benefit-card-head {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
+  align-items: flex-start;
+  gap: 9px;
+  margin-bottom: 7px;
+}
+
+.benefit-card-head svg {
+  flex-shrink: 0;
+  margin-top: 1px;
 }
 
 .benefit-card h3 {
   margin: 0;
-  color: var(--text);
-  font-size: 1rem;
+  color: var(--link);
+  font-size: 0.97rem;
   line-height: 1.3;
   font-weight: 700;
 }
 
 .benefit-card p {
   margin: 0;
+  flex: 1;
   color: #5b6478;
-  font-size: 0.93rem;
-  line-height: 1.6;
+  font-size: 0.87rem;
+  line-height: 1.58;
 }
 
 .benefit-card ul {
   display: grid;
-  gap: 6px;
-  margin: 10px 0 0;
+  gap: 4px;
+  margin: 8px 0 0;
   padding: 0;
   list-style: none;
 }
 
 .benefit-card li {
   position: relative;
-  padding-left: 18px;
+  padding-left: 14px;
   color: #5b6478;
-  font-size: 0.9rem;
-  line-height: 1.5;
+  font-size: 0.83rem;
+  line-height: 1.45;
 }
 
 .benefit-card li::before {
   content: "";
   position: absolute;
   left: 0;
-  top: 0.55em;
-  width: 7px;
-  height: 7px;
+  top: 0.58em;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
   background: #16a9bb;
-  box-shadow: 0 0 0 2px rgba(22, 169, 187, 0.14);
+  box-shadow: 0 0 0 2px rgba(22, 169, 187, 0.15);
 }
 
 /* ── Join Path Section ───────────────────────────────── */
 
 .join-path-section {
-  padding: 44px 0;
+  padding: 24px 0 30px;
   background: #fff;
 }
 
+.join-path-section .section-intro h2 {
+  margin: 0;
+  font-size: clamp(1.3rem, 2.2vw, 1.75rem);
+  line-height: 1.25;
+  color: var(--text);
+}
+
 .join-path-intro {
-  margin-bottom: 24px;
+  margin-bottom: 14px;
 }
 
 .join-path-intro p {
-  margin: 12px auto 0;
-  max-width: 680px;
+  margin: 5px auto 0;
+  max-width: 640px;
   color: #5b6478;
-  line-height: 1.7;
-  font-size: 1rem;
+  line-height: 1.6;
+  font-size: 0.93rem;
 }
 
 .join-audience-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 14px;
+  gap: 10px;
+  align-items: stretch;
 }
 
 .join-audience-card {
-  padding: 20px;
-  border: 1px solid rgba(15, 42, 70, 0.1);
-  border-radius: 10px;
-  background:
-    linear-gradient(#fff, #fff) padding-box,
-    linear-gradient(135deg, rgba(22, 169, 187, 0.4), rgba(255, 127, 39, 0.16)) border-box;
-  box-shadow: 0 8px 24px rgba(15, 42, 70, 0.06);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  padding: 13px 15px;
+  border: 1px solid rgba(15, 42, 70, 0.09);
+  border-left: 3px solid rgba(7, 88, 150, 0.35);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 3px 12px rgba(15, 42, 70, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-left-color 0.2s ease;
 }
 
 .join-audience-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 18px 38px rgba(15, 42, 70, 0.11);
+  border-left-color: var(--orange);
+  box-shadow: 0 12px 30px rgba(15, 42, 70, 0.1);
 }
 
 .join-audience-card span {
   display: block;
   color: var(--link);
-  font-size: 1rem;
+  font-size: 0.97rem;
   font-weight: 800;
-  margin-bottom: 6px;
+  margin-bottom: 5px;
+  line-height: 1.25;
 }
 
 .join-audience-card p {
   margin: 0;
+  flex: 1;
   color: #5b6478;
-  font-size: 0.9rem;
-  line-height: 1.6;
+  font-size: 0.85rem;
+  line-height: 1.55;
 }
 
 /* ── Why Join Band ───────────────────────────────────── */
@@ -1782,15 +1833,35 @@ a {
   }
 
   .hero {
-    min-height: min(70vh, 520px);
+    min-height: 360px;
+  }
+
+  .hero-inner {
+    position: relative;
+    grid-template-columns: 1fr;
+    padding: 48px 0 48px;
+  }
+
+  .hero-visual {
+    position: absolute;
+    right: -20px;
+    top: 0;
+    bottom: 0;
+    width: 55%;
+    height: 100%;
+    opacity: 0.22;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .hero-copy {
+    position: relative;
+    z-index: 1;
+    max-width: 100%;
   }
 
   .hero h1 {
     font-size: clamp(2rem, 6vw, 2.8rem);
-  }
-
-  .hero-content {
-    padding: 56px 0 48px;
   }
 
   .program-hero,
@@ -1809,10 +1880,12 @@ a {
 
   .benefit-card-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
   }
 
   .join-audience-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
   }
 
   .stats-grid {
@@ -1852,35 +1925,36 @@ a {
   }
 
   .hero {
-    min-height: min(65vh, 460px);
+    min-height: 320px;
+  }
+
+  .hero-inner {
+    padding: 40px 0 40px;
+  }
+
+  .hero-visual {
+    width: 65%;
+    right: -12px;
+    opacity: 0.18;
   }
 
   .hero h1 {
     font-size: clamp(1.8rem, 7vw, 2.4rem);
-    max-width: 300px;
   }
 
   .hero p {
     font-size: 1rem;
   }
 
-  .hero-content {
-    padding: 48px 0 40px;
-  }
-
-  .hero > img {
-    object-position: 56% center;
-  }
-
   .chapter-program,
   .focus-section,
   .benefit-section,
   .why-join-band {
-    padding: 24px 0;
+    padding: 20px 0;
   }
 
   .join-path-section {
-    padding: 30px 0;
+    padding: 20px 0 24px;
   }
 
   .program-hero {
@@ -2016,6 +2090,14 @@ a {
 
   .major-conferences {
     padding-top: 36px;
+  }
+}
+
+/* ── Nest Hub Max / mid-large screens 1200–1399px ───── */
+
+@media (min-width: 1200px) and (max-width: 1399px) {
+  .hero-inner {
+    padding-left: 32px;
   }
 }
 
