@@ -37,8 +37,10 @@ export default function MembershipPage() {
           <div className="feature-grid">
             {benefits.map((item) => (
               <article className="feature-card" key={item.title}>
-                <item.icon />
-                <h3>{item.title}</h3>
+                <div className="feature-card-head">
+                  <item.icon />
+                  <h3>{item.title}</h3>
+                </div>
                 <p>{item.description}</p>
               </article>
             ))}

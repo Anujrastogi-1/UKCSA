@@ -368,7 +368,7 @@ a {
 .stats-band {
   background: linear-gradient(180deg, #0f3f82 0%, #0d2f61 100%);
   color: #fff;
-  padding: 40px 0 44px;
+  padding: 32px 0;
 }
 
 .stats-grid {
@@ -407,7 +407,7 @@ a {
 /* ── Chapter Program Section ────────────────────────── */
 
 .chapter-program {
-  padding: 36px 0;
+  padding: 32px 0;
   background: #f5f7fb;
 }
 
@@ -524,12 +524,9 @@ a {
 }
 
 /* ── Focus Section ───────────────────────────────────── */
-.Focus-heading{
-  margin: -12px 0 -20px;
-}
 
 .focus-section {
-  padding: 5px 0;
+  padding: 32px 0;
   background: #fff;
 }
 
@@ -582,7 +579,7 @@ a {
 /* ── Benefit Section ─────────────────────────────────── */
 
 .benefit-section {
-  padding: 24px 0 30px;
+  padding: 32px 0;
   background: #f5f7fb;
 }
 
@@ -676,7 +673,7 @@ a {
 /* ── Join Path Section ───────────────────────────────── */
 
 .join-path-section {
-  padding: 24px 0 30px;
+  padding: 32px 0;
   background: #fff;
 }
 
@@ -744,7 +741,7 @@ a {
 /* ── Why Join Band ───────────────────────────────────── */
 
 .why-join-band {
-  padding: 16px 0;
+  padding: 32px 0;
   background: #081b41;
   color: #fff;
 }
@@ -773,7 +770,7 @@ a {
 /* ── Join Benefits (membership page) ────────────────── */
 
 .join-benefits {
-  padding: 52px 0 56px;
+  padding: 26px 0 28px;
 }
 
 .join-benefits h2,
@@ -792,36 +789,57 @@ a {
 }
 
 .feature-card {
-  border-radius: 16px;
-  padding: 26px;
+  display: flex;
+  flex-direction: column;
+  padding: 13px 15px;
+  border: 1px solid rgba(15, 42, 70, 0.09);
+  border-left: 3px solid rgba(7, 88, 150, 0.35);
+  border-radius: 8px;
   background: #fff;
-  box-shadow: var(--panel-shadow);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 3px 12px rgba(15, 42, 70, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-left-color 0.2s ease;
 }
 
 .feature-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 22px 50px rgba(25, 36, 71, 0.12);
+  border-left-color: var(--orange);
+  box-shadow: 0 12px 30px rgba(15, 42, 70, 0.1);
 }
 
-.feature-card svg {
-  width: 36px;
-  height: 36px;
-  color: var(--orange);
-  margin-bottom: 16px;
+.feature-card-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin-bottom: 7px;
+}
+
+.feature-card-head svg {
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+  padding: 6px;
+  border-radius: 7px;
+  background: rgba(22, 169, 187, 0.1);
+  color: var(--blue);
+  box-shadow: inset 0 0 0 1px rgba(22, 169, 187, 0.16);
+  flex-shrink: 0;
+  margin-top: 1px;
 }
 
 .feature-card h3 {
-  margin: 0 0 10px;
-  font-size: 1.2rem;
+  margin: 0;
+  color: var(--link);
+  font-size: 0.97rem;
+  font-weight: 800;
   line-height: 1.3;
 }
 
 .feature-card p {
   margin: 0;
-  color: #5c647a;
-  line-height: 1.7;
-  font-size: 0.97rem;
+  flex: 1;
+  color: #5b6478;
+  font-size: 0.87rem;
+  line-height: 1.58;
 }
 
 /* ── Leadership / Board Members ──────────────────────── */
@@ -921,7 +939,7 @@ a {
 /* ── Resources Section ───────────────────────────────── */
 
 .resources {
-  padding: 25px 0 25px;
+  padding: 32px 0;
 }
 
 .resource-grid {
@@ -1689,7 +1707,7 @@ a {
 .about-hero {
   position: relative;
   overflow: hidden;
-  padding: 72px 0 64px;
+  padding: 36px 0 32px;
   background:
     radial-gradient(circle at 12% 10%, rgba(22, 169, 187, 0.22), transparent 30%),
     radial-gradient(circle at 88% 18%, rgba(255, 127, 39, 0.17), transparent 26%),
@@ -1734,11 +1752,11 @@ a {
 }
 
 .about-signal-panel {
-  min-height: 300px;
-  display: grid;
-  align-content: center;
-  gap: 24px;
-  padding: 28px;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px 26px;
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.08);
@@ -1746,26 +1764,32 @@ a {
   backdrop-filter: blur(18px);
 }
 
+.about-signal-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
 .about-signal-orbit {
-  width: 108px;
-  height: 108px;
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
   display: grid;
   place-items: center;
   border: 1px solid rgba(94, 228, 242, 0.3);
   border-radius: 50%;
   background: radial-gradient(circle, rgba(94, 228, 242, 0.2), rgba(94, 228, 242, 0.05));
   color: #5ee4f2;
-  box-shadow: 0 0 60px rgba(94, 228, 242, 0.16);
+  box-shadow: 0 0 40px rgba(94, 228, 242, 0.16);
 }
 
 .about-signal-panel span {
-  display: block;
-  margin-bottom: 10px;
   color: #5ee4f2;
-  font-size: 0.78rem;
+  font-size: 1.25rem;
   font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  line-height: 1.2;
 }
 
 .about-signal-panel strong {
@@ -1777,7 +1801,7 @@ a {
 .about-story,
 .about-impact,
 .about-audience {
-  padding: 64px 0;
+  padding: 32px 0;
 }
 
 .about-story-grid,
@@ -1790,15 +1814,44 @@ a {
 .about-story-card,
 .about-impact-card,
 .about-audience-card {
-  border: 1px solid rgba(15, 42, 70, 0.1);
-  border-radius: 12px;
+  border: 1px solid rgba(15, 42, 70, 0.09);
+  border-left: 3px solid rgba(7, 88, 150, 0.35);
+  border-radius: 8px;
   background: rgba(255, 255, 255, 0.94);
-  box-shadow: 0 16px 42px rgba(15, 42, 70, 0.08);
+  box-shadow: 0 3px 12px rgba(15, 42, 70, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-left-color 0.2s ease;
+}
+
+.about-story-card:hover,
+.about-impact-card:hover,
+.about-audience-card:hover {
+  transform: translateY(-3px);
+  border-left-color: var(--orange);
+  box-shadow: 0 12px 30px rgba(15, 42, 70, 0.1);
 }
 
 .about-story-card,
 .about-impact-card {
-  padding: 26px;
+  padding: 20px;
+}
+
+.about-card-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.about-card-head svg {
+  flex: 0 0 auto;
+  width: 32px;
+  height: 32px;
+  padding: 6px;
+  border-radius: 8px;
+  background: rgba(22, 169, 187, 0.1);
+  color: var(--blue);
+  box-shadow: inset 0 0 0 1px rgba(22, 169, 187, 0.16);
+  margin-top: 1px;
 }
 
 .about-story-card svg,
@@ -1812,6 +1865,7 @@ a {
     radial-gradient(circle at 86% 16%, rgba(22, 169, 187, 0.3), transparent 34%),
     linear-gradient(145deg, #08264e, #061631);
   color: #fff;
+  border-left-color: #5ee4f2;
 }
 
 .about-story-card--dark svg,
@@ -1822,7 +1876,7 @@ a {
 .about-story-card h2,
 .about-impact-card h3,
 .about-audience-card h3 {
-  margin: 18px 0 10px;
+  margin: 0;
   color: var(--text);
   font-size: 1.25rem;
   line-height: 1.25;
@@ -1845,7 +1899,7 @@ a {
 }
 
 .about-focus-band {
-  padding: 54px 0;
+  padding: 27px 0;
   background: #fff;
 }
 
@@ -1889,15 +1943,6 @@ a {
     #eef4fb;
 }
 
-.about-impact-card {
-  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-}
-
-.about-impact-card:hover {
-  transform: translateY(-5px);
-  border-color: rgba(22, 169, 187, 0.42);
-  box-shadow: 0 24px 58px rgba(7, 88, 150, 0.15);
-}
 
 .about-audience {
   background: #fff;
@@ -1922,8 +1967,7 @@ a {
 }
 
 .about-audience-card {
-  min-height: 190px;
-  padding: 22px;
+  padding: 16px;
 }
 
 /* ── Board Page ──────────────────────────────────────── */
@@ -2126,7 +2170,7 @@ a {
   }
 
   .about-hero {
-    padding: 58px 0 54px;
+    padding: 29px 0 27px;
   }
 
   .about-signal-panel {
@@ -2185,11 +2229,11 @@ a {
   .focus-section,
   .benefit-section,
   .why-join-band {
-    padding: 20px 0;
+    padding: 32px 0;
   }
 
   .join-path-section {
-    padding: 20px 0 24px;
+    padding: 32px 0;
   }
 
   .program-hero {
@@ -2279,7 +2323,7 @@ a {
   }
 
   .resources {
-    padding: 32px 0 40px;
+    padding: 32px 0;
   }
 
   .contact-panel {
@@ -2300,7 +2344,7 @@ a {
   }
 
   .about-hero {
-    padding: 40px 0;
+    padding: 20px 0;
   }
 
   .about-hero-copy h1 {
@@ -2318,11 +2362,11 @@ a {
   .about-story,
   .about-impact,
   .about-audience {
-    padding: 36px 0;
+    padding: 20px 0;
   }
 
   .about-focus-band {
-    padding: 36px 0;
+    padding: 20px 0;
   }
 
   .about-focus-list {

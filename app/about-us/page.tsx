@@ -53,13 +53,13 @@ export default function AboutPage() {
             </p>
           </div>
           <div className="about-signal-panel" aria-label="Chapter focus summary">
-            <div className="about-signal-orbit">
-              <ShieldCheck size={46} />
+            <div className="about-signal-header">
+              <div className="about-signal-orbit">
+                <ShieldCheck size={28} />
+              </div>
+              <span>Chapter Focus</span>
             </div>
-            <div>
-              <span>Chapter focus</span>
-              <strong>Cloud security, AI governance, Zero Trust, threat intelligence, and compliance</strong>
-            </div>
+            <strong>Cloud security, AI governance, Zero Trust, threat intelligence, and compliance</strong>
           </div>
         </div>
       </section>
@@ -67,24 +67,30 @@ export default function AboutPage() {
       <section className="about-story">
         <div className="container about-story-grid">
           <article className="about-story-card about-story-card--dark">
-            <Target size={28} />
-            <h2>What we do</h2>
+            <div className="about-card-head">
+              <Target size={28} />
+              <h2>What we do</h2>
+            </div>
             <p>
               We focus on creating meaningful conversations and practical outcomes for every member through research,
               technical discussions, cybersecurity awareness, and community-led learning.
             </p>
           </article>
           <article className="about-story-card">
-            <BrainCircuit size={28} />
-            <h2>How we grow</h2>
+            <div className="about-card-head">
+              <BrainCircuit size={28} />
+              <h2>How we grow</h2>
+            </div>
             <p>
               Members contribute to research, participate in technical discussions, gain exposure to global
               cybersecurity trends, and build strong local networks across the region.
             </p>
           </article>
           <article className="about-story-card">
-            <Users size={28} />
-            <h2>Who belongs here</h2>
+            <div className="about-card-head">
+              <Users size={28} />
+              <h2>Who belongs here</h2>
+            </div>
             <p>
               Whether you are a student, professional, or organization seeking collaboration opportunities, the chapter
               welcomes you to help shape secure digital transformation.
@@ -116,8 +122,10 @@ export default function AboutPage() {
           <div className="about-impact-grid">
             {impactCards.map((card) => (
               <article className="about-impact-card" key={card.title}>
-                <card.icon />
-                <h3>{card.title}</h3>
+                <div className="about-card-head">
+                  <card.icon size={28} />
+                  <h3>{card.title}</h3>
+                </div>
                 <p>{card.description}</p>
               </article>
             ))}
@@ -129,12 +137,14 @@ export default function AboutPage() {
         <div className="container about-audience-grid">
           <div>
             <p className="eyebrow">Join the community</p>
-            <h2>Open to people and organizations shaping secure digital transformation.</h2>
+            <h2>For people and teams building secure digital futures.</h2>
           </div>
           {audienceCards.map((card) => (
             <article className="about-audience-card" key={card.title}>
-              <Building2 size={22} />
-              <h3>{card.title}</h3>
+              <div className="about-card-head">
+                <Building2 size={22} />
+                <h3>{card.title}</h3>
+              </div>
               <p>{card.description}</p>
             </article>
           ))}
