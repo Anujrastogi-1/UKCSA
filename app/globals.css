@@ -174,8 +174,8 @@ a {
 .page-hero {
   background: linear-gradient(135deg, #081b41 0%, #0d2f61 55%, #104c8f 100%);
   color: #fff;
-  padding: 40px 0;
-  min-height: 130px;
+  padding: 10px 0;
+  min-height: auto;
   display: flex;
   align-items: center;
 }
@@ -566,7 +566,7 @@ a {
 /* ── Benefit Section ─────────────────────────────────── */
 
 .benefit-section {
-  padding: 30px 0;
+  padding: 12px 0;
   background: #f5f7fb;
 }
 
@@ -577,7 +577,7 @@ a {
 }
 
 .benefit-card {
-  padding: 20px;
+  padding: 16px;
   border: 1px solid rgba(15, 42, 70, 0.08);
   border-radius: 8px;
   background: #fff;
@@ -603,7 +603,7 @@ a {
   margin: 0;
   color: #5b6478;
   font-size: 0.93rem;
-  line-height: 1.6;
+  line-height: 1.4;
 }
 
 .benefit-card ul {
@@ -660,7 +660,7 @@ a {
 }
 
 .join-audience-card {
-  padding: 20px;
+  padding: 8px;
   border: 1px solid rgba(15, 42, 70, 0.1);
   border-radius: 10px;
   background:
@@ -693,7 +693,7 @@ a {
 /* ── Why Join Band ───────────────────────────────────── */
 
 .why-join-band {
-  padding: 36px 0;
+  padding: 16px 0;
   background: #081b41;
   color: #fff;
 }
@@ -776,7 +776,7 @@ a {
 /* ── Leadership / Board Members ──────────────────────── */
 
 .leadership {
-  padding: 44px 0 56px;
+  padding: 5px 0 20px;
   background:
     radial-gradient(circle at 8% 12%, rgba(22, 169, 187, 0.1), transparent 26%),
     linear-gradient(180deg, #f7f9fd 0%, #eef4fb 100%);
@@ -881,10 +881,10 @@ a {
 
 .resource-card {
   border-radius: 18px;
-  padding: 28px;
+  padding: 12px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 6px;
 }
 
 .resource-card--vault {
@@ -1179,11 +1179,11 @@ a {
 }
 
 .events-showcase {
-  padding: 40px 0 52px;
+  padding: 6px 0 12px;
 }
 
 .events-shell {
-  padding: 32px;
+  padding: 12px;
   border: 1px solid rgba(15, 42, 70, 0.1);
   border-radius: 10px;
   background: #fff;
@@ -1212,30 +1212,7 @@ a {
   line-height: 1.55;
 }
 
-.event-slider-controls {
-  display: flex;
-  gap: 8px;
-  flex-shrink: 0;
-}
 
-.event-slider-controls button {
-  width: 40px;
-  height: 40px;
-  display: grid;
-  place-items: center;
-  border: 1px solid rgba(15, 42, 70, 0.16);
-  border-radius: 8px;
-  background: #fff;
-  color: var(--link);
-  cursor: pointer;
-  transition: transform 0.2s ease, border-color 0.2s ease, color 0.2s ease;
-}
-
-.event-slider-controls button:hover {
-  transform: translateY(-1px);
-  border-color: var(--orange);
-  color: var(--orange);
-}
 
 .event-year-btn {
   display: grid;
@@ -1355,7 +1332,7 @@ a {
 /* ── Major conferences ────────────────────────────────── */
 
 .major-conferences {
-  padding: 44px 0 24px;
+  padding: 16px 0 6px;
   background: #fff;
 }
 
@@ -2177,8 +2154,8 @@ a {
   }
 
   .page-hero {
-    min-height: 110px;
-    padding: 28px 0;
+    min-height: auto;
+    padding: 6px 0;
   }
 
   .page-hero h1 {
@@ -2305,7 +2282,7 @@ a {
   }
 
   .major-conferences {
-    padding-top: 36px;
+    padding-top: 10px;
   }
 }
 

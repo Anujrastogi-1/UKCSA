@@ -106,10 +106,7 @@ export default function PastEventsPage() {
               <h1>Events</h1>
               <p>Ongoing awareness and specialized training sessions from the CSA Uttarakhand Chapter.</p>
             </div>
-            <div className="event-slider-controls" aria-label="Jump to event">
-              <a href="#event-0" className="event-year-btn" aria-label="CSA 2017">2017</a>
-              <a href="#event-1" className="event-year-btn" aria-label="CSA 2016">2016</a>
-            </div>
+            
           </div>
 
           {/* Infinite horizontal auto-scroll */}
