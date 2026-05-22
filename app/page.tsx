@@ -243,7 +243,7 @@ function ChapterProgramSection() {
                 Join LinkedIn Group
               </a>
               <Link className="btn btn-secondary dark-btn" href="/contact">
-                Contact Us
+                Become a Member
               </Link>
             </div>
           </div>

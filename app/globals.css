@@ -2252,6 +2252,64 @@ a {
   transform: none;
 }
 
+/* ── Become a Member (tabbed form) ───────────────────── */
+
+.member-panel-lead {
+  margin: -18px 0 24px;
+  color: #475569;
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.member-form-wrap {
+  display: grid;
+  gap: 24px;
+}
+
+.member-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  padding: 6px;
+  background: #f1f5f9;
+  border: 1px solid rgba(15, 42, 70, 0.08);
+  border-radius: 9px;
+}
+
+.member-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #475569;
+  font: 700 0.9rem "Calibri Local", Calibri, Arial, sans-serif;
+  cursor: pointer;
+  transition: background-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.member-tab:hover {
+  color: var(--blue);
+}
+
+.member-tab.is-active {
+  background: var(--blue);
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(7, 88, 150, 0.22);
+}
+
+.member-tab.is-active:hover {
+  color: #fff;
+}
+
+.member-tab:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 2px;
+}
+
 /* ── Auth pages (login / signup) ────────────────────── */
 
 .auth-panel--wide {
@@ -2993,6 +3051,20 @@ a {
   .contact-form button {
     width: 100%;
     justify-content: center;
+  }
+
+  .member-tabs {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .member-tab {
+    justify-content: flex-start;
+    padding: 11px 14px;
+  }
+
+  .member-panel-lead {
+    margin: -10px 0 18px;
   }
 
   .about-hero {

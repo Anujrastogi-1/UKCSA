@@ -50,7 +50,7 @@ export default function MembershipPage() {
               Join LinkedIn Group
             </a>
             <Link className="btn btn-outline" href="/contact">
-              Contact Us
+              Become a Member
             </Link>
           </div>
         </div>

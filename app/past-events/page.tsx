@@ -3,8 +3,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { events } from "./events-data";
 
+const eventItems = events.filter((e) => e.category === "event");
+const conferenceItems = events.filter((e) => e.category === "conference");
+
 // 4× duplication for seamless infinite loop
-const scrollerItems = [...events, ...events, ...events, ...events];
+const scrollerItems = [...eventItems, ...eventItems, ...eventItems, ...eventItems];
 
 export default function PastEventsPage() {
   return (
@@ -58,7 +61,7 @@ export default function PastEventsPage() {
             <h2>Conferences</h2>
           </div>
 
-          {events.map((event, index) => (
+          {conferenceItems.map((event, index) => (
             <article
               className={`conference-row${index % 2 === 1 ? " conference-row--reverse" : ""}`}
               id={`event-${index}`}

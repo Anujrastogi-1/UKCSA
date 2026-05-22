@@ -10,7 +10,7 @@ const navItems = [
   { label: "About Us", href: "/about-us" },
   { label: "Board Members", href: "/board-of-directors" },
   { label: "Events", href: "/past-events" },
-  { label: "Contact Us", href: "/contact" }
+  { label: "Become a Member", href: "/contact" }
 ];
 
 const footerLinks = [
@@ -19,7 +19,7 @@ const footerLinks = [
   ["Board Members", "/board-of-directors"],
   ["Membership", "/membership-info"],
   ["Events", "/past-events"],
-  ["Contact Us", "/contact"]
+  ["Become a Member", "/contact"]
 ];
 
 const socialLinks = [
