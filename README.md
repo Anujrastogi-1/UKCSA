@@ -41,13 +41,17 @@ http://localhost:3000
 
 ## Environment Variables
 
-Create a `.env.local` file in the project root if you want to enable MongoDB-backed chapter updates:
+Create a `.env.local` file in the project root if you want to enable MongoDB-backed chapter updates and contact email delivery:
 
 ```env
 MONGODB_URI=your_mongodb_connection_string
+EMAIL_USER=your_smtp_email_address
+EMAIL_PASS=your_smtp_app_password
+CONTACT_RECEIVER=contact_form_receiver_address
 ```
 
 If `MONGODB_URI` is not configured, `/api/chapter-updates` returns an unauthenticated response with an empty updates list.
+If the email variables are not configured, `/api/contact` validates requests but returns a configuration error before attempting delivery.
 
 ## Available Scripts
 
@@ -74,6 +78,7 @@ Runs the production build.
 ```text
 app/
   api/chapter-updates/   API route for chapter updates
+  api/contact/           API route for validated contact form emails
   about-us/              About page
   board-of-directors/    Board member page
   contact/               Contact page
@@ -83,6 +88,7 @@ app/
   layout.tsx             Root layout and metadata
   page.tsx               Homepage
 lib/
+  contactValidation.ts   Shared frontend/backend contact form validation
   db.ts                  MongoDB connection helper
 models/
   ChapterUpdate.ts       Mongoose model for chapter updates
@@ -106,4 +112,4 @@ The API returns the 10 most recent updates sorted by `publishedAt` in descending
 
 ## Deployment
 
-This is a standard Next.js application and can be deployed to platforms such as Vercel, Netlify, or any Node.js hosting environment that supports Next.js. For production deployments, configure `MONGODB_URI` in the hosting provider's environment settings if the chapter updates API should connect to MongoDB.
+This is a standard Next.js application and can be deployed to platforms such as Vercel, Netlify, or any Node.js hosting environment that supports Next.js. For production deployments, configure `MONGODB_URI` in the hosting provider's environment settings if the chapter updates API should connect to MongoDB. Configure `EMAIL_USER`, `EMAIL_PASS`, and `CONTACT_RECEIVER` in the hosting provider's environment settings for contact form email delivery.

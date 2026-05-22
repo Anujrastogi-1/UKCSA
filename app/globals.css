@@ -2184,6 +2184,54 @@ a {
   box-shadow: 0 0 0 3px rgba(7, 88, 150, 0.1);
 }
 
+.contact-form input.is-invalid,
+.contact-form textarea.is-invalid {
+  border-color: #c2410c;
+  background: #fff7ed;
+}
+
+.contact-form input.is-invalid:focus,
+.contact-form textarea.is-invalid:focus {
+  border-color: #c2410c;
+  box-shadow: 0 0 0 3px rgba(194, 65, 12, 0.12);
+}
+
+.field-error {
+  color: #9a3412;
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.form-notice {
+  padding: 10px 12px;
+  border-radius: 7px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.form-notice--success {
+  border: 1px solid rgba(22, 101, 52, 0.22);
+  background: #ecfdf3;
+  color: #166534;
+}
+
+.form-notice--error {
+  border: 1px solid rgba(154, 52, 18, 0.22);
+  background: #fff7ed;
+  color: #9a3412;
+}
+
+.contact-honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
 .contact-form button {
   width: fit-content;
   min-height: 42px;
@@ -2191,6 +2239,17 @@ a {
   margin-top: 4px;
   border-radius: 7px;
   font-size: 0.95rem;
+}
+
+.contact-form button:disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
+  transform: none;
+}
+
+.contact-form button:disabled:hover {
+  background: var(--orange);
+  transform: none;
 }
 
 /* ── Auth pages (login / signup) ────────────────────── */
