@@ -92,7 +92,6 @@ export const events: EventItem[] = [
     badges: [],
     highlightsTitle: "",
     highlights: [
-      // "Cloud Security Best Practices Workshop",
       // "OWASP Top 10 Vulnerabilities Session",
       // "Live Hacking Demonstrations",
       // "Networking with Industry Experts",
@@ -115,6 +114,7 @@ export const events: EventItem[] = [
   },
 
     {
+
     slug: "CSAXCON-2026",
     category: "conference",
     image: "/assets/img/CSAXCON/E89A6843.webp",
