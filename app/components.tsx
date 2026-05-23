@@ -1,6 +1,6 @@
 "use client";
 
-import { Facebook, Linkedin, Mail, MapPin, Menu, ShieldCheck, Twitter, X, Youtube } from "lucide-react";
+import { Facebook, Linkedin, Mail, MapPin, Menu, ShieldCheck, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -24,9 +24,7 @@ const footerLinks = [
 
 const socialLinks = [
   { label: "Facebook", href: "https://www.facebook.com/CSA.Dehradun", icon: Facebook },
-  { label: "Twitter", href: "#", icon: Twitter },
-  { label: "LinkedIn", href: "https://www.linkedin.com/groups/8409109/", icon: Linkedin },
-  { label: "YouTube", href: "#", icon: Youtube }
+  { label: "LinkedIn", href: "https://www.linkedin.com/groups/8409109/", icon: Linkedin }
 ];
 
 export function Header() {
@@ -54,7 +52,13 @@ export function Header() {
         </Link>
         <nav className="main-nav" aria-label="Main navigation">
           {navItems.map((item) => (
-            <Link className={isActive(item.href) ? "is-active" : ""} href={item.href} key={item.label} onClick={closeMenu}>
+            <Link
+              className={isActive(item.href) ? "is-active" : ""}
+              href={item.href}
+              key={item.label}
+              onClick={closeMenu}
+              aria-current={isActive(item.href) ? "page" : undefined}
+            >
               <span>{item.label}</span>
             </Link>
           ))}
@@ -73,10 +77,15 @@ export function Header() {
           {isMenuOpen ? <X size={26} /> : <Menu size={26} />}
         </button>
       </div>
-      <nav id="mobile-navigation" className="mobile-nav" aria-label="Mobile navigation">
+      <nav id="mobile-navigation" className="mobile-nav" aria-label="Mobile navigation" aria-hidden={!isMenuOpen}>
         <div className="container mobile-nav-inner">
           {navItems.map((item) => (
-            <Link href={item.href} key={item.label} onClick={closeMenu}>
+            <Link
+              href={item.href}
+              key={item.label}
+              onClick={closeMenu}
+              aria-current={isActive(item.href) ? "page" : undefined}
+            >
               {item.label}
             </Link>
           ))}
@@ -142,32 +151,43 @@ export function Footer() {
 
         <div className="footer-column">
           <h2>Contact</h2>
-          <div className="footer-contact">
+          <address className="footer-contact">
             <Link href="/contact">
-              <Mail size={17} />
+              <Mail size={17} aria-hidden="true" />
               Contact form
             </Link>
-            <a href="https://www.linkedin.com/groups/8409109/">
-              <Linkedin size={17} />
+            <a
+              href="https://www.linkedin.com/groups/8409109/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Linkedin size={17} aria-hidden="true" />
               LinkedIn community
             </a>
             <span>
-              <MapPin size={17} />
+              <MapPin size={17} aria-hidden="true" />
               Dehradun, Uttarakhand, India
             </span>
-          </div>
+          </address>
         </div>
 
         <div className="footer-column footer-community">
           <h2>Join the Community</h2>
           <p>Get event updates, security discussions, and chapter opportunities through our professional network.</p>
-          <div className="social-links" aria-label="Social links">
+          <ul className="social-links" aria-label="Social links">
             {socialLinks.map((item) => (
-              <a href={item.href} aria-label={item.label} key={item.label}>
-                <item.icon size={20} />
-              </a>
+              <li key={item.label}>
+                <a
+                  href={item.href}
+                  aria-label={`${item.label} (opens in new tab)`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <item.icon size={20} aria-hidden="true" />
+                </a>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       </div>
       <div className="container footer-bottom">

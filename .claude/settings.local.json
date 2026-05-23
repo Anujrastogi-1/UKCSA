@@ -7,7 +7,9 @@
       "Bash(Select-Object Name, Length)",
       "Bash(npx tsc *)",
       "PowerShell(npx tsc --noEmit 2>&1 | Select-Object -First 40)",
-      "PowerShell(Get-Command *)"
+      "PowerShell(Get-Command *)",
+      "Bash(git commit *)",
+      "Bash(git add *)"
     ]
   }
 }

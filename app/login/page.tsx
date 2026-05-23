@@ -1,5 +1,13 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { PageHero } from "../components";
+
+export const metadata: Metadata = {
+  title: "Sign In",
+  description: "Sign in to the CSA Uttarakhand Chapter member portal.",
+  alternates: { canonical: "/login" },
+  robots: { index: false, follow: false },
+};
 
 export default function LoginPage() {
   return (

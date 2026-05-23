@@ -1,5 +1,4 @@
-"use client";
-
+import type { Metadata } from "next";
 import {
   BrainCircuit,
   Building2,
@@ -11,15 +10,25 @@ import {
   Network,
   ShieldCheck,
   Sparkles,
-  TrendingUp,
   Users,
   BookOpen,
   type LucideIcon
 } from "lucide-react";
-import { BoardMemberGrid } from "./BoardMemberGrid";
-import { boardMembers } from "./board-members-data";
 import Image from "next/image";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Cloud Security & Cybersecurity Community in Uttarakhand",
+  description:
+    "Join the Cloud Security Alliance Uttarakhand Chapter — a regional cybersecurity community in Dehradun for cloud security, AI security, Zero Trust, training, events, and research collaboration.",
+  alternates: { canonical: "/" },
+  openGraph: {
+    url: "/",
+    title: "CSA Uttarakhand Chapter — Cloud Security & Cybersecurity Community",
+    description:
+      "Regional cybersecurity community in Uttarakhand for cloud security, AI security, Zero Trust, events, and research.",
+  },
+};
 
 const stats = [
   { value: "250+", label: "Active Members" },
@@ -256,7 +265,7 @@ function ChapterProgramSection() {
 
         <div className="mission-grid">
           <article className="mission-card mission-card--dark">
-            <span>Vision</span>
+            <span>Our Vision</span>
             <h3>Uttarakhand as a cybersecurity growth hub.</h3>
             <p>
               To establish Uttarakhand as a growing hub for cybersecurity awareness, innovation, research, and talent
@@ -264,7 +273,7 @@ function ChapterProgramSection() {
             </p>
           </article>
           <article className="mission-card">
-            <span>Mission</span>
+            <span>Our Mission</span>
             <h3>Practical skills for secure digital resilience.</h3>
             <p>
               To empower individuals and organizations with cybersecurity knowledge, practical skills, and collaborative

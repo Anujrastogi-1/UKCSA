@@ -1,4 +1,18 @@
+import type { Metadata } from "next";
 import { BrainCircuit, Building2, GraduationCap, Handshake, Network, ShieldCheck, Target, Users } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "About CSA Uttarakhand Chapter",
+  description:
+    "Learn about the Cloud Security Alliance Uttarakhand Chapter — our mission, focus areas in cloud security, AI governance, Zero Trust, threat intelligence and how we build a future-ready cybersecurity community.",
+  alternates: { canonical: "/about-us" },
+  openGraph: {
+    url: "/about-us",
+    title: "About CSA Uttarakhand Chapter",
+    description:
+      "Cloud Security Alliance Uttarakhand Chapter — mission, focus areas, and how we grow a regional cybersecurity community.",
+  },
+};
 
 const focusItems = [
   "Cloud Security",
@@ -45,7 +59,7 @@ export default function AboutPage() {
         <div className="container about-hero-grid">
           <div className="about-hero-copy">
             <p className="eyebrow">About CSA Uttarakhand Chapter</p>
-            <h2>Building a future-ready cybersecurity community for Uttarakhand.</h2>
+            <h1>Building a future-ready cybersecurity community for Uttarakhand.</h1>
             <p>
               The CSA Uttarakhand Chapter serves as a platform where industry experts, academic institutions, startups,
               and security enthusiasts come together to explore emerging technologies, discuss evolving cyber threats,
@@ -69,7 +83,7 @@ export default function AboutPage() {
           <article className="about-story-card about-story-card--dark">
             <div className="about-card-head">
               <Target size={28} />
-              <h2>What we do</h2>
+              <h3>What we do</h3>
             </div>
             <p>
               We focus on creating meaningful conversations and practical outcomes for every member through research,
@@ -79,7 +93,7 @@ export default function AboutPage() {
           <article className="about-story-card">
             <div className="about-card-head">
               <BrainCircuit size={28} />
-              <h2>How we grow</h2>
+              <h3>How we grow</h3>
             </div>
             <p>
               Members contribute to research, participate in technical discussions, gain exposure to global
@@ -89,7 +103,7 @@ export default function AboutPage() {
           <article className="about-story-card">
             <div className="about-card-head">
               <Users size={28} />
-              <h2>Who belongs here</h2>
+              <h3>Who belongs here</h3>
             </div>
             <p>
               Whether you are a student, professional, or organization seeking collaboration opportunities, the chapter

@@ -1,7 +1,21 @@
+import type { Metadata } from "next";
 import { CheckCircle2, Images, MapPin, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { events } from "./events-data";
+
+export const metadata: Metadata = {
+  title: "Cybersecurity Events & Conferences in Uttarakhand",
+  description:
+    "Browse past cybersecurity, cloud security, and AI security events, workshops, and conferences hosted by the CSA Uttarakhand Chapter across Dehradun and Uttarakhand.",
+  alternates: { canonical: "/past-events" },
+  openGraph: {
+    url: "/past-events",
+    title: "CSA Uttarakhand Chapter — Events & Conferences",
+    description:
+      "Past cybersecurity events, workshops, and conferences hosted by CSA Uttarakhand Chapter.",
+  },
+};
 
 const eventItems = events.filter((e) => e.category === "event");
 const conferenceItems = events.filter((e) => e.category === "conference");
