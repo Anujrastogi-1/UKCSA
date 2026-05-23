@@ -12,11 +12,20 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
-import { type EventItem, type GalleryImage } from "../events-data";
+import { type GalleryImage } from "../events-data";
 
 const BATCH = 8;
 
-export default function GalleryView({ event }: { event: EventItem }) {
+export type GalleryViewEvent = {
+  image: string;
+  alt: string;
+  title: string;
+  place: string;
+  date: string;
+  gallery: GalleryImage[];
+};
+
+export default function GalleryView({ event }: { event: GalleryViewEvent }) {
   const [visible, setVisible] = useState(BATCH);
   const [lightbox, setLightbox] = useState<number | null>(null);
 

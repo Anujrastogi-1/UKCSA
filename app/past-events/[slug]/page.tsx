@@ -126,6 +126,15 @@ export default async function EventGalleryPage({
     ],
   };
 
+  const galleryEvent = {
+    image: event.image,
+    alt: event.alt,
+    title: event.title,
+    place: event.place,
+    date: event.date,
+    gallery: event.gallery,
+  };
+
   return (
     <>
       <script
@@ -136,7 +145,7 @@ export default async function EventGalleryPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
-      <GalleryView event={event} />
+      <GalleryView event={galleryEvent} />
     </>
   );
 }
