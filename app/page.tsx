@@ -40,103 +40,100 @@ const focusAreas = [
 
 type BenefitCard = {
   title: string;
-  description: string;
   icon: LucideIcon;
-  points?: string[];
+  points: string[];
 };
 
 const benefitCards: BenefitCard[] = [
   {
     title: "Global Community Access",
-    description:
-      "Become a part of the globally recognized Cloud Security Alliance network and connect with cybersecurity professionals, researchers, and industry leaders from around the world.",
-    icon: Users
+    icon: Users,
+    points: [
+      "Globally recognized Cloud Security Alliance network",
+      "Connect with cybersecurity professionals worldwide",
+      "Engage with researchers and industry leaders",
+      "Be part of an international security community"
+    ]
   },
   {
     title: "Learning & Skill Development",
-    description: "Gain access to:",
+    icon: GraduationCap,
     points: [
       "Cybersecurity workshops and webinars",
       "Expert-led training sessions",
-      "Industry insights on cloud security, AI security, Zero Trust, and emerging technologies",
-      "Hands-on learning opportunities and practical exposure"
-    ],
-    icon: GraduationCap
+      "Insights on cloud, AI security, and Zero Trust",
+      "Hands-on learning and practical exposure"
+    ]
   },
   {
     title: "Networking Opportunities",
-    description: "Build meaningful connections with:",
+    icon: Network,
     points: [
-      "Cybersecurity professionals",
-      "Industry experts",
+      "Cybersecurity professionals and security leaders",
+      "Industry experts across cloud and AI",
       "University faculty and researchers",
       "Students and tech communities"
-    ],
-    icon: Network
+    ]
   },
   {
     title: "Access to Industry Knowledge",
-    description: "Stay updated with:",
+    icon: ShieldCheck,
     points: [
       "Latest cybersecurity trends",
       "Cloud security best practices",
-      "Threat intelligence and risk management strategies",
+      "Threat intelligence and risk management",
       "Security frameworks and compliance updates"
-    ],
-    icon: ShieldCheck
+    ]
   },
   {
-    title: "Participation in Events & Conferences",
-    description: "Get opportunities to participate in:",
+    title: "Events & Conferences",
+    icon: CalendarDays,
     points: [
-      "Cybersecurity conferences",
-      "Hackathons and Capture The Flag (CTF) competitions",
-      "Community meetups",
-      "Research discussions and panel sessions",
+      "Cybersecurity conferences and meetups",
+      "Hackathons and CTF competitions",
+      "Research panels and discussion sessions",
       "Awareness campaigns and technical events"
-    ],
-    icon: CalendarDays
+    ]
   },
   {
-    title: "Research & Collaboration Opportunities",
-    description: "Collaborate on:",
+    title: "Research & Collaboration",
+    icon: Lightbulb,
     points: [
       "Security research initiatives",
       "Whitepapers and case studies",
       "Academic-industry projects",
       "Innovation and technology discussions"
-    ],
-    icon: Lightbulb
+    ]
   },
   {
-    title: "Career Growth & Professional Visibility",
-    description: "Enhance your professional profile through:",
+    title: "Career Growth & Visibility",
+    icon: Sparkles,
     points: [
       "Community leadership opportunities",
-      "Speaking engagements",
-      "Volunteer roles",
-      "Industry exposure",
-      "Internship and career networking opportunities"
-    ],
-    icon: Sparkles
+      "Speaking engagements and panels",
+      "Volunteer and ambassador roles",
+      "Internship and career networking"
+    ]
   },
   {
     title: "Student-Focused Opportunities",
-    description: "Students can benefit from:",
+    icon: BookOpen,
     points: [
       "Mentorship from industry experts",
-      "Career guidance in cybersecurity",
-      "Certification awareness",
-      "Exposure to real-world cybersecurity domains",
-      "Opportunities to build technical and leadership skills"
-    ],
-    icon: GraduationCap
+      "Career guidance and certification awareness",
+      "Real-world cybersecurity exposure",
+      "Technical and leadership skill building"
+    ]
   },
   {
     title: "Contribute to a Secure Digital Future",
-    description:
-      "Be part of initiatives that promote cybersecurity awareness, secure cloud adoption, and digital resilience across Uttarakhand and beyond.",
-    icon: Building2
+    icon: Building2,
+    points: [
+      "Promote cybersecurity awareness",
+      "Drive secure cloud adoption",
+      "Strengthen digital resilience",
+      "Empower Uttarakhand and beyond"
+    ]
   }
 ];
 
@@ -305,31 +302,24 @@ function BenefitCardsSection() {
   return (
     <section className="benefit-section">
       <div className="container">
-        <div className="section-intro">
+        <div className="section-intro section-intro--center">
           <p className="eyebrow">Benefits of joining</p>
-          <h2>Benefits of Joining the CSA Uttarakhand Chapter</h2>
-          <p className="section-copy">
-            Joining the CSA Uttarakhand Chapter opens the door to a dynamic cybersecurity community where learning,
-            networking, and innovation come together. Whether you are a student, working professional, researcher, or
-            organization, the chapter provides opportunities to grow in the rapidly evolving world of cybersecurity and
-            cloud security.
-          </p>
+          <h2>Why Join CSA Uttarakhand</h2>
         </div>
         <div className="benefit-card-grid">
           {benefitCards.map((item) => (
             <article className="benefit-card" key={item.title}>
               <div className="benefit-card-head">
-                <item.icon />
+                <span className="benefit-card-icon" aria-hidden="true">
+                  <item.icon />
+                </span>
                 <h3>{item.title}</h3>
               </div>
-              <p>{item.description}</p>
-              {item.points?.length ? (
-                <ul>
-                  {item.points.map((point) => (
-                    <li key={point}>{point}</li>
-                  ))}
-                </ul>
-              ) : null}
+              <ul className="benefit-card-list">
+                {item.points.map((point) => (
+                  <li key={point}>{point}</li>
+                ))}
+              </ul>
             </article>
           ))}
         </div>
@@ -410,10 +400,8 @@ function ResourcesSection() {
           </Link>
         </article>
         <article className="resource-card resource-card--community">
-          <div className="community-top">
-            {/* <div className="community-pill">Stay Connected</div> */}
-            <h2>Join Our Community</h2>
-          </div>
+          <div className="resource-label">STAY CONNECTED</div>
+          <h2>Join Our Community</h2>
           <p>Get real-time updates on local meetups, job opportunities, and breaking news in the cloud security domain.</p>
           <a className="btn btn-secondary" href="https://www.linkedin.com/groups/8409109/">
             Connect on LinkedIn

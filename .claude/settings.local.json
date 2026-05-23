@@ -4,7 +4,10 @@
       "Bash(npx next *)",
       "Bash(dir C:\\\\Users\\\\Win11\\\\Desktop\\\\UKCSA\\\\public\\\\assets\\\\img *)",
       "Bash(Get-ChildItem \"C:\\\\Users\\\\Win11\\\\Desktop\\\\UKCSA\\\\public\\\\assets\\\\img\\\\events\")",
-      "Bash(Select-Object Name, Length)"
+      "Bash(Select-Object Name, Length)",
+      "Bash(npx tsc *)",
+      "PowerShell(npx tsc --noEmit 2>&1 | Select-Object -First 40)",
+      "PowerShell(Get-Command *)"
     ]
   }
 }
