@@ -14,6 +14,13 @@ import {
 
 type TabId = "students" | "professionals" | "board";
 
+// Maps the UI tab id to the canonical membershipType enum the API expects.
+const TAB_TO_MEMBERSHIP_TYPE: Record<TabId, "student" | "professional" | "board"> = {
+  students: "student",
+  professionals: "professional",
+  board: "board"
+};
+
 type TabConfig = {
   id: TabId;
   label: string;
@@ -196,20 +203,30 @@ export function MembershipForm() {
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...result.values, website: "" })
+        body: JSON.stringify({
+          ...result.values,
+          membershipType: TAB_TO_MEMBERSHIP_TYPE[activeTab],
+          context: values.context.trim().replace(/\s+/g, " "),
+          website: ""
+        })
       });
-      const data = (await response.json().catch(() => null)) as {
-        message?: string;
-        errors?: ContactErrors;
-      } | null;
 
-      if (!response.ok) {
-        if (data?.errors) {
-          setServerErrors(data.errors);
+      // API envelope: { ok: true, data: { message } } | { ok: false, error: { code, message, details? } }
+      const payload = (await response.json().catch(() => null)) as
+        | { ok: true; data: { message?: string } }
+        | { ok: false; error: { code: string; message: string; details?: ContactErrors } }
+        | null;
+
+      if (!response.ok || !payload || payload.ok === false) {
+        const errorPayload = payload && payload.ok === false ? payload.error : null;
+        if (errorPayload?.details && typeof errorPayload.details === "object") {
+          setServerErrors(errorPayload.details as ContactErrors);
         }
         setStatus({
           type: "error",
-          message: data?.message ?? "Your application could not be sent. Please try again."
+          message:
+            errorPayload?.message ??
+            "Your application could not be sent. Please try again."
         });
         return;
       }
@@ -219,7 +236,9 @@ export function MembershipForm() {
       setContextTouched(false);
       setStatus({
         type: "success",
-        message: data?.message ?? "Your application has been sent successfully. We'll be in touch soon."
+        message:
+          payload.data?.message ??
+          "Your application has been sent successfully. We'll be in touch soon."
       });
     } catch {
       setStatus({ type: "error", message: "Network error. Please check your connection and try again." });

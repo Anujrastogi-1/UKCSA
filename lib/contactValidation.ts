@@ -4,6 +4,22 @@ export type ContactField = (typeof CONTACT_FIELDS)[number];
 export type ContactFormValues = Record<ContactField, string>;
 export type ContactErrors = Partial<Record<ContactField, string>>;
 
+export const MEMBERSHIP_TYPES = ["student", "professional", "board"] as const;
+export type MembershipType = (typeof MEMBERSHIP_TYPES)[number];
+
+export type MembershipExtras = {
+  membershipType: MembershipType;
+  context: string;
+};
+export type MembershipFormValues = ContactFormValues & MembershipExtras;
+export type MembershipErrors = ContactErrors &
+  Partial<Record<"membershipType" | "context", string>>;
+export type MembershipValidationResult = {
+  values: MembershipFormValues;
+  errors: MembershipErrors;
+  isValid: boolean;
+};
+
 export type ContactValidationResult = {
   values: ContactFormValues;
   errors: ContactErrors;
@@ -204,6 +220,45 @@ function validateMessage(value: string) {
   }
 
   return undefined;
+}
+
+function validateContext(value: string) {
+  if (!value) return "This field is required.";
+  if (value.length < 2) return "Please enter at least 2 characters.";
+  if (value.length > 150) return "Please keep this under 150 characters.";
+  if (hasRepeatedSpam(value)) return "Contains spam-like repeated characters.";
+  return undefined;
+}
+
+function validateMembershipType(value: unknown): MembershipType | undefined {
+  if (typeof value !== "string") return undefined;
+  return (MEMBERSHIP_TYPES as readonly string[]).includes(value)
+    ? (value as MembershipType)
+    : undefined;
+}
+
+export function validateMembershipForm(
+  input: Partial<Record<string, unknown>>
+): MembershipValidationResult {
+  const base = validateContactForm(input);
+  const context = normalizeText(typeof input.context === "string" ? input.context : "");
+  const membershipType = validateMembershipType(input.membershipType);
+
+  const errors: MembershipErrors = { ...base.errors };
+
+  const contextErr = validateContext(context);
+  if (contextErr) errors.context = contextErr;
+  if (!membershipType) errors.membershipType = "Please choose a membership type.";
+
+  return {
+    values: {
+      ...base.values,
+      context,
+      membershipType: membershipType ?? ("student" as MembershipType)
+    },
+    errors,
+    isValid: Object.keys(errors).length === 0 && Boolean(membershipType)
+  };
 }
 
 export function validateContactForm(input: Partial<Record<ContactField, unknown>>): ContactValidationResult {
