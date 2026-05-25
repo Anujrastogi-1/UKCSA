@@ -1,8 +1,6 @@
 "use client";
 
-import { Briefcase, GraduationCap, ShieldCheck } from "lucide-react";
-import { FormEvent, useMemo, useState } from "react";
-import type { LucideIcon } from "lucide-react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import {
   CONTACT_FIELDS,
   ContactErrors,
@@ -12,19 +10,18 @@ import {
   validateContactForm
 } from "../../lib/contactValidation";
 
-type TabId = "students" | "professionals" | "board";
+export type RoleId = "students" | "professionals" | "board";
 
-// Maps the UI tab id to the canonical membershipType enum the API expects.
-const TAB_TO_MEMBERSHIP_TYPE: Record<TabId, "student" | "professional" | "board"> = {
+// Maps the UI role id to the canonical membershipType enum the API expects.
+const ROLE_TO_MEMBERSHIP_TYPE: Record<RoleId, "student" | "professional" | "board"> = {
   students: "student",
   professionals: "professional",
   board: "board"
 };
 
-type TabConfig = {
-  id: TabId;
+type RoleFormConfig = {
+  id: RoleId;
   label: string;
-  icon: LucideIcon;
   contextLabel: string;
   contextPlaceholder: string;
   subjectPrefix: string;
@@ -33,41 +30,38 @@ type TabConfig = {
   messagePlaceholder: string;
 };
 
-const TABS: TabConfig[] = [
-  {
+const ROLE_FORMS: Record<RoleId, RoleFormConfig> = {
+  students: {
     id: "students",
-    label: "Students",
-    icon: GraduationCap,
+    label: "Student",
     contextLabel: "Institution / University",
-    contextPlaceholder: "e.g. DIT University, Dehradun",
+    contextPlaceholder: "e.g. Graphic Era University, Dehradun",
     subjectPrefix: "Student membership",
-    buttonLabel: "Apply as Student",
+    buttonLabel: "Start Your Security Journey",
     messageLabel: "Why do you want to join?",
     messagePlaceholder: "Tell us about your interest in cloud security and what you'd like to learn."
   },
-  {
+  professionals: {
     id: "professionals",
-    label: "Professionals",
-    icon: Briefcase,
+    label: "Professional",
     contextLabel: "Company / Employer",
     contextPlaceholder: "Your current organization",
     subjectPrefix: "Professional membership",
-    buttonLabel: "Apply as Professional",
+    buttonLabel: "Join the Professional Network",
     messageLabel: "Your background and goals",
     messagePlaceholder: "Briefly share your experience and what you hope to gain from the chapter."
   },
-  {
+  board: {
     id: "board",
-    label: "Board Members",
-    icon: ShieldCheck,
+    label: "Board Member",
     contextLabel: "Organization & Designation",
     contextPlaceholder: "Organization and current role",
     subjectPrefix: "Board member application",
-    buttonLabel: "Apply for Board",
+    buttonLabel: "Lead the Community",
     messageLabel: "Why are you a good fit?",
     messagePlaceholder: "Share your background and what you can contribute as a board member."
   }
-];
+};
 
 type FormStatus = {
   type: "success" | "error";
@@ -97,8 +91,7 @@ const allUntouched = CONTACT_FIELDS.reduce(
   {} as Record<ContactField, boolean>
 );
 
-export function MembershipForm() {
-  const [activeTab, setActiveTab] = useState<TabId>("students");
+export function MembershipForm({ role }: { role: RoleId }) {
   const [values, setValues] = useState<MembershipValues>(emptyMembership);
   const [touched, setTouched] = useState<Record<ContactField, boolean>>(allUntouched);
   const [contextTouched, setContextTouched] = useState(false);
@@ -106,7 +99,13 @@ export function MembershipForm() {
   const [status, setStatus] = useState<FormStatus>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const tab = TABS.find((t) => t.id === activeTab) ?? TABS[0];
+  const tab = ROLE_FORMS[role] ?? ROLE_FORMS.students;
+
+  // Clear server feedback when the selected role changes (kept entered values).
+  useEffect(() => {
+    setStatus(null);
+    setServerErrors({});
+  }, [role]);
 
   const composedSubject = useMemo(() => {
     const trimmed = values.context.trim().replace(/\s+/g, " ");
@@ -166,13 +165,6 @@ export function MembershipForm() {
     setContextTouched(true);
   };
 
-  const switchTab = (id: TabId) => {
-    if (id === activeTab) return;
-    setActiveTab(id);
-    setStatus(null);
-    setServerErrors({});
-  };
-
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setTouched(touchedAllFields);
@@ -205,7 +197,7 @@ export function MembershipForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...result.values,
-          membershipType: TAB_TO_MEMBERSHIP_TYPE[activeTab],
+          membershipType: ROLE_TO_MEMBERSHIP_TYPE[role],
           context: values.context.trim().replace(/\s+/g, " "),
           website: ""
         })
@@ -248,149 +240,123 @@ export function MembershipForm() {
   };
 
   return (
-    <div className="member-form-wrap">
-      <div className="member-tabs" role="tablist" aria-label="Membership type">
-        {TABS.map((entry) => {
-          const Icon = entry.icon;
-          const isActive = entry.id === activeTab;
-          return (
-            <button
-              key={entry.id}
-              type="button"
-              role="tab"
-              id={`member-tab-${entry.id}`}
-              aria-selected={isActive}
-              aria-controls={`member-panel-${entry.id}`}
-              className={`member-tab${isActive ? " is-active" : ""}`}
-              onClick={() => switchTab(entry.id)}
-            >
-              <Icon size={16} aria-hidden="true" />
-              <span>{entry.label}</span>
-            </button>
-          );
-        })}
+    <form
+      className="contact-form member-form"
+      noValidate
+      onSubmit={handleSubmit}
+      aria-label={`${tab.label} membership application`}
+    >
+      {status ? (
+        <div
+          className={`form-notice form-notice--${status.type}`}
+          role={status.type === "error" ? "alert" : "status"}
+          aria-live="polite"
+        >
+          {status.message}
+        </div>
+      ) : null}
+
+      <div className="contact-form-row">
+        <FieldControl
+          field="firstName"
+          label={fieldLabels.firstName}
+          value={values.firstName}
+          error={fieldError("firstName")}
+          placeholder="First Name"
+          autoComplete="given-name"
+          onBlur={() => trimField("firstName")}
+          onChange={updateField}
+        />
+        <FieldControl
+          field="lastName"
+          label={fieldLabels.lastName}
+          value={values.lastName}
+          error={fieldError("lastName")}
+          placeholder="Last Name"
+          autoComplete="family-name"
+          onBlur={() => trimField("lastName")}
+          onChange={updateField}
+        />
       </div>
 
-      <form
-        className="contact-form member-form"
-        noValidate
-        onSubmit={handleSubmit}
-        role="tabpanel"
-        id={`member-panel-${tab.id}`}
-        aria-labelledby={`member-tab-${tab.id}`}
-      >
-        {status ? (
-          <div
-            className={`form-notice form-notice--${status.type}`}
-            role={status.type === "error" ? "alert" : "status"}
-            aria-live="polite"
-          >
-            {status.message}
-          </div>
-        ) : null}
-
-        <div className="contact-form-row">
-          <FieldControl
-            field="firstName"
-            label={fieldLabels.firstName}
-            value={values.firstName}
-            error={fieldError("firstName")}
-            placeholder="First Name"
-            autoComplete="given-name"
-            onBlur={() => trimField("firstName")}
-            onChange={updateField}
-          />
-          <FieldControl
-            field="lastName"
-            label={fieldLabels.lastName}
-            value={values.lastName}
-            error={fieldError("lastName")}
-            placeholder="Last Name"
-            autoComplete="family-name"
-            onBlur={() => trimField("lastName")}
-            onChange={updateField}
-          />
-        </div>
-
-        <div className="contact-form-row">
-          <FieldControl
-            field="email"
-            label={fieldLabels.email}
-            type="email"
-            value={values.email}
-            error={fieldError("email")}
-            placeholder="you@example.com"
-            autoComplete="email"
-            onBlur={() => trimField("email")}
-            onChange={updateField}
-          />
-          <FieldControl
-            field="phone"
-            label={fieldLabels.phone}
-            type="tel"
-            value={values.phone}
-            error={fieldError("phone")}
-            placeholder="+91XXXXXXXXXX"
-            autoComplete="tel"
-            inputMode="tel"
-            onBlur={() => trimField("phone")}
-            onChange={updateField}
-          />
-        </div>
-
-        <label className="contact-field">
-          <span>{tab.contextLabel}</span>
-          <input
-            type="text"
-            aria-label={tab.contextLabel}
-            aria-describedby={showContextError ? "context-error" : undefined}
-            aria-invalid={Boolean(showContextError)}
-            className={showContextError ? "is-invalid" : undefined}
-            value={values.context}
-            placeholder={tab.contextPlaceholder}
-            onBlur={trimContext}
-            onChange={(event) => updateContext(event.target.value)}
-          />
-          {showContextError ? (
-            <span className="field-error" id="context-error" role="alert">
-              {showContextError}
-            </span>
-          ) : null}
-        </label>
-
-        <label className="contact-field">
-          <span>{tab.messageLabel}</span>
-          <textarea
-            aria-label={tab.messageLabel}
-            aria-describedby={fieldError("message") ? "message-error" : undefined}
-            aria-invalid={Boolean(fieldError("message"))}
-            className={fieldError("message") ? "is-invalid" : undefined}
-            rows={6}
-            value={values.message}
-            placeholder={tab.messagePlaceholder}
-            onBlur={() => trimField("message")}
-            onChange={(event) => updateField("message", event.target.value)}
-          />
-          {fieldError("message") ? (
-            <span className="field-error" id="message-error" role="alert">
-              {fieldError("message")}
-            </span>
-          ) : null}
-        </label>
-
-        <input
-          className="contact-honeypot"
-          type="text"
-          name="website"
-          tabIndex={-1}
-          autoComplete="off"
-          aria-hidden="true"
+      <div className="contact-form-row">
+        <FieldControl
+          field="email"
+          label={fieldLabels.email}
+          type="email"
+          value={values.email}
+          error={fieldError("email")}
+          placeholder="you@example.com"
+          autoComplete="email"
+          onBlur={() => trimField("email")}
+          onChange={updateField}
         />
-        <button type="submit" disabled={isSubmitDisabled} aria-busy={isSubmitting}>
-          {isSubmitting ? "Submitting..." : tab.buttonLabel}
-        </button>
-      </form>
-    </div>
+        <FieldControl
+          field="phone"
+          label={fieldLabels.phone}
+          type="tel"
+          value={values.phone}
+          error={fieldError("phone")}
+          placeholder="+91XXXXXXXXXX"
+          autoComplete="tel"
+          inputMode="tel"
+          onBlur={() => trimField("phone")}
+          onChange={updateField}
+        />
+      </div>
+
+      <label className="contact-field">
+        <span>{tab.contextLabel}</span>
+        <input
+          type="text"
+          aria-label={tab.contextLabel}
+          aria-describedby={showContextError ? "context-error" : undefined}
+          aria-invalid={Boolean(showContextError)}
+          className={showContextError ? "is-invalid" : undefined}
+          value={values.context}
+          placeholder={tab.contextPlaceholder}
+          onBlur={trimContext}
+          onChange={(event) => updateContext(event.target.value)}
+        />
+        {showContextError ? (
+          <span className="field-error" id="context-error" role="alert">
+            {showContextError}
+          </span>
+        ) : null}
+      </label>
+
+      <label className="contact-field">
+        <span>{tab.messageLabel}</span>
+        <textarea
+          aria-label={tab.messageLabel}
+          aria-describedby={fieldError("message") ? "message-error" : undefined}
+          aria-invalid={Boolean(fieldError("message"))}
+          className={fieldError("message") ? "is-invalid" : undefined}
+          rows={6}
+          value={values.message}
+          placeholder={tab.messagePlaceholder}
+          onBlur={() => trimField("message")}
+          onChange={(event) => updateField("message", event.target.value)}
+        />
+        {fieldError("message") ? (
+          <span className="field-error" id="message-error" role="alert">
+            {fieldError("message")}
+          </span>
+        ) : null}
+      </label>
+
+      <input
+        className="contact-honeypot"
+        type="text"
+        name="website"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+      />
+      <button type="submit" disabled={isSubmitDisabled} aria-busy={isSubmitting}>
+        {isSubmitting ? "Submitting..." : tab.buttonLabel}
+      </button>
+    </form>
   );
 }
 

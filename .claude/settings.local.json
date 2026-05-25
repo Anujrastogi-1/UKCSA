@@ -10,7 +10,29 @@
       "PowerShell(Get-Command *)",
       "Bash(git commit *)",
       "Bash(git add *)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Bash(node *)",
+      "PowerShell($bytes = New-Object byte[] 64; [System.Security.Cryptography.RandomNumberGenerator]::Create\\(\\).GetBytes\\($bytes\\); -join \\($bytes | ForEach-Object { $_.ToString\\('x2'\\) }\\))",
+      "PowerShell(npm install *)",
+      "PowerShell(winget install *)",
+      "Bash(awk 'NR==459' app/admin/Dashboard.tsx)",
+      "Bash(npm run *)",
+      "WebFetch(domain:stitch.withgoogle.com)",
+      "Bash(npm install *)",
+      "Bash(echo \"TSC_EXIT=$?\")",
+      "Bash(curl -sL --max-time 25 -A \"Mozilla/5.0 \\(Windows NT 10.0; Win64; x64\\)\" \"https://stitch.withgoogle.com/preview/13683270118758438156?node-id=fc69411eba484160929ed8e4c2eec4b1\" -o stitch.html -w \"HTTP %{http_code} size=%{size_download}\\\\n\")",
+      "Bash(grep -o -i -E \"events|conference|rounded-[a-z0-9]+|bg-\\\\[#[0-9a-fA-F]+\\\\]|#[0-9a-fA-F]{6}|class=\\\\\\\\\\\\\\\\?\\\\\"[^\\\\\"]{0,40}\" stitch.html)",
+      "Bash(taskkill //F //IM node.exe)",
+      "Bash(rm -f dev-smoke.log)",
+      "Bash(curl -sL --max-time 25 -A \"Mozilla/5.0 \\(Windows NT 10.0; Win64; x64\\) AppleWebKit/537.36\" \"https://stitch.withgoogle.com/preview/13683270118758438156?node-id=fc69411eba484160929ed8e4c2eec4b1&raw=1\" -o stitch_raw.html -w \"HTTP %{http_code}  type=%{content_type}  size=%{size_download}\\\\n\")",
+      "Bash(curl -s -o NUL -w \"google-fonts reachable: HTTP %{http_code}\\\\n\" --max-time 12 \"https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap\")",
+      "WebFetch(domain:uk.cloudsecurityalliance.in)",
+      "Bash(curl -sL --max-time 25 \"https://uk.cloudsecurityalliance.in/past-events\" -o live.html -w \"HTTP %{http_code} size=%{size_download}\\\\n\")",
+      "Bash(curl -sL --max-time 25 \"https://uk.cloudsecurityalliance.in/past-events\" -o live.html)",
+      "Bash(grep -o -iE \"Amrapali Group of Institutes organized.{0,400}\" live.html)",
+      "Bash(grep -o -iE \"\\(Haldwani|Dehradun|Sultanpur|Lalkuan\\)[^\\\\\"\\\\\\\\]{0,80}\" live.html)",
+      "Bash(grep -o -iE \"\\(Sep|September|Oct|March|April|Feb|Jan|Aug\\)[a-z]*[^\\\\\"\\\\\\\\]{0,18}2017\" live.html)",
+      "Bash(grep -o -iE \"\\(Cloud Security Best Practices|OWASP Top 10|Live Hacking|Networking with Industry\\)[^\\\\\"\\\\\\\\]{0,40}\" live.html)"
     ]
   }
 }

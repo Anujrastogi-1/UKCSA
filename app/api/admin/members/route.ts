@@ -12,6 +12,7 @@ export const runtime = "nodejs";
 // Returns paginated members with optional filters:
 //   - type:   membership category
 //   - status: workflow status (new/reviewing/approved/rejected/archived)
+//   - range:  recency window — "7d" or "30d" (anything else = all time)
 //   - q:      free-text search across firstName/lastName/email
 //   - page:   1-based page number (default 1)
 //   - pageSize: 1–100, default 20
@@ -34,6 +35,7 @@ export async function GET(request: NextRequest) {
   const q = url.searchParams.get("q")?.trim() ?? "";
   const typeRaw = url.searchParams.get("type") ?? "";
   const statusRaw = url.searchParams.get("status") ?? "";
+  const rangeRaw = url.searchParams.get("range") ?? "";
   const page = clampInt(url.searchParams.get("page"), 1, 1, 10_000);
   const pageSize = clampInt(
     url.searchParams.get("pageSize"),
@@ -65,6 +67,12 @@ export async function GET(request: NextRequest) {
     const escaped = q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     const rx = new RegExp(escaped, "i");
     filter.$or = [{ firstName: rx }, { lastName: rx }, { email: rx }];
+  }
+
+  // Optional date-range filter ("7d" / "30d"); anything else means all time.
+  if (rangeRaw === "7d" || rangeRaw === "30d") {
+    const days = rangeRaw === "7d" ? 7 : 30;
+    filter.createdAt = { $gte: new Date(Date.now() - days * 24 * 60 * 60 * 1000) };
   }
 
   await connectDB();

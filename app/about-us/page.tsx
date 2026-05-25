@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { BrainCircuit, Building2, GraduationCap, Handshake, Network, ShieldCheck, Target, Users } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -58,13 +59,15 @@ export default function AboutPage() {
       <section className="about-hero">
         <div className="container about-hero-grid">
           <div className="about-hero-copy">
-            <p className="eyebrow">About CSA Uttarakhand Chapter</p>
-            <h1>Building a future-ready cybersecurity community for Uttarakhand.</h1>
+            <h1>About CSA Uttarakhand Chapter</h1>
             <p>
               The CSA Uttarakhand Chapter serves as a platform where industry experts, academic institutions, startups,
               and security enthusiasts come together to explore emerging technologies, discuss evolving cyber threats,
               and create impactful solutions for a secure digital future.
             </p>
+            {/* <div className="about-hero-actions">
+              <Link className="btn btn-primary" href="/contact">Become a Member</Link>
+            </div> */}
           </div>
           <div className="about-signal-panel" aria-label="Chapter focus summary">
             <div className="about-signal-header">
@@ -79,6 +82,12 @@ export default function AboutPage() {
       </section>
 
       <section className="about-story">
+        <div className="container">
+          <div className="section-intro">
+            <p className="eyebrow">How the chapter works</p>
+            <h2>What we do, how we grow, and who belongs here.</h2>
+          </div>
+        </div>
         <div className="container about-story-grid">
           <article className="about-story-card about-story-card--dark">
             <div className="about-card-head">

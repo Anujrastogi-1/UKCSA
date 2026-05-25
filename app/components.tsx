@@ -154,7 +154,7 @@ export function Footer() {
           <address className="footer-contact">
             <Link href="/contact">
               <Mail size={17} aria-hidden="true" />
-              Contact form
+              Become a Member
             </Link>
             <a
               href="https://www.linkedin.com/groups/8409109/"

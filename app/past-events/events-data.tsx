@@ -1,6 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
-import { Award, Download, Users } from "lucide-react";
+import { Download, Users } from "lucide-react";
 
 export type EventAction = [label: string, href: string, Icon: LucideIcon];
 export type GalleryImage = { src: string; alt: string };
@@ -81,12 +81,11 @@ export const events: EventItem[] = [
     place: "Graphic Era Hill University, Bell Road, Society Area, Clement Town, Dehradun, Uttarakhand",
     intro: (
       <>
-        FCSA, Tula's Institute organized a landmark one-day conference on{" "}
-        <strong>&ldquo;Cloud Security&rdquo;</strong> in collaboration with{" "}
-        <strong>Cloud Security Alliance (CSA)</strong> and{" "}
-        <strong>Open Web Application Security Project (OWASP)</strong> on 24th April, 2026.
-        The conference featured expert sessions on cloud computing security, penetration testing,
-        and cybersecurity awareness for BCA, MCA and B.Tech (CS) students.
+        The <strong>Cloud Security Alliance (CSA) Uttarakhand Chapter</strong> signed a{" "}
+        <strong>Memorandum of Understanding</strong> with{" "}
+        <strong>Graphic Era Hill University</strong> to strengthen collaboration in cloud security,
+        cybersecurity awareness, and skill development. The partnership focuses on joint workshops,
+        training programs, research initiatives, and hands-on learning opportunities for students and faculty.
       </>
     ),
     badges: [],
@@ -113,6 +112,40 @@ export const events: EventItem[] = [
     ],
   },
 
+  {
+    slug: "Mou-UPES",
+    category: "event",
+    image: "/assets/img/MOU_UPES/Group_Photo.jpg",
+    alt: "MOU Signing Ceremony - University of Petroleum and Energy Studies (UPES)",
+    date: "May 2026",
+    title: "MOU Signing Ceremony - UPES",
+    place: "University of Petroleum and Energy Studies (UPES), Bidholi, Dehradun, Uttarakhand",
+    intro: (
+      <>
+        The <strong>Cloud Security Alliance (CSA) Uttarakhand Chapter</strong> signed a{" "}
+        <strong>Memorandum of Understanding</strong> with the{" "}
+        <strong>University of Petroleum and Energy Studies (UPES)</strong> to advance collaboration
+        in cloud security, cybersecurity awareness, and skill development. The partnership focuses on
+        joint workshops, training programs, research initiatives, and hands-on learning opportunities
+        for students and faculty.
+      </>
+    ),
+    badges: [],
+    highlightsTitle: "",
+    highlights: [],
+    actions: [],
+    gallery: [
+      { src: "/assets/img/MOU_UPES/Group_Photo.jpg",            alt: "CSA × UPES — Group photo" },
+      { src: "/assets/img/MOU_UPES/Entrance.jpg",               alt: "CSA × UPES — Event entrance" },
+      { src: "/assets/img/MOU_UPES/Light Lampning.jpg",         alt: "CSA × UPES — Lamp lighting ceremony" },
+      { src: "/assets/img/MOU_UPES/hands_raising.jpg",          alt: "CSA × UPES — Pledge moment" },
+      { src: "/assets/img/MOU_UPES/Batch.jpg",                  alt: "CSA × UPES — Participants" },
+      { src: "/assets/img/MOU_UPES/Certificates&Trophies.jpg",  alt: "CSA × UPES — Certificates and trophies" },
+      { src: "/assets/img/MOU_UPES/Newspaper_Cutting.jpg",      alt: "CSA × UPES — Press coverage" },
+      { src: "/assets/img/MOU_UPES/image.jpg",                  alt: "CSA × UPES — Ceremony highlights" },
+    ],
+  },
+
     {
 
     slug: "CSAXCON-2026",
@@ -124,31 +157,23 @@ export const events: EventItem[] = [
     place: "Graphic Era (Deemed to be University), Dehradun, Uttarakhand",
     intro: (
       <>
-        A <strong>historic milestone</strong> for cybersecurity in Uttarakhand! The{" "}
-        <strong>Cloud Security Alliance International Information Security Summit 2026</strong> was
-        organized by <strong>Mr. Satyam Rastogi</strong> in association with the Department of IT
-        at DIT University on <strong>14th March 2026</strong> — marking the <strong>INDIA's</strong>{" "}
-        Biggest cybersecurity summit ever held in Dehradun.
+        The <strong>CSA International Information Security Summit 2026</strong>, held at
+        Graphic Era (Deemed to be University), was the largest cybersecurity summit
+        ever hosted in Dehradun.
       </>
     ),
-    badges: ["Flagship Event", "Historic Event", "First in Dehradun", "Organized by Satyam Rastogi"],
-    highlightsTitle: "Summit Highlights:",
+    badges: [],
+    highlightsTitle: "Summit Highlights",
     highlights: [
-      "First International Security Summit in Dehradun",
-      "Keynote by Industry Leaders & CSA Experts",
-      "Cloud Security Trends & Threat Landscape 2026",
-      "Hands-on Workshops on Ethical Hacking",
-      "Career Guidance in Cybersecurity",
+      "First international security summit in Dehradun",
+      "Keynotes by industry leaders & CSA experts",
+      "Cloud security trends & 2026 threat landscape",
+      "Hands-on ethical hacking workshops",
     ],
     about:
-      "Satyam Rastogi pioneered cloud security awareness in Uttarakhand by bringing this landmark event to DIT University, establishing the foundation for CSA Uttarakhand Chapter.",
+      "Pioneered by Mr. Satyam Rastogi, the summit laid the foundation for the CSA Uttarakhand Chapter.",
     actions: [
-      [
-        "Official Coverage",
-        "https://www.dituniversity.edu.in/workshop-conference-seminars/cloud-security-alliance-international-information-security-summit-2016-was-organized-by-the-department-of-it-",
-        Award,
-      ],
-      ["Meet Satyam Rastogi", "/board-of-directors", Users],
+      ["Meet Satyam Rastogi", "https://www.satyamrastogi.com/", Users],
     ],
     gallery: [
       { src: "/assets/img/CSAXCON/E89A6701.webp", alt: "CSAXCON 2026 — Opening session" },
@@ -175,6 +200,43 @@ export const events: EventItem[] = [
       { src: "/assets/img/CSAXCON/DSC06854.webp", alt: "CSAXCON 2026 — Venue moments" },
       { src: "/assets/img/CSAXCON/DSC06873.webp", alt: "CSAXCON 2026 — Event highlights" },
       { src: "/assets/img/CSAXCON/DSC06894.webp", alt: "CSAXCON 2026 — Final shots" },
+    ],
+  },
+
+  {
+    slug: "CSA-2017",
+    category: "conference",
+    image: "/assets/img/events/2017-CSA-28.png",
+    alt: "Conference on Cloud Computing & Cyber Security (CSA 2017) — Amrapali Group of Institutes",
+    date: "Sept 16, 2017",
+    title: "Conference on Cloud Computing & Cyber Security (CSA 2017)",
+    place: "Amrapali Group of Institutes, Haldwani, Uttarakhand",
+    intro: (
+      <>
+        <strong>Amrapali Group of Institutes</strong> organized a landmark one-day conference on
+        &ldquo;Cloud Security&rdquo; in collaboration with Cloud Security Alliance (CSA) and the
+        Open Web Application Security Project (OWASP) on 16th September 2017 — featuring expert
+        sessions on cloud security, penetration testing, and cybersecurity awareness for BCA, MCA,
+        and B.Tech (CS) students.
+      </>
+    ),
+    badges: ["Completed", "500+ Attendees"],
+    highlightsTitle: "Key Highlights",
+    highlights: [
+      "Cloud security best practices workshop",
+      "OWASP Top 10 vulnerabilities session",
+      "Live hacking demonstrations",
+      "Networking with industry experts",
+    ],
+    actions: [
+      ["Download Report", "https://uk.cloudsecurityalliance.in/assets/img/events/2016%20CSA.pdf", Download],
+      ["Join Community", "https://www.linkedin.com/groups/8409109/", Users],
+    ],
+    gallery: [
+      {
+        src: "/assets/img/events/2017-CSA-28.png",
+        alt: "Conference on Cloud Computing & Cyber Security (CSA 2017) — Amrapali Group of Institutes",
+      },
     ],
   },
 

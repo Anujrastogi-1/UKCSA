@@ -21,11 +21,8 @@ export default function BoardPage() {
     <main>
 
       <PageHero title="Board Members" />
-      <section className="leadership" id="chapters" aria-labelledby="leadership-heading">
+      <section className="leadership" id="chapters" aria-label="Board members">
         <div className="container">
-          <div className="section-intro section-intro--center">
-            <h2 id="leadership-heading">Chapter Leadership</h2>
-          </div>
           <BoardMemberGrid members={boardMembers} />
         </div>
       </section>

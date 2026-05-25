@@ -9,12 +9,6 @@ import {
   RefreshCw,
   LogOut,
   Trash2,
-  Users,
-  CalendarDays,
-  CalendarRange,
-  GraduationCap,
-  Briefcase,
-  ShieldCheck,
   ChevronLeft,
   ChevronRight,
   CheckCircle2,
@@ -51,8 +45,14 @@ type StatsData = {
   byStatus: Record<string, number>;
 };
 
+const RANGE_FILTERS = [
+  { value: "", label: "Total" },
+  { value: "7d", label: "Last 7 Days" },
+  { value: "30d", label: "Last 30 Days" }
+] as const;
+
 const TYPE_FILTERS = [
-  { value: "", label: "All types" },
+  { value: "", label: "All" },
   { value: "student", label: "Students" },
   { value: "professional", label: "Professionals" },
   { value: "board", label: "Board Members" }
@@ -82,6 +82,7 @@ export function Dashboard() {
   const [stats, setStats] = useState<StatsData | null>(null);
   const [list, setList] = useState<ListData | null>(null);
   const [type, setType] = useState<string>("");
+  const [range, setRange] = useState<string>("");
   const [q, setQ] = useState<string>("");
   const [debouncedQ, setDebouncedQ] = useState<string>("");
   const [page, setPage] = useState(1);
@@ -97,9 +98,10 @@ export function Dashboard() {
   const filterParams = useMemo(() => {
     const p = new URLSearchParams();
     if (type) p.set("type", type);
+    if (range) p.set("range", range);
     if (debouncedQ) p.set("q", debouncedQ);
     return p;
-  }, [type, debouncedQ]);
+  }, [type, range, debouncedQ]);
 
   const listUrl = useMemo(() => {
     const p = new URLSearchParams(filterParams);
@@ -131,7 +133,7 @@ export function Dashboard() {
 
   useEffect(() => {
     setPage(1);
-  }, [type, debouncedQ]);
+  }, [type, range, debouncedQ]);
 
   async function onDelete(id: string) {
     if (!confirm("Delete this submission? This cannot be undone.")) return;
@@ -193,6 +195,21 @@ export function Dashboard() {
   const visibleStart = list && list.items.length > 0 ? (list.pagination.page - 1) * list.pagination.pageSize + 1 : 0;
   const visibleEnd = list ? visibleStart + list.items.length - 1 : 0;
 
+  const rangeCount = (v: string): number | null => {
+    if (!stats) return null;
+    if (v === "7d") return stats.totals.last7Days;
+    if (v === "30d") return stats.totals.last30Days;
+    return stats.totals.all;
+  };
+
+  const typeCount = (v: string): number | null => {
+    if (!stats) return null;
+    if (v === "student") return stats.byType.student;
+    if (v === "professional") return stats.byType.professional;
+    if (v === "board") return stats.byType.board;
+    return stats.totals.all;
+  };
+
   return (
     <div className="admin-dashboard">
       <header className="admin-header">
@@ -205,16 +222,44 @@ export function Dashboard() {
         </button>
       </header>
 
-      {stats ? (
-        <div className="admin-stat-grid">
-          <StatCard tone="blue" icon={<Users size={20} />} label="Total submissions" value={stats.totals.all} />
-          <StatCard tone="orange" icon={<CalendarDays size={20} />} label="Last 7 days" value={stats.totals.last7Days} />
-          <StatCard tone="slate" icon={<CalendarRange size={20} />} label="Last 30 days" value={stats.totals.last30Days} />
-          <StatCard tone="blue" icon={<GraduationCap size={20} />} label="Students" value={stats.byType.student} />
-          <StatCard tone="orange" icon={<Briefcase size={20} />} label="Professionals" value={stats.byType.professional} />
-          <StatCard tone="slate" icon={<ShieldCheck size={20} />} label="Board members" value={stats.byType.board} />
+      <div className="admin-filters">
+        <div className="admin-filter-row" role="group" aria-label="Filter by recency">
+          {RANGE_FILTERS.map((f) => {
+            const active = range === f.value;
+            const count = rangeCount(f.value);
+            return (
+              <button
+                key={f.value || "all-time"}
+                type="button"
+                className={`admin-chip${active ? " is-active" : ""}`}
+                onClick={() => setRange(f.value)}
+                aria-pressed={active}
+              >
+                {f.label}
+                {count != null ? <span className="admin-chip__count">{count.toLocaleString()}</span> : null}
+              </button>
+            );
+          })}
         </div>
-      ) : null}
+        <div className="admin-filter-row" role="group" aria-label="Filter by membership type">
+          {TYPE_FILTERS.map((f) => {
+            const active = type === f.value;
+            const count = typeCount(f.value);
+            return (
+              <button
+                key={f.value || "all-types"}
+                type="button"
+                className={`admin-chip${active ? " is-active" : ""}`}
+                onClick={() => setType(f.value)}
+                aria-pressed={active}
+              >
+                {f.label}
+                {count != null ? <span className="admin-chip__count">{count.toLocaleString()}</span> : null}
+              </button>
+            );
+          })}
+        </div>
+      </div>
 
       <div className="admin-toolbar">
         <div className="admin-search">
@@ -227,16 +272,6 @@ export function Dashboard() {
             aria-label="Search submissions"
           />
         </div>
-        <select
-          className="admin-select"
-          value={type}
-          onChange={(e) => setType(e.target.value)}
-          aria-label="Filter by membership type"
-        >
-          {TYPE_FILTERS.map((f) => (
-            <option key={f.value} value={f.value}>{f.label}</option>
-          ))}
-        </select>
         <div className="admin-actions">
           <button
             type="button"
@@ -288,18 +323,17 @@ export function Dashboard() {
               <th>Email</th>
               <th>Phone</th>
               <th>Org / Institution</th>
-              <th>Status</th>
               <th>Sheet</th>
               <th className="admin-col-actions" aria-label="Actions"></th>
             </tr>
           </thead>
           <tbody>
             {loading && !list ? (
-              <tr><td colSpan={9} className="admin-empty">Loading…</td></tr>
+              <tr><td colSpan={8} className="admin-empty">Loading…</td></tr>
             ) : null}
             {list && list.items.length === 0 ? (
               <tr>
-                <td colSpan={9} className="admin-empty">
+                <td colSpan={8} className="admin-empty">
                   <Inbox size={28} aria-hidden />
                   <span>No submissions match the current filters.</span>
                 </td>
@@ -313,7 +347,6 @@ export function Dashboard() {
                 <td><a href={`mailto:${m.email}`} className="admin-link">{m.email}</a></td>
                 <td className="admin-cell-meta">{m.phone}</td>
                 <td className="admin-cell-clip" title={m.context}>{m.context}</td>
-                <td><StatusBadge status={m.status} /></td>
                 <td className="admin-cell-center">
                   {m.sheetSynced ? (
                     <CheckCircle2 size={16} className="admin-sheet-ok" aria-label="Synced" />
@@ -374,37 +407,8 @@ export function Dashboard() {
   );
 }
 
-function StatCard({
-  tone,
-  icon,
-  label,
-  value
-}: {
-  tone: "blue" | "orange" | "slate";
-  icon: React.ReactNode;
-  label: string;
-  value: number;
-}) {
-  return (
-    <div className={`admin-stat admin-stat--${tone}`}>
-      <span className="admin-stat__icon" aria-hidden>{icon}</span>
-      <div className="admin-stat__body">
-        <span className="admin-stat__label">{label}</span>
-        <span className="admin-stat__value">{value.toLocaleString()}</span>
-      </div>
-    </div>
-  );
-}
-
 function TypeBadge({ type }: { type: Member["membershipType"] }) {
   return <span className={`admin-badge admin-badge--type-${type}`}>{TYPE_LABEL[type]}</span>;
-}
-
-function StatusBadge({ status }: { status: string }) {
-  const key = ["new", "reviewing", "approved", "rejected", "archived"].includes(status)
-    ? status
-    : "other";
-  return <span className={`admin-badge admin-badge--status-${key}`}>{status}</span>;
 }
 
 function formatDate(iso: string) {

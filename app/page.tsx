@@ -194,7 +194,7 @@ function Hero() {
             Join Uttarakhand&apos;s premier hub for cybersecurity excellence.
           </p>
           <div className="hero-actions">
-            <Link className="btn btn-primary" href="/membership-info">
+            <Link className="btn btn-primary" href="/contact">
               Become a Member
             </Link>
             <Link className="btn btn-secondary" href="/past-events">
@@ -367,15 +367,16 @@ function WhyJoinBand() {
     <section className="why-join-band">
       <div className="container why-join-inner">
         <div>
-          <p className="eyebrow">Why join?</p>
+          <p className="eyebrow">Why join &amp; stay connected</p>
           <h2>Stay informed, connected, and future-ready.</h2>
           <p>
-            Cybersecurity is evolving faster than a browser tab explosion at a hacker conference. The CSA Uttarakhand
-            Chapter helps you become part of a collaborative community working toward a safer digital ecosystem.
+            The CSA Uttarakhand Chapter helps you become part of a collaborative community working toward a
+            safer digital ecosystem — with real-time updates on local meetups, opportunities, and breaking
+            news across the cloud security domain.
           </p>
         </div>
         <a className="btn btn-primary" href="https://www.linkedin.com/groups/8409109/">
-          Join the Community
+          Connect on LinkedIn
         </a>
       </div>
     </section>
@@ -396,31 +397,6 @@ function WhyJoinBand() {
 //   );
 // }
 
-function ResourcesSection() {
-  return (
-    <section className="resources">
-      <div className="container resource-grid">
-        <article className="resource-card resource-card--vault">
-          <div className="resource-label">MEMBER-ONLY CONTENT</div>
-          <h2>Exclusive Resource Vault</h2>
-          <p>Access chapter-exclusive whitepapers, compliance templates, and full recordings of our monthly webinars.</p>
-          <Link className="btn btn-primary" href="/contact">
-            Login to Access
-          </Link>
-        </article>
-        <article className="resource-card resource-card--community">
-          <div className="resource-label">STAY CONNECTED</div>
-          <h2>Join Our Community</h2>
-          <p>Get real-time updates on local meetups, job opportunities, and breaking news in the cloud security domain.</p>
-          <a className="btn btn-secondary" href="https://www.linkedin.com/groups/8409109/">
-            Connect on LinkedIn
-          </a>
-        </article>
-      </div>
-    </section>
-  );
-}
-
 export default function Home() {
   return (
     <main>
@@ -432,7 +408,6 @@ export default function Home() {
       <JoinPathSection />
       <WhyJoinBand />
       {/* <BoardMembersSection /> */}
-      <ResourcesSection />
     </main>
   );
 }
