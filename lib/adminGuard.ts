@@ -1,16 +1,15 @@
 import { NextRequest } from "next/server";
-import type { HydratedDocument } from "mongoose";
+import type { Admin } from "@prisma/client";
 import { readSessionFromCookies, type AdminSessionPayload } from "./auth";
 import { errors } from "./apiResponse";
-import { connectDB } from "./db";
-import Admin, { type AdminDoc } from "../models/Admin";
+import { prisma } from "./db";
 
 // Use inside any /api/admin/* route to gate access. Returns either the loaded
-// admin doc + session, or a NextResponse you should return as-is.
+// admin row + session, or a NextResponse you should return as-is.
 
 export type AdminContext = {
   session: AdminSessionPayload;
-  admin: HydratedDocument<AdminDoc>;
+  admin: Admin;
 };
 
 type Options = {
@@ -33,8 +32,7 @@ export async function requireAdmin(
   const session = await readSessionFromCookies();
   if (!session) return { response: errors.unauthorized() };
 
-  await connectDB();
-  const admin = await Admin.findById(session.sub);
+  const admin = await prisma.admin.findUnique({ where: { id: session.sub } });
   if (!admin) return { response: errors.unauthorized("Session invalid.") };
 
   if (admin.mustChangePassword && !options.allowMustChange) {

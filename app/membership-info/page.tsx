@@ -1,20 +1,14 @@
-import type { Metadata } from "next";
 import { BookOpen, ShieldCheck, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { PageHero } from "../components";
+import { buildMetadata } from "../../lib/seo";
 
-export const metadata: Metadata = {
+export const metadata = buildMetadata({
   title: "Membership — Join CSA Uttarakhand Chapter",
   description:
     "Become a member of the Cloud Security Alliance Uttarakhand Chapter. Get learning access, professional growth, and connect with a regional cybersecurity community.",
-  alternates: { canonical: "/membership-info" },
-  openGraph: {
-    url: "/membership-info",
-    title: "Membership — CSA Uttarakhand Chapter",
-    description:
-      "Join the CSA Uttarakhand Chapter — community, learning, and professional growth in cloud security.",
-  },
-};
+  path: "/membership-info",
+});
 
 const benefits = [
   {

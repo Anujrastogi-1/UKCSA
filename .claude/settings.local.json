@@ -32,7 +32,17 @@
       "Bash(grep -o -iE \"Amrapali Group of Institutes organized.{0,400}\" live.html)",
       "Bash(grep -o -iE \"\\(Haldwani|Dehradun|Sultanpur|Lalkuan\\)[^\\\\\"\\\\\\\\]{0,80}\" live.html)",
       "Bash(grep -o -iE \"\\(Sep|September|Oct|March|April|Feb|Jan|Aug\\)[a-z]*[^\\\\\"\\\\\\\\]{0,18}2017\" live.html)",
-      "Bash(grep -o -iE \"\\(Cloud Security Best Practices|OWASP Top 10|Live Hacking|Networking with Industry\\)[^\\\\\"\\\\\\\\]{0,40}\" live.html)"
+      "Bash(grep -o -iE \"\\(Cloud Security Best Practices|OWASP Top 10|Live Hacking|Networking with Industry\\)[^\\\\\"\\\\\\\\]{0,40}\" live.html)",
+      "Bash(git fetch *)",
+      "Bash(git rev-list *)",
+      "Bash(npx prisma *)",
+      "Bash(npm uninstall *)",
+      "Bash(grep -E '\\\\.\\(tsx|ts|css\\)$')",
+      "Bash(awk '{printf \"%6.1f KB %s\\\\n\", $1/1024, $2}')",
+      "Bash(awk '{printf \"%6.1f KB  %s\\\\n\", $1/1024, $2}')",
+      "Bash(awk '{s+=$1} END{printf \"JS total: %.1f KB\\\\n\", s/1024}')",
+      "Bash(awk '{s+=$1} END{printf \"CSS total: %.1f KB\\\\n\", s/1024}')",
+      "Bash(awk '{s+=$1} END{printf \"%.1f KB\\\\n\", s/1024}')"
     ]
   }
 }

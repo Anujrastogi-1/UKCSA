@@ -1,0 +1,84 @@
+// Prisma schema — PostgreSQL.
+// Run `npx prisma migrate dev --name init` (or `npx prisma db push`) against
+// your DATABASE_URL to create these tables.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum MembershipType {
+  student
+  professional
+  board
+}
+
+enum MemberStatus {
+  new
+  reviewing
+  approved
+  rejected
+  archived
+}
+
+/// Membership applications captured from /contact.
+model Member {
+  id             String         @id @default(uuid())
+  membershipType MembershipType
+  firstName      String
+  lastName       String
+  email          String
+  phone          String
+  // institution / company / organization — depends on membershipType
+  context        String
+  subject        String
+  message        String
+
+  // Operational metadata (abuse investigation).
+  ipAddress      String?
+  userAgent      String?
+
+  status         MemberStatus   @default(new)
+  // Whether the row was synchronized to Google Sheets.
+  sheetSynced    Boolean        @default(false)
+
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  // Supports the common admin query (filter by type, newest first).
+  @@index([membershipType, createdAt(sort: Desc)])
+  @@index([email])
+  @@index([status])
+  @@map("members")
+}
+
+/// Admin users for the dashboard.
+model Admin {
+  id                 String    @id @default(uuid())
+  username           String    @unique
+  email              String    @unique
+  passwordHash       String
+  // First login forced to change the seeded password.
+  mustChangePassword Boolean   @default(true)
+  lastLoginAt        DateTime?
+  lastLoginIp        String?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  @@map("admins")
+}
+
+model ChapterUpdate {
+  id          String   @id @default(uuid())
+  title       String
+  body        String
+  publishedAt DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("chapter_updates")
+}

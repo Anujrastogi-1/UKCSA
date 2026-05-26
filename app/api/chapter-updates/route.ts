@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server";
-import { connectDB } from "../../../lib/db";
-import ChapterUpdate from "../../../models/ChapterUpdate";
+import { prisma } from "../../../lib/db";
 
 export async function GET() {
-  if (!process.env.MONGODB_URI) {
+  if (!process.env.DATABASE_URL) {
     return NextResponse.json({
       authenticated: false,
       message:
@@ -12,8 +11,10 @@ export async function GET() {
     });
   }
 
-  await connectDB();
-  const updates = await ChapterUpdate.find().sort({ publishedAt: -1 }).limit(10).lean();
+  const updates = await prisma.chapterUpdate.findMany({
+    orderBy: { publishedAt: "desc" },
+    take: 10
+  });
 
   return NextResponse.json({
     authenticated: updates.length > 0,

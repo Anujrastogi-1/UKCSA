@@ -1,20 +1,14 @@
-import type { Metadata } from "next";
 import { BoardMemberGrid } from "../BoardMemberGrid";
 import { boardMembers } from "../board-members-data";
 import { PageHero } from "../components";
+import { buildMetadata } from "../../lib/seo";
 
-export const metadata: Metadata = {
+export const metadata = buildMetadata({
   title: "Board Members — CSA Uttarakhand Chapter",
   description:
     "Meet the board members of the Cloud Security Alliance Uttarakhand Chapter — industry leaders guiding the regional cybersecurity community.",
-  alternates: { canonical: "/board-of-directors" },
-  openGraph: {
-    url: "/board-of-directors",
-    title: "Board Members — CSA Uttarakhand Chapter",
-    description:
-      "Industry leaders guiding the Cloud Security Alliance Uttarakhand Chapter.",
-  },
-};
+  path: "/board-of-directors",
+});
 
 export default function BoardPage() {
   return (

@@ -1,0 +1,455 @@
+/* "Become a Member" (mx-) styles — route-scoped to /contact (imported by
+   app/contact/page.tsx). Moved out of globals.css to keep public pages lean. */
+
+/* ════════════════════════════════════════════════════════════════
+   Become a Member — role-based onboarding (mx-)
+   Brand palette: navy #0A2A66 · blue #0D5CAB · orange #F28C28
+   ════════════════════════════════════════════════════════════════ */
+
+.mx {
+  --mx-navy: #0a2a66;
+  --mx-blue: #0d5cab;
+  --mx-orange: #f28c28;
+  --mx-light: #f4f7fb;
+  --mx-border: #d9e2f2;
+  --mx-accent: var(--mx-blue);
+  --mx-accent-rgb: 13, 92, 171;
+  background: var(--mx-light);
+}
+
+.mx[data-role="students"]      { --mx-accent: #0d5cab; --mx-accent-rgb: 13, 92, 171; }
+.mx[data-role="professionals"] { --mx-accent: #f28c28; --mx-accent-rgb: 242, 140, 40; }
+.mx[data-role="board"]         { --mx-accent: #0a2a66; --mx-accent-rgb: 10, 42, 102; }
+
+/* ── Hero ── */
+.mx-hero {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(56px, 9vw, 104px) 0 clamp(48px, 7vw, 88px);
+  background: linear-gradient(135deg, #081b41 0%, #0d2f61 55%, #104c8f 100%);
+  color: #fff;
+  text-align: center;
+}
+
+.mx-hero-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle at 15% 18%, rgba(7, 88, 150, 0.5), transparent 42%),
+    radial-gradient(circle at 85% 82%, rgba(245, 130, 42, 0.26), transparent 46%),
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: auto, auto, 40px 40px, 40px 40px;
+  mask-image: radial-gradient(ellipse 92% 82% at 50% 34%, #000, transparent 76%);
+  -webkit-mask-image: radial-gradient(ellipse 92% 82% at 50% 34%, #000, transparent 76%);
+}
+
+.mx-hero::before,
+.mx-hero::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(64px);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.mx-hero::before {
+  width: 360px;
+  height: 360px;
+  left: -90px;
+  top: -70px;
+  background: rgba(7, 88, 150, 0.55);
+  animation: mxFloat 9s ease-in-out infinite;
+}
+
+.mx-hero::after {
+  width: 320px;
+  height: 320px;
+  right: -80px;
+  bottom: -90px;
+  background: rgba(245, 130, 42, 0.3);
+  animation: mxFloat 11s ease-in-out infinite reverse;
+}
+
+@keyframes mxFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(26px); }
+}
+
+.mx-hero-inner {
+  position: relative;
+  z-index: 1;
+}
+
+.mx-tagline {
+  display: inline-block;
+  margin-bottom: 16px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffd9b3;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.mx-hero h1 {
+  margin: 0;
+  font-size: clamp(2.1rem, 1.5rem + 3.4vw, 3.6rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  font-weight: 800;
+}
+
+.mx-hero p {
+  margin: 16px auto 0;
+  max-width: 540px;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: clamp(1rem, 0.97rem + 0.3vw, 1.15rem);
+  line-height: 1.6;
+}
+
+/* ── Apply section ── */
+.mx-apply {
+  padding: clamp(36px, 6vw, 72px) 0;
+}
+
+/* Extra left/right breathing room so content isn't edge-to-edge */
+.mx-apply > .container {
+  max-width: 1080px;
+}
+
+.mx-tabs-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: clamp(28px, 4vw, 44px);
+}
+
+.mx-tabs {
+  display: inline-flex;
+  gap: 6px;
+  padding: 6px;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--mx-border);
+  box-shadow: 0 6px 22px rgba(10, 42, 102, 0.08);
+}
+
+.mx-tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #4a5a74;
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.mx-tab:not(.is-active):hover {
+  color: var(--mx-navy);
+  background: rgba(10, 42, 102, 0.05);
+}
+
+.mx-tab.is-active {
+  color: #fff;
+}
+
+.mx-tab-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: 999px;
+  background: var(--mx-accent);
+  box-shadow: 0 8px 20px rgba(var(--mx-accent-rgb), 0.4);
+}
+
+.mx-tab-label {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── Split: benefits + form ── */
+/* Desktop: compact benefits column + wider form, sitting together
+   within the centered container (no edge-pushing void). */
+.mx-split {
+  display: grid;
+  grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+  gap: clamp(32px, 5vw, 60px);
+  align-items: start;
+}
+
+/* Role section intro — sits below the tabs */
+.mx-role-intro {
+  max-width: 640px;
+  margin-bottom: clamp(24px, 3vw, 36px);
+  animation: mxEnter 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+/* Tab-switch enter animation (replaces framer AnimatePresence). The keyed
+   remount in MembershipExperience replays these on every role change; benefit
+   items stagger via an inline animation-delay. */
+@keyframes mxEnter {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mx-role-intro,
+  .mx-benefit-item {
+    animation: none;
+  }
+}
+
+.mx-eyebrow {
+  margin: 0 0 8px;
+  color: var(--mx-accent);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.mx-role-intro h2 {
+  margin: 0;
+  color: var(--mx-navy);
+  font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.3rem);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  font-weight: 800;
+}
+
+/* Benefits — clean icon + text feature list (not bulky cards) */
+.mx-benefit-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.mx-benefit-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--mx-border);
+  animation: mxEnter 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+.mx-benefit-item:first-child {
+  padding-top: 0;
+}
+
+.mx-benefit-item:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.mx-benefit-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  color: var(--mx-accent);
+  background: rgba(var(--mx-accent-rgb), 0.1);
+}
+
+/* Board: premium navy + gold/orange accent on the icons */
+.mx[data-role="board"] .mx-benefit-icon {
+  color: var(--mx-orange);
+  background: rgba(242, 140, 40, 0.12);
+}
+
+.mx-benefit-text h3 {
+  margin: 0 0 3px;
+  color: var(--mx-navy);
+  font-size: 0.98rem;
+  font-weight: 700;
+}
+
+.mx-benefit-text p {
+  margin: 0;
+  color: #51607a;
+  font-size: 0.86rem;
+  line-height: 1.5;
+}
+
+/* ── Form card (glass) ── */
+.mx-form-wrap {
+  position: sticky;
+  top: 90px;
+}
+
+.mx-form-card {
+  position: relative;
+  padding: clamp(22px, 3vw, 32px);
+  border-radius: 20px;
+  border: 1px solid var(--mx-border);
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 1px 2px rgba(10, 42, 102, 0.05), 0 22px 50px rgba(10, 42, 102, 0.12);
+}
+
+/* Subtle accent gradient border */
+.mx-form-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  padding: 1px;
+  background: linear-gradient(140deg, rgba(var(--mx-accent-rgb), 0.5), transparent 52%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.mx-form-title {
+  margin: 0 0 4px;
+  color: var(--mx-navy);
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.mx-form-sub {
+  margin: 0 0 18px;
+  color: #51607a;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Premium inputs inside the glass card */
+.mx-form-card .contact-form {
+  gap: 18px;
+}
+
+.mx-form-card .contact-field > span:not(.field-error) {
+  color: var(--mx-navy);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.mx-form-card .contact-field input,
+.mx-form-card .contact-field textarea {
+  border-radius: 12px;
+  border: 1.5px solid var(--mx-border);
+  background: #fff;
+  padding: 12px 14px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.mx-form-card .contact-field input {
+  height: 46px;
+}
+
+.mx-form-card .contact-field input:focus,
+.mx-form-card .contact-field textarea:focus {
+  border-color: var(--mx-accent);
+  box-shadow: 0 0 0 3px rgba(var(--mx-accent-rgb), 0.16);
+  outline: none;
+}
+
+.mx-form-card .contact-form button {
+  width: 100%;
+  min-height: 50px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--mx-orange), #e0761a);
+  box-shadow: 0 10px 24px rgba(242, 140, 40, 0.28);
+}
+
+.mx-form-card .contact-form button:hover:not(:disabled) {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 16px 32px rgba(242, 140, 40, 0.42);
+}
+
+/* ── Community stats ── */
+.mx-stats {
+  padding: clamp(40px, 6vw, 72px) 0;
+  background: linear-gradient(135deg, #061a3f, #0a2a66);
+  color: #fff;
+}
+
+.mx-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+  text-align: center;
+}
+
+.mx-stat strong {
+  display: block;
+  font-size: clamp(2rem, 1.4rem + 2.4vw, 3rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: #fff;
+  text-shadow: 0 0 28px rgba(242, 140, 40, 0.45);
+}
+
+.mx-stat:nth-child(even) strong {
+  text-shadow: 0 0 28px rgba(13, 92, 171, 0.6);
+}
+
+.mx-stat span {
+  display: block;
+  margin-top: 8px;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* ── Responsive ── */
+/* Tablet & below: benefits stack ABOVE the full-width form */
+@media (max-width: 900px) {
+  .mx-split {
+    grid-template-columns: 1fr;
+    row-gap: 28px;
+  }
+  .mx-form-wrap {
+    position: static;
+  }
+  .mx-stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .mx-apply {
+    padding: 28px 0;
+  }
+  .mx-tabs {
+    display: flex;
+    width: 100%;
+  }
+  .mx-tab {
+    flex: 1;
+    padding: 0 10px;
+    font-size: 0.82rem;
+  }
+  .mx-tab-label {
+    gap: 6px;
+  }
+  .mx-form-card {
+    padding: 20px 16px;
+  }
+}

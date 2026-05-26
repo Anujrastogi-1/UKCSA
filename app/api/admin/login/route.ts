@@ -1,6 +1,5 @@
 import { NextRequest } from "next/server";
-import { connectDB } from "../../../../lib/db";
-import Admin from "../../../../models/Admin";
+import { prisma } from "../../../../lib/db";
 import { verifyPassword, signAdminSession, setSessionCookie } from "../../../../lib/auth";
 import { ensureAdminSeeded } from "../../../../lib/seedAdmin";
 import { clientIp, rateLimit } from "../../../../lib/rateLimit";
@@ -58,8 +57,7 @@ export async function POST(request: NextRequest) {
     return errors.rateLimited("Too many attempts for this account. Try again later.");
   }
 
-  await connectDB();
-  const admin = await Admin.findOne({ username: usernameNorm }).select("+passwordHash");
+  const admin = await prisma.admin.findUnique({ where: { username: usernameNorm } });
 
   // Generic message on both "no such user" and "wrong password" so we don't
   // leak which accounts exist.
@@ -69,25 +67,26 @@ export async function POST(request: NextRequest) {
 
   // Update last-login metadata. Failure here must not block login.
   try {
-    admin.lastLoginAt = new Date();
-    admin.lastLoginIp = ip;
-    await admin.save();
+    await prisma.admin.update({
+      where: { id: admin.id },
+      data: { lastLoginAt: new Date(), lastLoginIp: ip }
+    });
   } catch (err) {
     console.warn("[admin/login] failed to update last-login:", err);
   }
 
   const token = await signAdminSession({
-    sub: String(admin._id),
+    sub: admin.id,
     username: admin.username,
-    mustChangePassword: Boolean(admin.mustChangePassword)
+    mustChangePassword: admin.mustChangePassword
   });
 
   const response = ok({
     admin: {
-      id: String(admin._id),
+      id: admin.id,
       username: admin.username,
       email: admin.email,
-      mustChangePassword: Boolean(admin.mustChangePassword)
+      mustChangePassword: admin.mustChangePassword
     }
   });
   setSessionCookie(response, token);

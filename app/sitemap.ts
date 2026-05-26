@@ -1,7 +1,6 @@
 import type { MetadataRoute } from "next";
 import { events } from "./past-events/events-data";
-
-const siteUrl = "https://ukcsa.vercel.app";
+import { SITE_URL as siteUrl } from "../lib/seo";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();

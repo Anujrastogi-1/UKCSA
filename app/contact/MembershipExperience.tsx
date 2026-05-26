@@ -2,12 +2,6 @@
 
 import { useState } from "react";
 import {
-  AnimatePresence,
-  motion,
-  useReducedMotion,
-  type Variants,
-} from "framer-motion";
-import {
   Award,
   BadgeCheck,
   Briefcase,
@@ -84,30 +78,12 @@ const ROLES: RoleConfig[] = [
 ];
 
 export default function MembershipExperience() {
-  const reduce = useReducedMotion();
   const [role, setRole] = useState<RoleId>("students");
   const current = ROLES.find((r) => r.id === role) ?? ROLES[0];
 
-  const fadeUp: Variants = {
-    hidden: { opacity: reduce ? 1 : 0, y: reduce ? 0 : 22 },
-    show: { opacity: 1, y: 0, transition: { duration: reduce ? 0 : 0.55, ease: [0.22, 0.61, 0.36, 1] } },
-  };
-  const viewport = { once: true, amount: 0.2 } as const;
-
   return (
     <div className="mx" data-role={role}>
-      {/* ── Hero ─────────────────────────────────────────── */}
-      {/* <section className="mx-hero">
-        <div className="mx-hero-bg" aria-hidden="true" />
-        <div className="container mx-hero-inner">
-          <motion.div initial="hidden" animate="show" variants={fadeUp}>
-            <span className="mx-tagline">Learn. Network. Lead.</span>
-            <h1>Become a Member</h1>
-            <p>Join Uttarakhand&apos;s growing cloud security community.</p>
-          </motion.div>
-        </div>
-      </section> */}
-    <section className="page-hero"><div className="container"><h1>Become a Member</h1></div></section>
+      <section className="page-hero"><div className="container"><h1>Become a Member</h1></div></section>
       {/* ── Role selector + benefits + form ──────────────── */}
       <section className="mx-apply">
         <div className="container">
@@ -125,13 +101,7 @@ export default function MembershipExperience() {
                     className={`mx-tab${active ? " is-active" : ""}`}
                     onClick={() => setRole(r.id)}
                   >
-                    {active && (
-                      <motion.span
-                        layoutId="mx-tab-bg"
-                        className="mx-tab-bg"
-                        transition={{ type: "spring", stiffness: 380, damping: 32 }}
-                      />
-                    )}
+                    {active && <span className="mx-tab-bg" aria-hidden="true" />}
                     <span className="mx-tab-label">
                       <Icon size={18} aria-hidden="true" />
                       {r.label}
@@ -142,65 +112,40 @@ export default function MembershipExperience() {
             </div>
           </div>
 
-          {/* Role section intro — sits below the tabs */}
-          <AnimatePresence mode="wait">
-            <motion.div
-              className="mx-role-intro"
-              key={role}
-              initial={{ opacity: 0, y: reduce ? 0 : 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: reduce ? 0 : -10 }}
-              transition={{ duration: reduce ? 0 : 0.4, ease: [0.22, 0.61, 0.36, 1] }}
-            >
-              <p className="mx-eyebrow">{current.eyebrow}</p>
-              <h2>{current.pitch}</h2>
-            </motion.div>
-          </AnimatePresence>
+          {/* Role section intro — `key` remounts it so the CSS enter animation
+              replays on every tab switch (replaces framer AnimatePresence). */}
+          <div className="mx-role-intro" key={role}>
+            <p className="mx-eyebrow">{current.eyebrow}</p>
+            <h2>{current.pitch}</h2>
+          </div>
 
           <div className="mx-split">
             {/* Dynamic benefits — clean icon + text list */}
             <div className="mx-benefits">
-              <AnimatePresence mode="wait">
-                <motion.ul
-                  className="mx-benefit-list"
-                  key={role}
-                  initial={{ opacity: 0, y: reduce ? 0 : 14 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: reduce ? 0 : -10 }}
-                  transition={{ duration: reduce ? 0 : 0.4, ease: [0.22, 0.61, 0.36, 1] }}
-                >
-                  {current.benefits.map((b, i) => {
-                    const Icon = b.icon;
-                    return (
-                      <motion.li
-                        key={b.title}
-                        className="mx-benefit-item"
-                        initial={{ opacity: 0, y: reduce ? 0 : 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: reduce ? 0 : 0.35, delay: reduce ? 0 : 0.05 * i }}
-                      >
-                        <span className="mx-benefit-icon" aria-hidden="true">
-                          <Icon size={18} />
-                        </span>
-                        <div className="mx-benefit-text">
-                          <h3>{b.title}</h3>
-                          <p>{b.text}</p>
-                        </div>
-                      </motion.li>
-                    );
-                  })}
-                </motion.ul>
-              </AnimatePresence>
+              <ul className="mx-benefit-list" key={role}>
+                {current.benefits.map((b, i) => {
+                  const Icon = b.icon;
+                  return (
+                    <li
+                      key={b.title}
+                      className="mx-benefit-item"
+                      style={{ animationDelay: `${0.05 * i}s` }}
+                    >
+                      <span className="mx-benefit-icon" aria-hidden="true">
+                        <Icon size={18} />
+                      </span>
+                      <div className="mx-benefit-text">
+                        <h3>{b.title}</h3>
+                        <p>{b.text}</p>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
             </div>
 
             {/* Application form */}
-            <motion.div
-              className="mx-form-wrap"
-              variants={fadeUp}
-              initial="hidden"
-              whileInView="show"
-              viewport={viewport}
-            >
+            <div className="mx-form-wrap">
               <div className="mx-form-card">
                 <h2 className="mx-form-title">Apply now</h2>
                 <p className="mx-form-sub">
@@ -208,7 +153,7 @@ export default function MembershipExperience() {
                 </p>
                 <MembershipForm role={role} />
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>

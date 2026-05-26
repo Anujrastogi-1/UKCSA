@@ -3,8 +3,9 @@ import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { events } from "../events-data";
 import GalleryView from "./gallery-view";
-
-const siteUrl = "https://ukcsa.vercel.app";
+import { JsonLd } from "../../JsonLd";
+import { buildMetadata } from "../../../lib/seo";
+import { eventSchema, breadcrumbSchema } from "../../../lib/structuredData";
 
 export function generateStaticParams() {
   return events.map((e) => ({ slug: e.slug }));
@@ -19,39 +20,21 @@ export async function generateMetadata({
   const event = events.find((e) => e.slug === slug);
 
   if (!event) {
-    return {
+    return buildMetadata({
       title: "Event not found",
-      robots: { index: false, follow: false },
-    };
+      description: "This event could not be found.",
+      path: `/past-events/${slug}`,
+      noindex: true,
+    });
   }
 
-  const title = `${event.title} — Event Gallery`;
-  const description = `${event.title} at ${event.place} on ${event.date}. View ${event.gallery.length} photos from this CSA Uttarakhand Chapter event.`;
-  const url = `/past-events/${event.slug}`;
-
-  return {
-    title,
-    description,
-    alternates: { canonical: url },
-    openGraph: {
-      type: "article",
-      url,
-      title,
-      description,
-      images: [
-        {
-          url: event.image,
-          alt: event.alt,
-        },
-      ],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-      images: [event.image],
-    },
-  };
+  return buildMetadata({
+    title: `${event.title} — Event Gallery`,
+    description: `${event.title} at ${event.place} on ${event.date}. View ${event.gallery.length} photos from this CSA Uttarakhand Chapter event.`,
+    path: `/past-events/${event.slug}`,
+    image: event.image,
+    type: "article",
+  });
 }
 
 export default async function EventGalleryPage({
@@ -75,56 +58,19 @@ export default async function EventGalleryPage({
     );
   }
 
-  const eventJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Event",
-    name: event.title,
-    startDate: event.date,
-    eventStatus: "https://schema.org/EventScheduled",
-    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
-    location: {
-      "@type": "Place",
-      name: event.place,
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: "Dehradun",
-        addressRegion: "Uttarakhand",
-        addressCountry: "IN",
-      },
-    },
-    image: [`${siteUrl}${event.image}`],
-    description: `${event.title} hosted by the CSA Uttarakhand Chapter. ${event.gallery.length} photos available.`,
-    organizer: {
-      "@type": "Organization",
-      name: "CSA Uttarakhand Chapter",
-      url: siteUrl,
-    },
-  };
+  const eventJsonLd = eventSchema({
+    title: event.title,
+    place: event.place,
+    date: event.date,
+    image: event.image,
+    photoCount: event.gallery.length,
+  });
 
-  const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Home",
-        item: siteUrl,
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: "Events",
-        item: `${siteUrl}/past-events`,
-      },
-      {
-        "@type": "ListItem",
-        position: 3,
-        name: event.title,
-        item: `${siteUrl}/past-events/${event.slug}`,
-      },
-    ],
-  };
+  const breadcrumbJsonLd = breadcrumbSchema([
+    { name: "Home", path: "/" },
+    { name: "Events", path: "/past-events" },
+    { name: event.title, path: `/past-events/${event.slug}` },
+  ]);
 
   const galleryEvent = {
     image: event.image,
@@ -137,14 +83,8 @@ export default async function EventGalleryPage({
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(eventJsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
-      />
+      <JsonLd data={eventJsonLd} />
+      <JsonLd data={breadcrumbJsonLd} />
       <GalleryView event={galleryEvent} />
     </>
   );

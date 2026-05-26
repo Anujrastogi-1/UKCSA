@@ -1,3 +1,14 @@
+import { redirect } from "next/navigation";
+
+// Public member self-registration is disabled for now — there is no member
+// account backend yet, only admin accounts. Visitors are routed to sign-in.
+// The original signup form is preserved in the block comment below for when
+// membership accounts ship.
+export default function SignupPage() {
+  redirect("/login");
+}
+
+/* --- Original signup form (re-enable when membership accounts are added) ----
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PageHero } from "../components";
@@ -53,8 +64,7 @@ export default function SignupPage() {
               <span>or</span>
             </div>
             <p className="auth-switch">
-              Already have an account?{" "}
-              <Link href="/login">Sign in</Link>
+              Already have an account? <Link href="/login">Sign in</Link>
             </p>
           </div>
         </div>
@@ -62,3 +72,4 @@ export default function SignupPage() {
     </main>
   );
 }
+---------------------------------------------------------------------------- */

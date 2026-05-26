@@ -117,7 +117,7 @@ export const events: EventItem[] = [
     category: "event",
     image: "/assets/img/MOU_UPES/Group_Photo.jpg",
     alt: "MOU Signing Ceremony - University of Petroleum and Energy Studies (UPES)",
-    date: "May 2026",
+    date: "Feb 2022",
     title: "MOU Signing Ceremony - UPES",
     place: "University of Petroleum and Energy Studies (UPES), Bidholi, Dehradun, Uttarakhand",
     intro: (
@@ -173,7 +173,7 @@ export const events: EventItem[] = [
     about:
       "Pioneered by Mr. Satyam Rastogi, the summit laid the foundation for the CSA Uttarakhand Chapter.",
     actions: [
-      ["Meet Satyam Rastogi", "https://www.satyamrastogi.com/", Users],
+      ["Meet Satyam Rastogi", "/board-of-directors", Users],
     ],
     gallery: [
       { src: "/assets/img/CSAXCON/E89A6701.webp", alt: "CSAXCON 2026 — Opening session" },

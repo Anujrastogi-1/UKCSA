@@ -1,6 +1,6 @@
-import { connectDB } from "./db";
+import { Prisma } from "@prisma/client";
+import { prisma } from "./db";
 import { hashPassword } from "./auth";
-import Admin from "../models/Admin";
 
 // Idempotent admin bootstrap. Called lazily from the admin login endpoint:
 //  - If at least one admin already exists → no-op.
@@ -15,8 +15,7 @@ let seededInProcess = false;
 export async function ensureAdminSeeded(): Promise<void> {
   if (seededInProcess) return;
 
-  await connectDB();
-  const count = await Admin.estimatedDocumentCount();
+  const count = await prisma.admin.count();
   if (count > 0) {
     seededInProcess = true;
     return;
@@ -36,18 +35,24 @@ export async function ensureAdminSeeded(): Promise<void> {
 
   const passwordHash = await hashPassword(password);
 
-  // Use create() with try/catch on E11000 in case two cold invocations race.
+  // Catch the unique-constraint error (P2002) in case two cold invocations race.
   try {
-    await Admin.create({
-      username: username.toLowerCase(),
-      email: email.toLowerCase(),
-      passwordHash,
-      mustChangePassword: true
+    await prisma.admin.create({
+      data: {
+        username: username.toLowerCase(),
+        email: email.toLowerCase(),
+        passwordHash,
+        mustChangePassword: true
+      }
     });
     console.log(`[seedAdmin] Created initial admin "${username}".`);
   } catch (err: unknown) {
-    const e = err as { code?: number };
-    if (e?.code !== 11000) throw err;
+    if (
+      !(err instanceof Prisma.PrismaClientKnownRequestError) ||
+      err.code !== "P2002"
+    ) {
+      throw err;
+    }
   }
 
   seededInProcess = true;

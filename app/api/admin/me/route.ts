@@ -13,11 +13,11 @@ export async function GET(request: NextRequest) {
 
   return ok({
     admin: {
-      id: String(admin!._id),
-      username: admin!.username,
-      email: admin!.email,
-      mustChangePassword: Boolean(admin!.mustChangePassword),
-      lastLoginAt: admin!.lastLoginAt ?? null
+      id: admin.id,
+      username: admin.username,
+      email: admin.email,
+      mustChangePassword: admin.mustChangePassword,
+      lastLoginAt: admin.lastLoginAt ?? null
     }
   });
 }

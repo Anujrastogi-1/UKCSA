@@ -1,6 +1,5 @@
 import type { MetadataRoute } from "next";
-
-const siteUrl = "https://ukcsa.vercel.app";
+import { SITE_URL } from "../lib/seo";
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -8,10 +7,11 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/api/", "/login", "/signup"],
+        // Keep the admin panel, auth pages, and API endpoints out of the index.
+        disallow: ["/api/", "/admin", "/admin/", "/login", "/signup"],
       },
     ],
-    sitemap: `${siteUrl}/sitemap.xml`,
-    host: siteUrl,
+    sitemap: `${SITE_URL}/sitemap.xml`,
+    host: SITE_URL,
   };
 }

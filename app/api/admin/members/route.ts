@@ -1,8 +1,8 @@
 import { NextRequest } from "next/server";
+import { Prisma, $Enums } from "@prisma/client";
 import { requireAdmin } from "../../../../lib/adminGuard";
-import { connectDB } from "../../../../lib/db";
-import Member from "../../../../models/Member";
-import { MEMBERSHIP_TYPES, type MembershipType } from "../../../../lib/contactValidation";
+import { prisma } from "../../../../lib/db";
+import { MEMBERSHIP_TYPES } from "../../../../lib/contactValidation";
 import { errors, ok } from "../../../../lib/apiResponse";
 
 export const runtime = "nodejs";
@@ -20,6 +20,9 @@ export const runtime = "nodejs";
 const MAX_PAGE_SIZE = 100;
 const DEFAULT_PAGE_SIZE = 20;
 const STATUS_VALUES = ["new", "reviewing", "approved", "rejected", "archived"] as const;
+// Whitelist of columns the table is allowed to sort by (prevents arbitrary
+// orderBy injection from the query string).
+const SORT_FIELDS = new Set(["createdAt", "membershipType", "firstName", "email", "context"]);
 
 function clampInt(raw: string | null, def: number, min: number, max: number) {
   const n = Number(raw);
@@ -44,51 +47,61 @@ export async function GET(request: NextRequest) {
     MAX_PAGE_SIZE
   );
 
-  const filter: Record<string, unknown> = {};
+  // Sorting — column comes from a whitelist, direction defaults to descending.
+  const sortRaw = url.searchParams.get("sort") ?? "createdAt";
+  const sortField = SORT_FIELDS.has(sortRaw) ? sortRaw : "createdAt";
+  const dir: "asc" | "desc" = url.searchParams.get("dir") === "asc" ? "asc" : "desc";
+  // Always tie-break by createdAt so paging stays stable for non-unique keys.
+  const orderBy: Prisma.MemberOrderByWithRelationInput[] = [
+    { [sortField]: dir } as Prisma.MemberOrderByWithRelationInput
+  ];
+  if (sortField !== "createdAt") orderBy.push({ createdAt: "desc" });
+
+  const where: Prisma.MemberWhereInput = {};
 
   if (typeRaw) {
     if (!(MEMBERSHIP_TYPES as readonly string[]).includes(typeRaw)) {
       return errors.badRequest("Invalid `type` filter.");
     }
-    filter.membershipType = typeRaw as MembershipType;
+    where.membershipType = typeRaw as $Enums.MembershipType;
   }
 
   if (statusRaw) {
     if (!(STATUS_VALUES as readonly string[]).includes(statusRaw)) {
       return errors.badRequest("Invalid `status` filter.");
     }
-    filter.status = statusRaw;
+    where.status = statusRaw as $Enums.MemberStatus;
   }
 
   if (q) {
-    // Defense against attempts to inject an operator object via JSON params.
+    // Cap length; Prisma parameterizes the value so no escaping is needed.
     if (q.length > 80) return errors.badRequest("Search query too long.");
-    // Escape user input before plugging into a regex.
-    const escaped = q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const rx = new RegExp(escaped, "i");
-    filter.$or = [{ firstName: rx }, { lastName: rx }, { email: rx }];
+    where.OR = [
+      { firstName: { contains: q, mode: "insensitive" } },
+      { lastName: { contains: q, mode: "insensitive" } },
+      { email: { contains: q, mode: "insensitive" } }
+    ];
   }
 
   // Optional date-range filter ("7d" / "30d"); anything else means all time.
   if (rangeRaw === "7d" || rangeRaw === "30d") {
     const days = rangeRaw === "7d" ? 7 : 30;
-    filter.createdAt = { $gte: new Date(Date.now() - days * 24 * 60 * 60 * 1000) };
+    where.createdAt = { gte: new Date(Date.now() - days * 24 * 60 * 60 * 1000) };
   }
 
-  await connectDB();
-
   const [total, items] = await Promise.all([
-    Member.countDocuments(filter),
-    Member.find(filter)
-      .sort({ createdAt: -1 })
-      .skip((page - 1) * pageSize)
-      .limit(pageSize)
-      .lean()
+    prisma.member.count({ where }),
+    prisma.member.findMany({
+      where,
+      orderBy,
+      skip: (page - 1) * pageSize,
+      take: pageSize
+    })
   ]);
 
   return ok({
     items: items.map((m) => ({
-      id: String(m._id),
+      id: m.id,
       membershipType: m.membershipType,
       firstName: m.firstName,
       lastName: m.lastName,
@@ -96,6 +109,7 @@ export async function GET(request: NextRequest) {
       phone: m.phone,
       context: m.context,
       subject: m.subject,
+      message: m.message,
       status: m.status,
       sheetSynced: m.sheetSynced,
       createdAt: m.createdAt

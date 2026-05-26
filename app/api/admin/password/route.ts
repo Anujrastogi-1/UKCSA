@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { requireAdmin } from "../../../../lib/adminGuard";
-import Admin from "../../../../models/Admin";
+import { prisma } from "../../../../lib/db";
 import {
   hashPassword,
   signAdminSession,
@@ -56,21 +56,22 @@ export async function POST(request: NextRequest) {
     return errors.validation({ newPassword: "New password must differ from current password." });
   }
 
-  // Re-fetch with the hash included.
-  const full = await Admin.findById(admin!._id).select("+passwordHash");
-  if (!full) return errors.unauthorized("Session invalid.");
-
-  const ok1 = await verifyPassword(currentPassword, full.passwordHash);
+  // The session guard already loaded the admin row (passwordHash included).
+  const ok1 = await verifyPassword(currentPassword, admin.passwordHash);
   if (!ok1) return errors.unauthorized("Current password is incorrect.");
 
-  full.passwordHash = await hashPassword(newPassword);
-  full.mustChangePassword = false;
-  await full.save();
+  await prisma.admin.update({
+    where: { id: admin.id },
+    data: {
+      passwordHash: await hashPassword(newPassword),
+      mustChangePassword: false
+    }
+  });
 
   // Issue a fresh session so the new JWT no longer carries mcp=true.
   const token = await signAdminSession({
-    sub: String(full._id),
-    username: full.username,
+    sub: admin.id,
+    username: admin.username,
     mustChangePassword: false
   });
   const response = ok({ message: "Password updated." });

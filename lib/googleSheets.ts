@@ -46,8 +46,20 @@ function getConfig() {
   const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL?.trim();
   // The private key arrives from env with literal "\n" escapes; convert them
   // to real newlines so the PEM parser is happy.
-  const key = process.env.GOOGLE_SERVICE_ACCOUNT_KEY?.replace(/\\n/g, "\n");
+  const key = process.env.GOOGLE_SERVICE_ACCOUNT_KEY?.replace(/\\n/g, "\n").trim();
   if (!id || !email || !key) return null;
+
+  // Treat the .env.example placeholders (or an obviously truncated key) as
+  // "not configured" so an unconfigured deploy skips Sheets gracefully instead
+  // of throwing `DECODER routines::unsupported` on every submission.
+  const keyLooksReal =
+    key.includes("-----BEGIN PRIVATE KEY-----") &&
+    key.includes("-----END PRIVATE KEY-----") &&
+    key.replace(/\s/g, "").length > 800;
+  if (!keyLooksReal || email.includes("your-project")) {
+    return null;
+  }
+
   return { id, email, key };
 }
 

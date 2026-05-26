@@ -1,12 +1,14 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { Footer, Header } from "./components";
+import { JsonLd } from "./JsonLd";
+import { SITE_URL, SITE_NAME, SITE_LOCALE, DEFAULT_DESCRIPTION, DEFAULT_OG_IMAGE } from "../lib/seo";
+import { organizationSchema, websiteSchema } from "../lib/structuredData";
 import "./globals.css";
 
-const siteUrl = "https://ukcsa.vercel.app";
-const siteName = "CSA Uttarakhand Chapter";
-const defaultDescription =
-  "Cloud Security Alliance Uttarakhand Chapter — building a future-ready cybersecurity community in Uttarakhand through events, research, training, and collaboration on cloud security, AI security, and Zero Trust.";
+const siteUrl = SITE_URL;
+const siteName = SITE_NAME;
+const defaultDescription = DEFAULT_DESCRIPTION;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -40,10 +42,10 @@ export const metadata: Metadata = {
     title: `${siteName} — Cloud Security & Cybersecurity Community`,
     description: defaultDescription,
     url: siteUrl,
-    locale: "en_IN",
+    locale: SITE_LOCALE,
     images: [
       {
-        url: "/assets/img/Chapter-hero.jpg",
+        url: DEFAULT_OG_IMAGE,
         width: 1200,
         height: 630,
         alt: "Cloud Security Alliance Uttarakhand Chapter",
@@ -54,7 +56,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `${siteName} — Cloud Security & Cybersecurity Community`,
     description: defaultDescription,
-    images: ["/assets/img/Chapter-hero.jpg"],
+    images: [DEFAULT_OG_IMAGE],
   },
   robots: {
     index: true,
@@ -92,49 +94,6 @@ export const viewport: Viewport = {
   colorScheme: "light",
 };
 
-const organizationJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "@id": `${siteUrl}#organization`,
-  name: siteName,
-  alternateName: "Cloud Security Alliance Uttarakhand",
-  url: siteUrl,
-  logo: `${siteUrl}/assets/img/logo.png`,
-  description: defaultDescription,
-  foundingLocation: {
-    "@type": "Place",
-    name: "Dehradun, Uttarakhand, India",
-  },
-  areaServed: {
-    "@type": "AdministrativeArea",
-    name: "Uttarakhand, India",
-  },
-  parentOrganization: {
-    "@type": "Organization",
-    name: "Cloud Security Alliance",
-    url: "https://cloudsecurityalliance.org",
-  },
-  sameAs: [
-    "https://www.linkedin.com/groups/8409109/",
-    "https://www.facebook.com/CSA.Dehradun",
-  ],
-};
-
-const websiteJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "@id": `${siteUrl}#website`,
-  name: siteName,
-  url: siteUrl,
-  inLanguage: "en-IN",
-  publisher: { "@id": `${siteUrl}#organization` },
-  potentialAction: {
-    "@type": "SearchAction",
-    target: `${siteUrl}/?q={search_term_string}`,
-    "query-input": "required name=search_term_string",
-  },
-};
-
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
@@ -153,14 +112,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           type="font/woff2"
           crossOrigin="anonymous"
         />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
-        />
+        <JsonLd data={organizationSchema()} />
+        <JsonLd data={websiteSchema()} />
+        {/* Without JS, scroll-reveal elements must still be visible. */}
+        <noscript>
+          <style>{".reveal{opacity:1 !important;transform:none !important}"}</style>
+        </noscript>
       </head>
       <body>
         <Header />

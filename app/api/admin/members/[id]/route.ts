@@ -1,16 +1,16 @@
 import { NextRequest } from "next/server";
-import mongoose from "mongoose";
+import { Prisma, $Enums } from "@prisma/client";
 import { requireAdmin } from "../../../../../lib/adminGuard";
-import { connectDB } from "../../../../../lib/db";
-import Member from "../../../../../models/Member";
+import { prisma } from "../../../../../lib/db";
 import { errors, ok } from "../../../../../lib/apiResponse";
 
 export const runtime = "nodejs";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 function isValidId(id: string) {
-  return mongoose.isValidObjectId(id);
+  return UUID_RE.test(id);
 }
 
 export async function GET(request: NextRequest, ctx: RouteContext) {
@@ -20,13 +20,12 @@ export async function GET(request: NextRequest, ctx: RouteContext) {
   const { id } = await ctx.params;
   if (!isValidId(id)) return errors.badRequest("Invalid id.");
 
-  await connectDB();
-  const member = await Member.findById(id).lean();
+  const member = await prisma.member.findUnique({ where: { id } });
   if (!member) return errors.notFound();
 
   return ok({
     member: {
-      id: String(member._id),
+      id: member.id,
       membershipType: member.membershipType,
       firstName: member.firstName,
       lastName: member.lastName,
@@ -52,9 +51,14 @@ export async function DELETE(request: NextRequest, ctx: RouteContext) {
   const { id } = await ctx.params;
   if (!isValidId(id)) return errors.badRequest("Invalid id.");
 
-  await connectDB();
-  const deleted = await Member.findByIdAndDelete(id).lean();
-  if (!deleted) return errors.notFound();
+  try {
+    await prisma.member.delete({ where: { id } });
+  } catch (err) {
+    if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2025") {
+      return errors.notFound();
+    }
+    throw err;
+  }
 
   return ok({ message: "Submission deleted." });
 }
@@ -82,13 +86,16 @@ export async function PATCH(request: NextRequest, ctx: RouteContext) {
     return errors.validation({ status: "Invalid status value." });
   }
 
-  await connectDB();
-  const updated = await Member.findByIdAndUpdate(
-    id,
-    { $set: { status: next } },
-    { new: true, lean: true }
-  );
-  if (!updated) return errors.notFound();
-
-  return ok({ message: "Status updated.", status: updated.status });
+  try {
+    const updated = await prisma.member.update({
+      where: { id },
+      data: { status: next as $Enums.MemberStatus }
+    });
+    return ok({ message: "Status updated.", status: updated.status });
+  } catch (err) {
+    if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2025") {
+      return errors.notFound();
+    }
+    throw err;
+  }
 }

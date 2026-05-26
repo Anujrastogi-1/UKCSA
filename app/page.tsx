@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { buildMetadata } from "../lib/seo";
 import {
   BrainCircuit,
   Building2,
@@ -17,18 +17,12 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 
-export const metadata: Metadata = {
+export const metadata = buildMetadata({
   title: "Cloud Security & Cybersecurity Community in Uttarakhand",
   description:
     "Join the Cloud Security Alliance Uttarakhand Chapter — a regional cybersecurity community in Dehradun for cloud security, AI security, Zero Trust, training, events, and research collaboration.",
-  alternates: { canonical: "/" },
-  openGraph: {
-    url: "/",
-    title: "CSA Uttarakhand Chapter — Cloud Security & Cybersecurity Community",
-    description:
-      "Regional cybersecurity community in Uttarakhand for cloud security, AI security, Zero Trust, events, and research.",
-  },
-};
+  path: "/",
+});
 
 const stats = [
   { value: "250+", label: "Active Members" },
@@ -265,18 +259,18 @@ function ChapterProgramSection() {
 
         <div className="mission-grid">
           <article className="mission-card mission-card--dark">
-            <span>Our Vision</span>
-            <h3>Uttarakhand as a cybersecurity growth hub.</h3>
+            {/* <span>Our Vision</span> */}
+            <h3>Our Vision</h3>
             <p>
-              To establish Uttarakhand as a growing hub for cybersecurity awareness, innovation, research, and talent
+              Uttarakhand as a cybersecurity growth hub to establish Uttarakhand as a growing hub for cybersecurity awareness, innovation, research, and talent
               development by building an inclusive and future-ready security community.
             </p>
           </article>
           <article className="mission-card">
-            <span>Our Mission</span>
-            <h3>Practical skills for secure digital resilience.</h3>
+            {/* <span>Our Mission</span> */}
+            <h3>Our Mission</h3>
             <p>
-              To empower individuals and organizations with cybersecurity knowledge, practical skills, and collaborative
+              Practical skills for secure digital resilience to empower individuals and organizations with cybersecurity knowledge, practical skills, and collaborative
               opportunities that promote secure cloud adoption and digital resilience.
             </p>
           </article>
@@ -291,8 +285,7 @@ function FocusSection() {
     <section className="focus-section">
       <div className="container">
         <div className="section-intro section-intro--center">
-          <p className="eyebrow">Our focus areas</p>
-          <h2 className="Focus-heading">Where the chapter creates momentum.</h2>
+          <h2 className="Focus-heading">Our Focus Areas</h2>
         </div>
         <div className="focus-grid">
           {focusAreas.map((item) => (
@@ -312,8 +305,8 @@ function BenefitCardsSection() {
     <section className="benefit-section">
       <div className="container">
         <div className="section-intro section-intro--center">
-          <p className="eyebrow">Benefits of joining</p>
-          <h2>Why Join CSA Uttarakhand</h2>
+          {/* <p className="eyebrow">Benefits of joining</p> */}
+          <h2>Benefits of Joining the CSAUttarakhand Chapter</h2>
         </div>
         <div className="benefit-card-grid">
           {benefitCards.map((item) => (
@@ -342,11 +335,10 @@ function JoinPathSection() {
     <section className="join-path-section">
       <div className="container">
         <div className="section-intro section-intro--center join-path-intro">
-          <p className="eyebrow">Who can join?</p>
-          <h2 style={{ margin: 'auto' }}>Anyone passionate about cybersecurity and secure digital transformation is welcome.</h2>
+          {/* <p className="eyebrow">Who can join?</p> */}
+          <h2 style={{ margin: 'auto' }}>Who can join?</h2>
           <p>
-            The chapter is open, practical, and built for people who want to learn, contribute, and grow with the
-            cybersecurity community.
+            Anyone passionate about cybersecurity and secure digital transformation is welcome.
           </p>
         </div>
         <div className="join-audience-grid">
@@ -367,7 +359,7 @@ function WhyJoinBand() {
     <section className="why-join-band">
       <div className="container why-join-inner">
         <div>
-          <p className="eyebrow">Why join &amp; stay connected</p>
+          {/* <p className="eyebrow">Why join &amp; stay connected</p> */}
           <h2>Stay informed, connected, and future-ready.</h2>
           <p>
             The CSA Uttarakhand Chapter helps you become part of a collaborative community working toward a
@@ -397,12 +389,55 @@ function WhyJoinBand() {
 //   );
 // }
 
+// function EventsHighlightSection() {
+//   return (
+//     <section className="home-events">
+//       <div className="container home-events-inner">
+//         <div className="home-events-copy">
+//           <p className="eyebrow">Events &amp; Conferences</p>
+//           <h2>Where our community comes together.</h2>
+//           <p>
+//             From India&apos;s biggest cybersecurity &amp; AI conference to university MOU signings,
+//             hands-on workshops, and meetups — our events bring students, professionals, and industry
+//             leaders together across Uttarakhand.
+//           </p>
+//           <div className="hero-actions">
+//             <Link className="btn btn-primary" href="/past-events">
+//               View Events <ChevronRight size={18} />
+//             </Link>
+//           </div>
+//         </div>
+//         <div className="home-events-media">
+//           <div className="home-events-img home-events-img--main">
+//             <Image
+//               src="/assets/img/CSAXCON/E89A6843.webp"
+//               alt="CSA cybersecurity and AI conference at Graphic Era University, Dehradun"
+//               fill
+//               sizes="(max-width: 900px) 100vw, 520px"
+//             />
+//             <span className="home-events-tag">CSAXCON 2026</span>
+//           </div>
+//           <div className="home-events-img home-events-img--sub">
+//             <Image
+//               src="/assets/img/MOU_GEHU/IMG_0391.webp"
+//               alt="MOU signing ceremony with Graphic Era Hill University"
+//               fill
+//               sizes="(max-width: 900px) 55vw, 230px"
+//             />
+//           </div>
+//         </div>
+//       </div>
+//     </section>
+//   );
+// }
+
 export default function Home() {
   return (
     <main>
       <Hero />
       {/* <StatsBand /> */}
       <ChapterProgramSection />
+      {/* <EventsHighlightSection /> */}
       <FocusSection />
       <BenefitCardsSection />
       <JoinPathSection />

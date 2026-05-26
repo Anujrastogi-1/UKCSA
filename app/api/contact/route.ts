@@ -5,8 +5,7 @@ import {
   validateMembershipForm,
   type MembershipType
 } from "../../../lib/contactValidation";
-import { connectDB } from "../../../lib/db";
-import Member from "../../../models/Member";
+import { prisma } from "../../../lib/db";
 import { appendMembershipRow } from "../../../lib/googleSheets";
 import { clientIp, rateLimit, sweepRateLimits } from "../../../lib/rateLimit";
 import { errors, ok } from "../../../lib/apiResponse";
@@ -113,7 +112,15 @@ async function sendEmail(values: {
   const emailUser = process.env.EMAIL_USER?.trim();
   const emailPass = process.env.EMAIL_PASS?.trim();
   const receiver = process.env.CONTACT_RECEIVER?.trim();
-  if (!emailUser || !emailPass || !receiver) {
+  // Skip when unset OR still holding the .env.example placeholders, so an
+  // unconfigured deploy doesn't throw a 535 BadCredentials error per submit.
+  const isPlaceholder =
+    !emailUser ||
+    !emailPass ||
+    !receiver ||
+    emailUser.includes("youraddress@") ||
+    emailPass.startsWith("your-");
+  if (isPlaceholder) {
     console.warn("[contact] email not configured — skipping send");
     return { sent: false };
   }
@@ -241,22 +248,23 @@ export async function POST(request: NextRequest) {
   // ---- persist to Mongo (system of record) --------------------------------
   let memberId: string;
   try {
-    await connectDB();
-    const created = await Member.create({
-      membershipType: v.membershipType,
-      firstName: v.firstName,
-      lastName: v.lastName,
-      email: v.email,
-      phone: v.phone,
-      context: v.context,
-      subject: v.subject,
-      message: v.message,
-      ipAddress: ip,
-      userAgent: request.headers.get("user-agent")?.slice(0, 256) ?? undefined
+    const created = await prisma.member.create({
+      data: {
+        membershipType: v.membershipType,
+        firstName: v.firstName,
+        lastName: v.lastName,
+        email: v.email,
+        phone: v.phone,
+        context: v.context,
+        subject: v.subject,
+        message: v.message,
+        ipAddress: ip,
+        userAgent: request.headers.get("user-agent")?.slice(0, 256) ?? undefined
+      }
     });
-    memberId = String(created._id);
+    memberId = created.id;
   } catch (err) {
-    console.error("[contact] mongo insert failed:", err);
+    console.error("[contact] db insert failed:", err);
     return errors.server(
       "We could not save your application right now. Please try again shortly."
     );
@@ -292,7 +300,7 @@ export async function POST(request: NextRequest) {
   // Mark Sheets-sync status for retry/visibility in the admin dashboard.
   if (sheetResult.status === "fulfilled" && sheetResult.value.ok) {
     try {
-      await Member.updateOne({ _id: memberId }, { $set: { sheetSynced: true } });
+      await prisma.member.update({ where: { id: memberId }, data: { sheetSynced: true } });
     } catch {
       /* non-fatal */
     }

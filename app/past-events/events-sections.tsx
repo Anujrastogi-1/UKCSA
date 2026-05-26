@@ -1,18 +1,14 @@
-"use client";
-
 import { ArrowRight, Images, MapPin, Users } from "lucide-react";
-import { motion, useReducedMotion, type Variants } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { events } from "./events-data";
+import { Reveal } from "../Reveal";
 
 const mouItems = events.filter((e) => e.category === "event");
 const conferenceItems = events.filter((e) => e.category === "conference");
 
 // 4× duplication for a seamless, gapless infinite loop (track translates -50%).
 const scrollerItems = [...mouItems, ...mouItems, ...mouItems, ...mouItems];
-
-const EASE = [0.22, 0.61, 0.36, 1] as const;
 
 // Weave the highlight phrases into a single readable sentence. Lower-cases the
 // leading character for natural prose, but leaves acronyms (e.g. "OWASP") intact.
@@ -27,49 +23,20 @@ function joinHighlights(items: string[]): string {
 }
 
 export default function EventsSections() {
-  const reduce = useReducedMotion();
-
-  // Reduced motion: collapse transforms/duration so content appears instantly
-  // while staying fully visible and accessible.
-  const fadeUp: Variants = {
-    hidden: { opacity: reduce ? 1 : 0, y: reduce ? 0 : 24 },
-    show: { opacity: 1, y: 0, transition: { duration: reduce ? 0 : 0.6, ease: EASE } },
-  };
-
-  const fade: Variants = {
-    hidden: { opacity: reduce ? 1 : 0 },
-    show: { opacity: 1, transition: { duration: reduce ? 0 : 0.7, ease: EASE } },
-  };
-
-  const viewport = { once: true, amount: 0.15 } as const;
-
   return (
     <>
       {/* ── MOU showcase (auto-scroll marquee) ─────────────── */}
       <section className="page-hero"><div className="container"><h1>Events</h1></div></section>
       <section className="events-showcase">
         <div className="container">
-          <motion.div
-            className="events-heading-row"
-            variants={fadeUp}
-            initial="hidden"
-            whileInView="show"
-            viewport={viewport}
-          >
+          <Reveal className="events-heading-row">
             <div className="section-intro-block">
-              <h1>Recent MOUs</h1>
+              <h2>Recent MOUs</h2>
               <p>Strengthening ties with academic institutions across Uttarakhand.</p>
             </div>
-          </motion.div>
+          </Reveal>
 
-          <motion.div
-            className="events-scroller-wrap"
-            aria-label="MOU ceremony gallery"
-            variants={fade}
-            initial="hidden"
-            whileInView="show"
-            viewport={viewport}
-          >
+          <Reveal className="events-scroller-wrap" variant="fade" aria-label="MOU ceremony gallery">
             <div className="events-scroller-track">
               {scrollerItems.map((event, i) => (
               <Link
@@ -99,33 +66,20 @@ export default function EventsSections() {
               </Link>
             ))}
             </div>
-          </motion.div>
+          </Reveal>
         </div>
       </section>
 
       {/* ── Conferences (featured cards) ───────────────────── */}
       <section className="major-conferences">
         <div className="container">
-          <motion.div
-            className="major-heading"
-            variants={fadeUp}
-            initial="hidden"
-            whileInView="show"
-            viewport={viewport}
-          >
+          <Reveal className="major-heading">
             <h2>Conferences</h2>
             <p>Landmark summits that put Uttarakhand on the national cybersecurity map.</p>
-          </motion.div>
+          </Reveal>
 
           {conferenceItems.map((event, index) => (
-            <motion.article
-              className="conf-card"
-              key={event.slug}
-              variants={fadeUp}
-              initial="hidden"
-              whileInView="show"
-              viewport={viewport}
-            >
+            <Reveal as="article" className="conf-card" key={event.slug}>
               <div className="conf-media">
                 <Image
                   src={event.image}
@@ -182,7 +136,7 @@ export default function EventsSections() {
                   )}
                 </div>
               </div>
-            </motion.article>
+            </Reveal>
           ))}
         </div>
       </section>
@@ -190,12 +144,7 @@ export default function EventsSections() {
       {/* ── CTA ────────────────────────────────────────────── */}
       <section className="event-cta">
         <div className="container">
-          <motion.div
-            variants={fadeUp}
-            initial="hidden"
-            whileInView="show"
-            viewport={viewport}
-          >
+          <Reveal>
             <h2>Don&apos;t Miss Our Next Event!</h2>
             <p>Join 500+ cybersecurity professionals at our upcoming cloud security events in Uttarakhand.</p>
             <div className="event-actions centered">
@@ -204,7 +153,7 @@ export default function EventsSections() {
                 Follow on LinkedIn
               </a>
             </div>
-          </motion.div>
+          </Reveal>
         </div>
       </section>
     </>

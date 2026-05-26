@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { PageHero } from "../components";
+import { LoginForm } from "../admin/login/LoginForm";
 
 export const metadata: Metadata = {
   title: "Sign In",
-  description: "Sign in to the CSA Uttarakhand Chapter member portal.",
+  description: "Sign in to the CSA Uttarakhand Chapter admin panel.",
   alternates: { canonical: "/login" },
   robots: { index: false, follow: false },
 };
@@ -18,27 +18,9 @@ export default function LoginPage() {
           <div className="contact-panel">
             <strong>CSA Uttarakhand Chapter</strong>
             <h2>Welcome back</h2>
-            <form className="contact-form">
-              <label>
-                <span>Email Address</span>
-                <input type="email" aria-label="Email Address" required placeholder="you@example.com" />
-              </label>
-              <label>
-                <span>Password</span>
-                <input type="password" aria-label="Password" required placeholder="Enter your password" />
-              </label>
-              <div className="auth-form-meta">
-                <Link href="/forgot-password" className="auth-forgot-link">Forgot password?</Link>
-              </div>
-              <button type="button">Sign In</button>
-            </form>
-            <div className="auth-divider">
-              <span>or</span>
-            </div>
-            <p className="auth-switch">
-              Don&apos;t have an account?{" "}
-              <Link href="/signup">Create one</Link>
-            </p>
+            {/* Reuses the admin auth flow: on success it redirects to the
+                admin panel (or the force-password-change page on first login). */}
+            <LoginForm />
           </div>
         </div>
       </section>

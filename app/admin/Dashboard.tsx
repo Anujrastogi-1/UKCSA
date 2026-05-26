@@ -11,8 +11,9 @@ import {
   Trash2,
   ChevronLeft,
   ChevronRight,
-  CheckCircle2,
-  Minus,
+  ChevronUp,
+  ChevronDown,
+  ChevronsUpDown,
   Inbox
 } from "lucide-react";
 
@@ -29,10 +30,15 @@ type Member = {
   phone: string;
   context: string;
   subject: string;
+  message: string;
   status: string;
   sheetSynced: boolean;
   createdAt: string;
 };
+
+// Columns the table can be sorted by (must match the API whitelist).
+type SortKey = "createdAt" | "membershipType" | "firstName" | "email" | "context";
+type SortDir = "asc" | "desc";
 
 type ListData = {
   items: Member[];
@@ -64,7 +70,7 @@ const EXPORT_BATCH_SIZE = 100;
 const TYPE_LABEL: Record<Member["membershipType"], string> = {
   student: "Student",
   professional: "Professional",
-  board: "Board"
+  board: "Board Member"
 };
 
 async function apiGet<T>(url: string): Promise<T> {
@@ -86,6 +92,8 @@ export function Dashboard() {
   const [q, setQ] = useState<string>("");
   const [debouncedQ, setDebouncedQ] = useState<string>("");
   const [page, setPage] = useState(1);
+  const [sort, setSort] = useState<SortKey>("createdAt");
+  const [dir, setDir] = useState<SortDir>("desc");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [exporting, setExporting] = useState(false);
@@ -107,8 +115,10 @@ export function Dashboard() {
     const p = new URLSearchParams(filterParams);
     p.set("page", String(page));
     p.set("pageSize", String(PAGE_SIZE));
+    p.set("sort", sort);
+    p.set("dir", dir);
     return `/api/admin/members?${p.toString()}`;
-  }, [filterParams, page]);
+  }, [filterParams, page, sort, dir]);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -133,7 +143,18 @@ export function Dashboard() {
 
   useEffect(() => {
     setPage(1);
-  }, [type, range, debouncedQ]);
+  }, [type, range, debouncedQ, sort, dir]);
+
+  // Toggle direction when re-clicking the active column; otherwise switch
+  // column (newest-first for dates, A→Z for everything else).
+  const onSort = (key: SortKey) => {
+    if (sort === key) {
+      setDir((d) => (d === "asc" ? "desc" : "asc"));
+    } else {
+      setSort(key);
+      setDir(key === "createdAt" ? "desc" : "asc");
+    }
+  };
 
   async function onDelete(id: string) {
     if (!confirm("Delete this submission? This cannot be undone.")) return;
@@ -177,6 +198,8 @@ export function Dashboard() {
         const p = new URLSearchParams(filterParams);
         p.set("page", String(pageNum));
         p.set("pageSize", String(EXPORT_BATCH_SIZE));
+        p.set("sort", sort);
+        p.set("dir", dir);
         const data = await apiGet<ListData>(`/api/admin/members?${p.toString()}`);
         all.push(...data.items);
         if (pageNum >= data.pagination.totalPages || data.items.length === 0) break;
@@ -317,13 +340,13 @@ export function Dashboard() {
         <table className="admin-table">
           <thead>
             <tr>
-              <th>Submitted</th>
-              <th>Type</th>
-              <th>Name</th>
-              <th>Email</th>
+              <SortableTh label="Submitted" col="createdAt" sort={sort} dir={dir} onSort={onSort} />
+              <SortableTh label="Type" col="membershipType" sort={sort} dir={dir} onSort={onSort} />
+              <SortableTh label="Name" col="firstName" sort={sort} dir={dir} onSort={onSort} />
+              <SortableTh label="Email" col="email" sort={sort} dir={dir} onSort={onSort} />
               <th>Phone</th>
-              <th>Org / Institution</th>
-              <th>Sheet</th>
+              <SortableTh label="Org / Institution" col="context" sort={sort} dir={dir} onSort={onSort} />
+              <th>Message</th>
               <th className="admin-col-actions" aria-label="Actions"></th>
             </tr>
           </thead>
@@ -347,13 +370,7 @@ export function Dashboard() {
                 <td><a href={`mailto:${m.email}`} className="admin-link">{m.email}</a></td>
                 <td className="admin-cell-meta">{m.phone}</td>
                 <td className="admin-cell-clip" title={m.context}>{m.context}</td>
-                <td className="admin-cell-center">
-                  {m.sheetSynced ? (
-                    <CheckCircle2 size={16} className="admin-sheet-ok" aria-label="Synced" />
-                  ) : (
-                    <Minus size={16} className="admin-sheet-no" aria-label="Not synced" />
-                  )}
-                </td>
+                <td className="admin-cell-clip" title={m.message}>{m.message}</td>
                 <td className="admin-row-actions">
                   <button
                     type="button"
@@ -411,6 +428,43 @@ function TypeBadge({ type }: { type: Member["membershipType"] }) {
   return <span className={`admin-badge admin-badge--type-${type}`}>{TYPE_LABEL[type]}</span>;
 }
 
+function SortableTh({
+  label,
+  col,
+  sort,
+  dir,
+  onSort
+}: {
+  label: string;
+  col: SortKey;
+  sort: SortKey;
+  dir: SortDir;
+  onSort: (key: SortKey) => void;
+}) {
+  const active = sort === col;
+  return (
+    <th aria-sort={active ? (dir === "asc" ? "ascending" : "descending") : "none"}>
+      <button
+        type="button"
+        className={`admin-sort-btn${active ? " is-active" : ""}`}
+        onClick={() => onSort(col)}
+        title={`Sort by ${label}`}
+      >
+        <span>{label}</span>
+        {active ? (
+          dir === "asc" ? (
+            <ChevronUp size={13} aria-hidden />
+          ) : (
+            <ChevronDown size={13} aria-hidden />
+          )
+        ) : (
+          <ChevronsUpDown size={13} aria-hidden className="admin-sort-idle" />
+        )}
+      </button>
+    </th>
+  );
+}
+
 function formatDate(iso: string) {
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return iso;
@@ -433,6 +487,7 @@ function downloadCsv(rows: Member[]) {
     "Phone",
     "Organisation / Institution",
     "Subject",
+    "Message",
     "Status",
     "Sheet Synced"
   ];
@@ -452,6 +507,7 @@ function downloadCsv(rows: Member[]) {
         r.phone,
         r.context,
         r.subject,
+        r.message,
         r.status,
         r.sheetSynced ? "yes" : "no"
       ]

@@ -1,19 +1,13 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { BrainCircuit, Building2, GraduationCap, Handshake, Network, ShieldCheck, Target, Users } from "lucide-react";
+import { buildMetadata } from "../../lib/seo";
 
-export const metadata: Metadata = {
+export const metadata = buildMetadata({
   title: "About CSA Uttarakhand Chapter",
   description:
     "Learn about the Cloud Security Alliance Uttarakhand Chapter — our mission, focus areas in cloud security, AI governance, Zero Trust, threat intelligence and how we build a future-ready cybersecurity community.",
-  alternates: { canonical: "/about-us" },
-  openGraph: {
-    url: "/about-us",
-    title: "About CSA Uttarakhand Chapter",
-    description:
-      "Cloud Security Alliance Uttarakhand Chapter — mission, focus areas, and how we grow a regional cybersecurity community.",
-  },
-};
+  path: "/about-us",
+});
 
 const focusItems = [
   "Cloud Security",
@@ -84,7 +78,7 @@ export default function AboutPage() {
       <section className="about-story">
         <div className="container">
           <div className="section-intro">
-            <p className="eyebrow">How the chapter works</p>
+            {/* <p className="eyebrow">How the chapter works</p> */}
             <h2>What we do, how we grow, and who belongs here.</h2>
           </div>
         </div>
@@ -125,7 +119,7 @@ export default function AboutPage() {
       <section className="about-focus-band">
         <div className="container about-focus-inner">
           <div>
-            <p className="eyebrow">Core areas</p>
+            {/* <p className="eyebrow">Core areas</p> */}
             <h2>Practical cybersecurity topics for a stronger digital ecosystem.</h2>
           </div>
           <div className="about-focus-list">
@@ -139,7 +133,7 @@ export default function AboutPage() {
       <section className="about-impact">
         <div className="container">
           <div className="section-intro section-intro--center">
-            <p className="eyebrow">Community impact</p>
+            {/* <p className="eyebrow">Community impact</p> */}
             <h2>Learning, collaboration, and action in one regional chapter.</h2>
           </div>
           <div className="about-impact-grid">
@@ -159,7 +153,7 @@ export default function AboutPage() {
       <section className="about-audience">
         <div className="container about-audience-grid">
           <div>
-            <p className="eyebrow">Join the community</p>
+            {/* <p className="eyebrow">Join the community</p> */}
             <h2>For people and teams building secure digital futures.</h2>
           </div>
           {audienceCards.map((card) => (
