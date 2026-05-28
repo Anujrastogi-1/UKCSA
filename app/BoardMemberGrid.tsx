@@ -21,17 +21,21 @@ export function BoardMemberGrid({ members }: BoardMemberGridProps) {
             />
           </div>
           <div className="leader-copy">
-            <h3>{member.name}</h3>
-            <span>{member.role}</span>
+            <div className="leader-heading">
+              <div className="leader-identity">
+                <h3>{member.name}</h3>
+                <span>{member.role}</span>
+              </div>
+              <a
+                href={member.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${member.name} LinkedIn profile (opens in new tab)`}
+              >
+                <Linkedin size={18} aria-hidden="true" />
+              </a>
+            </div>
             <p>{member.description}</p>
-            <a
-              href={member.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`${member.name} LinkedIn profile (opens in new tab)`}
-            >
-              <Linkedin size={18} aria-hidden="true" />
-            </a>
           </div>
         </article>
       ))}

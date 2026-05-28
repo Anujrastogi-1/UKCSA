@@ -10,7 +10,8 @@ const navItems = [
   { label: "About Us", href: "/about-us" },
   { label: "Board Members", href: "/board-of-directors" },
   { label: "Events", href: "/past-events" },
-  { label: "Become a Member", href: "/contact" }
+  { label: "Become a Member", href: "/contact" },
+  { label: "Press Release", href: "/press-release" }
 ];
 
 const footerLinks = [
@@ -19,7 +20,8 @@ const footerLinks = [
   ["Board Members", "/board-of-directors"],
   ["Membership", "/membership-info"],
   ["Events", "/past-events"],
-  ["Become a Member", "/contact"]
+  ["Become a Member", "/contact"],
+  ["Press Release", "/press-release"]
 ];
 
 const socialLinks = [

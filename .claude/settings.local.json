@@ -42,7 +42,8 @@
       "Bash(awk '{printf \"%6.1f KB  %s\\\\n\", $1/1024, $2}')",
       "Bash(awk '{s+=$1} END{printf \"JS total: %.1f KB\\\\n\", s/1024}')",
       "Bash(awk '{s+=$1} END{printf \"CSS total: %.1f KB\\\\n\", s/1024}')",
-      "Bash(awk '{s+=$1} END{printf \"%.1f KB\\\\n\", s/1024}')"
+      "Bash(awk '{s+=$1} END{printf \"%.1f KB\\\\n\", s/1024}')",
+      "Bash(powershell *)"
     ]
   }
 }

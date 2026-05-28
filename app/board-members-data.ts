@@ -10,24 +10,24 @@ export const boardMembers: BoardMember[] = [
   {
     name: "Satyam Rastogi",
     role: "Chapter Leader",
-    image: "/assets/img/board-of-directors/SatyamRastogi.jpeg",
+    image: "/assets/img/board-of-directors/SatyamRastogi.png",
     linkedin: "https://www.linkedin.com/in/hackersatyamrastogi/",
     description: "Leads chapter strategy, cybersecurity awareness, and regional community-building initiatives."
   },
   {
     name: "Devjeet Singh",
     role: "Board Member",
-    image: "/assets/img/board-of-directors/Devjeet.jpg",
+    image: "/assets/img/board-of-directors/Devjeet.png",
     linkedin: "https://www.linkedin.com/in/devjeethacker/",
     description: "Supports security programs, practitioner outreach, and technical community engagement."
   },
-  {
-    name: "Avita Katal",
-    role: "Board Member",
-    image: "/assets/img/board-of-directors/female_dummy.png",
-    linkedin: "https://www.linkedin.com/in/avita-katal/",
-    description: "Contributes to awareness, academic collaboration, and inclusive cybersecurity participation."
-  },
+  // {
+  //   name: "Avita Katal",
+  //   role: "Board Member",
+  //   image: "/assets/img/board-of-directors/female_dummy.png",
+  //   linkedin: "https://www.linkedin.com/in/avita-katal/",
+  //   description: "Contributes to awareness, academic collaboration, and inclusive cybersecurity participation."
+  // },
   {
     name: "Naveen Pal",
     role: "Board Member",
@@ -38,7 +38,7 @@ export const boardMembers: BoardMember[] = [
   {
     name: "Kush Kaushik",
     role: "Board Member",
-    image: "/assets/img/board-of-directors/kush_kaushik.jpg",
+    image: "/assets/img/board-of-directors/kush_kaushik.png",
     linkedin: "https://in.linkedin.com/in/kushkaushik",
     description: "Supports cloud security knowledge-sharing, events, and industry collaboration."
   },
