@@ -14,7 +14,7 @@ export function BoardMemberGrid({ members }: BoardMemberGridProps) {
           <div className="leader-media">
             <Image
               src={member.image}
-              alt={`${member.name} — ${member.role}, CSA Uttarakhand Chapter`}
+              alt={`${member.name}, ${member.role}, CSA Uttarakhand Chapter`}
               fill
               loading={index === 0 ? "eager" : "lazy"}
               sizes="(max-width: 920px) 100vw, 33vw"

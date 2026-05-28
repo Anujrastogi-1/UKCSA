@@ -13,7 +13,7 @@ const defaultDescription = DEFAULT_DESCRIPTION;
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: `${siteName} — Cloud Security, AI Security & Cybersecurity Community`,
+    default: `${siteName} | Cloud Security, AI Security & Cybersecurity Community`,
     template: `%s | ${siteName}`,
   },
   description: defaultDescription,
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName,
-    title: `${siteName} — Cloud Security & Cybersecurity Community`,
+    title: `${siteName} | Cloud Security & Cybersecurity Community`,
     description: defaultDescription,
     url: siteUrl,
     locale: SITE_LOCALE,
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `${siteName} — Cloud Security & Cybersecurity Community`,
+    title: `${siteName} | Cloud Security & Cybersecurity Community`,
     description: defaultDescription,
     images: [DEFAULT_OG_IMAGE],
   },

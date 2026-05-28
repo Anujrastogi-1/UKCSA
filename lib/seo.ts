@@ -21,7 +21,7 @@ export const SITE_NAME = "CSA Uttarakhand Chapter";
 export const SITE_LOCALE = "en_IN";
 
 export const DEFAULT_DESCRIPTION =
-  "Cloud Security Alliance Uttarakhand Chapter — building a future-ready cybersecurity community in Uttarakhand through events, research, training, and collaboration on cloud security, AI security, and Zero Trust.";
+  "Cloud Security Alliance Uttarakhand Chapter, building a future-ready cybersecurity community in Uttarakhand through events, research, training, and collaboration on cloud security, AI security, and Zero Trust.";
 
 /** 1200×630 social card used as the default OG/Twitter image. */
 export const DEFAULT_OG_IMAGE = "/assets/img/Chapter-hero.jpg";

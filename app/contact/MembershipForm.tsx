@@ -109,7 +109,7 @@ export function MembershipForm({ role }: { role: RoleId }) {
 
   const composedSubject = useMemo(() => {
     const trimmed = values.context.trim().replace(/\s+/g, " ");
-    return trimmed ? `${tab.subjectPrefix} — ${trimmed}` : tab.subjectPrefix;
+    return trimmed ? `${tab.subjectPrefix}: ${trimmed}` : tab.subjectPrefix;
   }, [tab.subjectPrefix, values.context]);
 
   const submission = useMemo(

@@ -5,7 +5,7 @@ import { buildMetadata } from "../../lib/seo";
 export const metadata = buildMetadata({
   title: "About CSA Uttarakhand Chapter",
   description:
-    "Learn about the Cloud Security Alliance Uttarakhand Chapter — our mission, focus areas in cloud security, AI governance, Zero Trust, threat intelligence and how we build a future-ready cybersecurity community.",
+    "Learn about the Cloud Security Alliance Uttarakhand Chapter, our mission, focus areas in cloud security, AI governance, Zero Trust, threat intelligence and how we build a future-ready cybersecurity community.",
   path: "/about-us",
 });
 

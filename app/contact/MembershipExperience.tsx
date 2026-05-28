@@ -149,7 +149,7 @@ export default function MembershipExperience() {
               <div className="mx-form-card">
                 <h2 className="mx-form-title">Apply now</h2>
                 <p className="mx-form-sub">
-                  Tell us a bit about yourself — we&apos;ll get in touch with next steps.
+                  Tell us a bit about yourself and we&apos;ll get in touch with next steps.
                 </p>
                 <MembershipForm role={role} />
               </div>

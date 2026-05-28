@@ -29,7 +29,7 @@ export async function generateMetadata({
   }
 
   return buildMetadata({
-    title: `${event.title} — Event Gallery`,
+    title: `${event.title} | Event Gallery`,
     description: `${event.title} at ${event.place} on ${event.date}. View ${event.gallery.length} photos from this CSA Uttarakhand Chapter event.`,
     path: `/past-events/${event.slug}`,
     image: event.image,

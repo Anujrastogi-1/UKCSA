@@ -4,7 +4,7 @@ import { PageHero } from "../components";
 import { buildMetadata } from "../../lib/seo";
 
 export const metadata = buildMetadata({
-  title: "Membership — Join CSA Uttarakhand Chapter",
+  title: "Membership | Join CSA Uttarakhand Chapter",
   description:
     "Become a member of the Cloud Security Alliance Uttarakhand Chapter. Get learning access, professional growth, and connect with a regional cybersecurity community.",
   path: "/membership-info",

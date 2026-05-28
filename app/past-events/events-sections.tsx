@@ -43,7 +43,7 @@ export default function EventsSections() {
                 className="scroll-event-card"
                 href={`/past-events/${event.slug}`}
                 key={`scroll-${i}`}
-                aria-label={`View ${event.gallery.length} photos — ${event.title}`}
+                aria-label={`View ${event.gallery.length} photos from ${event.title}`}
               >
                 <div className="scroll-event-media">
                   <Image src={event.image} alt={event.alt} fill sizes="400px" loading="eager" />

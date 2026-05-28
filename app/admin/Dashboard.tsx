@@ -393,7 +393,7 @@ export function Dashboard() {
           <span className="admin-pagination__info">
             {total === 0
               ? "0 results"
-              : `Showing ${visibleStart}–${visibleEnd} of ${total}`}
+              : `Showing ${visibleStart} to ${visibleEnd} of ${total}`}
           </span>
           <div className="admin-pagination__controls">
             <button

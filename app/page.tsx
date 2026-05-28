@@ -20,7 +20,7 @@ import Link from "next/link";
 export const metadata = buildMetadata({
   title: "Cloud Security & Cybersecurity Community in Uttarakhand",
   description:
-    "Join the Cloud Security Alliance Uttarakhand Chapter — a regional cybersecurity community in Dehradun for cloud security, AI security, Zero Trust, training, events, and research collaboration.",
+    "Join the Cloud Security Alliance Uttarakhand Chapter, a regional cybersecurity community in Dehradun for cloud security, AI security, Zero Trust, training, events, and research collaboration.",
   path: "/",
 });
 
@@ -363,7 +363,7 @@ function WhyJoinBand() {
           <h2>Stay informed, connected, and future-ready.</h2>
           <p>
             The CSA Uttarakhand Chapter helps you become part of a collaborative community working toward a
-            safer digital ecosystem — with real-time updates on local meetups, opportunities, and breaking
+            safer digital ecosystem, with real-time updates on local meetups, opportunities, and breaking
             news across the cloud security domain.
           </p>
         </div>

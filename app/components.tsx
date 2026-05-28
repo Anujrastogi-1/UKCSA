@@ -43,10 +43,10 @@ export function Header() {
   return (
     <header className={`site-header${isMenuOpen ? " is-menu-open" : ""}`}>
       <div className="container nav-row">
-        <Link className="brand" href="/" aria-label="Cloud Security Alliance Uttarakhand Chapter Logo - CSA Dehradun" onClick={closeMenu}>
+        <Link className="brand" href="/" aria-label="Cloud Security Alliance Uttarakhand Chapter Logo | CSA Dehradun" onClick={closeMenu}>
           <Image
             src="/assets/img/logo.png"
-            alt="Cloud Security Alliance Uttarakhand Chapter Logo - CSA Dehradun"
+            alt="Cloud Security Alliance Uttarakhand Chapter Logo | CSA Dehradun"
             width={207}
             height={75}
             priority

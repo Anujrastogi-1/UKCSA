@@ -4,9 +4,9 @@ import { PageHero } from "../components";
 import { buildMetadata } from "../../lib/seo";
 
 export const metadata = buildMetadata({
-  title: "Board Members — CSA Uttarakhand Chapter",
+  title: "Board Members | CSA Uttarakhand Chapter",
   description:
-    "Meet the board members of the Cloud Security Alliance Uttarakhand Chapter — industry leaders guiding the regional cybersecurity community.",
+    "Meet the board members of the Cloud Security Alliance Uttarakhand Chapter, industry leaders guiding the regional cybersecurity community.",
   path: "/board-of-directors",
 });
 

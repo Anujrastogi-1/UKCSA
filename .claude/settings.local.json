@@ -43,7 +43,9 @@
       "Bash(awk '{s+=$1} END{printf \"JS total: %.1f KB\\\\n\", s/1024}')",
       "Bash(awk '{s+=$1} END{printf \"CSS total: %.1f KB\\\\n\", s/1024}')",
       "Bash(awk '{s+=$1} END{printf \"%.1f KB\\\\n\", s/1024}')",
-      "Bash(powershell *)"
+      "Bash(powershell *)",
+      "PowerShell(Get-Content *)",
+      "PowerShell($bytes = [System.IO.File]::ReadAllBytes\\(\"C:\\\\Users\\\\HP\\\\Desktop\\\\Projects\\\\UKCSA\\\\app\\\\past-events\\\\events-data.tsx\"\\); \"First 3 bytes: $\\($bytes[0..2] -join ' '\\)\"; if \\($bytes[0] -eq 0xEF -and $bytes[1] -eq 0xBB -and $bytes[2] -eq 0xBF\\) { \"Has UTF-8 BOM - removing\"; $contents = [System.IO.File]::ReadAllBytes\\(\"C:\\\\Users\\\\HP\\\\Desktop\\\\Projects\\\\UKCSA\\\\app\\\\past-events\\\\events-data.tsx\"\\); $stripped = $contents[3..\\($contents.Length - 1\\)]; [System.IO.File]::WriteAllBytes\\(\"C:\\\\Users\\\\HP\\\\Desktop\\\\Projects\\\\UKCSA\\\\app\\\\past-events\\\\events-data.tsx\", $stripped\\); \"BOM removed\" } else { \"No BOM\" })"
     ]
   }
 }

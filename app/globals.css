@@ -3606,37 +3606,46 @@ select:focus-visible {
 
 .press-release-intro {
   max-width: 760px;
-  margin-bottom: clamp(22px, 3vw, 34px);
+  margin-bottom: clamp(24px, 3.4vw, 40px);
 }
 
 .press-release-intro h2 {
   margin: 0;
   color: var(--text);
   font-size: var(--fs-h2);
-  line-height: var(--lh-snug);
+  line-height: 1.15;
   letter-spacing: var(--tracking-tight);
 }
 
 .press-release-intro p:not(.eyebrow) {
-  margin: 10px 0 0;
+  margin: 12px 0 0;
   color: #4d5a6f;
   font-size: var(--fs-body-lg);
-  line-height: 1.65;
+  line-height: 1.7;
 }
 
 .press-link-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--gap-grid-lg);
-  margin-bottom: clamp(26px, 4vw, 44px);
+  margin-bottom: clamp(28px, 4vw, 48px);
 }
 
 .press-link-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
   border: 1px solid rgba(7, 88, 150, 0.16);
-  border-radius: 10px;
+  border-radius: 12px;
   background: #fff;
   box-shadow: 0 14px 34px rgba(7, 88, 144, 0.14);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.press-link-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 22px 44px rgba(7, 88, 144, 0.22);
 }
 
 .press-link-image {
@@ -3660,17 +3669,19 @@ select:focus-visible {
 
 .press-link-overlay {
   position: absolute;
-  inset: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  gap: 10px;
-  padding: clamp(18px, 2.6vw, 26px);
+  gap: 12px;
+  padding: clamp(20px, 2.8vw, 28px);
   color: #fff;
   background: linear-gradient(
     180deg,
-    rgba(6, 22, 49, 0) 22%,
-    rgba(6, 22, 49, 0.55) 55%,
+    rgba(6, 22, 49, 0) 0%,
+    rgba(6, 22, 49, 0.55) 45%,
     rgba(6, 22, 49, 0.94) 100%
   );
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
@@ -3680,7 +3691,7 @@ select:focus-visible {
   margin: 0;
   color: #fff;
   font-size: var(--fs-card-title-lg);
-  line-height: var(--lh-card-title);
+  line-height: 1.35;
   font-weight: 800;
 }
 
@@ -3688,13 +3699,13 @@ select:focus-visible {
   margin: 0;
   color: rgba(255, 255, 255, 0.92);
   font-size: var(--fs-card-body);
-  line-height: 1.55;
+  line-height: 1.6;
 }
 
 .press-link-overlay a {
   display: inline-flex;
   align-self: flex-start;
-  margin-top: 4px;
+  margin-top: 6px;
   color: #ffd9b5;
   font-weight: 800;
   text-decoration: underline;
@@ -3815,9 +3826,49 @@ select:focus-visible {
   }
 }
 
+@media (max-width: 720px) {
+  .press-link-image {
+    aspect-ratio: 16 / 10;
+  }
+
+  .press-link-overlay {
+    position: static;
+    padding: 16px 18px 18px;
+    gap: 8px;
+    background: #fff;
+    color: var(--text);
+    text-shadow: none;
+  }
+
+  .press-link-overlay h3 {
+    color: var(--text);
+    font-size: 1.05rem;
+    line-height: 1.35;
+  }
+
+  .press-link-overlay p {
+    color: #4d5a6f;
+    line-height: 1.55;
+  }
+
+  .press-link-overlay a {
+    color: var(--orange);
+    text-decoration-color: rgba(245, 130, 42, 0.6);
+  }
+}
+
 @media (max-width: 620px) {
   .press-release-section {
     padding-bottom: var(--space-8);
+  }
+
+  .press-link-grid {
+    gap: 18px;
+    margin-bottom: 28px;
+  }
+
+  .press-link-card {
+    border-radius: 10px;
   }
 
   .press-gallery-panel {
@@ -3834,6 +3885,7 @@ select:focus-visible {
     margin-bottom: 12px;
   }
 }
+
 
 
 /* Print: strip page chrome and the toolbar, show a clean tabular layout. */
