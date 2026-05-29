@@ -443,6 +443,7 @@
   }
   .mx-tab {
     flex: 1;
+    min-width: 0;
     padding: 0 10px;
     font-size: 0.82rem;
   }
@@ -451,5 +452,22 @@
   }
   .mx-form-card {
     padding: 20px 16px;
+  }
+}
+
+/* Very narrow phones: keep the longest tab ("Board Members") inside the
+   pill — tighten padding, allow the label to wrap to two lines, and let the
+   flex items shrink below their content width. */
+@media (max-width: 402px) {
+  .mx-tab {
+    padding: 8px 6px;
+    font-size: 0.74rem;
+  }
+  .mx-tab-label {
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    line-height: 1.15;
+    text-align: center;
   }
 }

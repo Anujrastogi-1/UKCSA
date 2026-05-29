@@ -70,7 +70,7 @@ export default function AboutPage() {
               </div>
               <span>Chapter Focus</span>
             </div>
-            <strong>Cloud security, AI governance, Zero Trust, threat intelligence, and compliance</strong>
+            <strong>Cloud security, AI governance, Zero Trust, Threat Intelligence, and Compliance</strong>
           </div>
         </div>
       </section>
