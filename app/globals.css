@@ -2635,6 +2635,20 @@ select:focus-visible {
   line-height: 1.35;
 }
 
+.field-counter {
+  display: block;
+  align-self: flex-end;
+  margin-top: 4px;
+  text-align: right;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.field-counter[data-limit-reached="true"] {
+  color: #c2410c;
+}
+
 .form-notice {
   padding: 10px 12px;
   border-radius: 7px;

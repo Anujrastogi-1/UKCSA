@@ -1,13 +1,21 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import {
   CONTACT_FIELDS,
   ContactErrors,
   ContactField,
   ContactFormValues,
+  countWords,
   emptyContactFormValues,
-  validateContactForm
+  limitWords,
+  MESSAGE_MAX_WORDS,
+  sanitizeContextInput,
+  sanitizeMessageInput,
+  sanitizeNameInput,
+  sanitizePhoneInput,
+  validateContactForm,
+  validateContext
 } from "../../lib/contactValidation";
 
 export type RoleId = "students" | "professionals" | "board";
@@ -98,8 +106,19 @@ export function MembershipForm({ role }: { role: RoleId }) {
   const [serverErrors, setServerErrors] = useState<ContactErrors>({});
   const [status, setStatus] = useState<FormStatus>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
 
   const tab = ROLE_FORMS[role] ?? ROLE_FORMS.students;
+
+  // Move keyboard focus to the first field flagged as invalid (after a failed submit).
+  const focusFirstInvalid = () => {
+    requestAnimationFrame(() => {
+      const invalid = formRef.current?.querySelector<HTMLElement>(
+        '[aria-invalid="true"]:not([aria-hidden="true"])'
+      );
+      invalid?.focus();
+    });
+  };
 
   // Clear server feedback when the selected role changes (kept entered values).
   useEffect(() => {
@@ -126,14 +145,31 @@ export function MembershipForm({ role }: { role: RoleId }) {
   );
 
   const contextError = validateContext(values.context);
+  const messageWordCount = countWords(values.message);
   const errors = { ...submission.errors, ...serverErrors };
   const isSubmitDisabled = isSubmitting || !submission.isValid || Boolean(contextError);
 
   const fieldError = (field: ContactField) => (touched[field] ? errors[field] : undefined);
   const showContextError = contextTouched ? contextError : undefined;
 
+  // Filter disallowed characters as the user types so they can never be entered.
+  const sanitizeFieldInput = (field: ContactField, value: string) => {
+    switch (field) {
+      case "phone":
+        return sanitizePhoneInput(value);
+      case "firstName":
+      case "lastName":
+        return sanitizeNameInput(value);
+      case "message":
+        return limitWords(sanitizeMessageInput(value), MESSAGE_MAX_WORDS);
+      default:
+        return value;
+    }
+  };
+
   const updateField = (field: ContactField, value: string) => {
-    setValues((current) => ({ ...current, [field]: value }));
+    const nextValue = sanitizeFieldInput(field, value);
+    setValues((current) => ({ ...current, [field]: nextValue }));
     setTouched((current) => ({ ...current, [field]: true }));
     setServerErrors((current) => {
       const next = { ...current };
@@ -144,7 +180,7 @@ export function MembershipForm({ role }: { role: RoleId }) {
   };
 
   const updateContext = (value: string) => {
-    setValues((current) => ({ ...current, context: value }));
+    setValues((current) => ({ ...current, context: sanitizeContextInput(value) }));
     setContextTouched(true);
     setServerErrors((current) => {
       const next = { ...current };
@@ -186,6 +222,7 @@ export function MembershipForm({ role }: { role: RoleId }) {
     if (!result.isValid || contextError) {
       setServerErrors(result.errors);
       setStatus({ type: "error", message: "Please correct the highlighted fields before submitting." });
+      focusFirstInvalid();
       return;
     }
 
@@ -213,6 +250,7 @@ export function MembershipForm({ role }: { role: RoleId }) {
         const errorPayload = payload && payload.ok === false ? payload.error : null;
         if (errorPayload?.details && typeof errorPayload.details === "object") {
           setServerErrors(errorPayload.details as ContactErrors);
+          focusFirstInvalid();
         }
         setStatus({
           type: "error",
@@ -241,6 +279,7 @@ export function MembershipForm({ role }: { role: RoleId }) {
 
   return (
     <form
+      ref={formRef}
       className="contact-form member-form"
       noValidate
       onSubmit={handleSubmit}
@@ -264,6 +303,7 @@ export function MembershipForm({ role }: { role: RoleId }) {
           error={fieldError("firstName")}
           placeholder="First Name"
           autoComplete="given-name"
+          maxLength={15}
           onBlur={() => trimField("firstName")}
           onChange={updateField}
         />
@@ -274,6 +314,7 @@ export function MembershipForm({ role }: { role: RoleId }) {
           error={fieldError("lastName")}
           placeholder="Last Name"
           autoComplete="family-name"
+          maxLength={15}
           onBlur={() => trimField("lastName")}
           onChange={updateField}
         />
@@ -288,6 +329,8 @@ export function MembershipForm({ role }: { role: RoleId }) {
           error={fieldError("email")}
           placeholder="you@example.com"
           autoComplete="email"
+          inputMode="email"
+          maxLength={254}
           onBlur={() => trimField("email")}
           onChange={updateField}
         />
@@ -300,6 +343,7 @@ export function MembershipForm({ role }: { role: RoleId }) {
           placeholder="+91XXXXXXXXXX"
           autoComplete="tel"
           inputMode="tel"
+          maxLength={16}
           onBlur={() => trimField("phone")}
           onChange={updateField}
         />
@@ -315,6 +359,7 @@ export function MembershipForm({ role }: { role: RoleId }) {
           className={showContextError ? "is-invalid" : undefined}
           value={values.context}
           placeholder={tab.contextPlaceholder}
+          maxLength={80}
           onBlur={trimContext}
           onChange={(event) => updateContext(event.target.value)}
         />
@@ -329,7 +374,7 @@ export function MembershipForm({ role }: { role: RoleId }) {
         <span>{tab.messageLabel}</span>
         <textarea
           aria-label={tab.messageLabel}
-          aria-describedby={fieldError("message") ? "message-error" : undefined}
+          aria-describedby={`message-counter${fieldError("message") ? " message-error" : ""}`}
           aria-invalid={Boolean(fieldError("message"))}
           className={fieldError("message") ? "is-invalid" : undefined}
           rows={6}
@@ -338,6 +383,14 @@ export function MembershipForm({ role }: { role: RoleId }) {
           onBlur={() => trimField("message")}
           onChange={(event) => updateField("message", event.target.value)}
         />
+        <span
+          className="field-counter"
+          id="message-counter"
+          aria-live="polite"
+          data-limit-reached={messageWordCount >= MESSAGE_MAX_WORDS ? "true" : undefined}
+        >
+          {messageWordCount} / {MESSAGE_MAX_WORDS} words
+        </span>
         {fieldError("message") ? (
           <span className="field-error" id="message-error" role="alert">
             {fieldError("message")}
@@ -360,14 +413,6 @@ export function MembershipForm({ role }: { role: RoleId }) {
   );
 }
 
-function validateContext(value: string) {
-  const trimmed = value.trim();
-  if (!trimmed) return "This field is required.";
-  if (trimmed.length < 2) return "Please enter at least 2 characters.";
-  if (trimmed.length > 150) return "Please keep this under 150 characters.";
-  return undefined;
-}
-
 type FieldControlProps = {
   field: Exclude<ContactField, "message" | "subject">;
   label: string;
@@ -377,6 +422,7 @@ type FieldControlProps = {
   type?: string;
   autoComplete?: string;
   inputMode?: "text" | "email" | "tel" | "url" | "numeric" | "decimal" | "search";
+  maxLength?: number;
   onBlur: () => void;
   onChange: (field: ContactField, value: string) => void;
 };
@@ -390,6 +436,7 @@ function FieldControl({
   type = "text",
   autoComplete,
   inputMode,
+  maxLength,
   onBlur,
   onChange
 }: FieldControlProps) {
@@ -408,6 +455,7 @@ function FieldControl({
         placeholder={placeholder}
         autoComplete={autoComplete}
         inputMode={inputMode}
+        maxLength={maxLength}
         onBlur={onBlur}
         onChange={(event) => onChange(field, event.target.value)}
       />

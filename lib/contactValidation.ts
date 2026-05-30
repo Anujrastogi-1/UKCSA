@@ -26,11 +26,31 @@ export type ContactValidationResult = {
   isValid: boolean;
 };
 
-const NAME_PATTERN = /^[A-Za-z]+$/;
+// Letters with optional internal space, apostrophe, or hyphen (e.g. "Mary-Anne", "O'Connor").
+const NAME_PATTERN = /^[A-Za-z]+(?:[ '-][A-Za-z]+)*$/;
+// University / company / organization: letters, numbers, spaces and a small set of punctuation.
+const CONTEXT_PATTERN = /^[A-Za-z0-9 &.,'-]+$/;
 const LOCAL_PART_PATTERN = new RegExp("^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+$");
 const DOMAIN_LABEL_PATTERN = /^[a-z0-9-]+$/i;
 const TLD_PATTERN = /^[a-z]{2,24}$/;
 const REPEATED_TEXT_PATTERN = /([A-Za-z0-9])\1{5,}/;
+
+// Patterns that indicate XSS / HTML / script / SQL / encoded payloads. Used to reject
+// free-text fields (message, subject) that cannot rely on a strict character allowlist.
+const UNSAFE_CONTENT_PATTERNS: RegExp[] = [
+  /<[^>]*>/, // any HTML / SVG / iframe tag
+  /<\s*\/?\s*[a-z]/i, // partial or opening tag such as "<script"
+  /javascript:/i, // javascript: URLs
+  /\bon[a-z]+\s*=/i, // inline event handlers (onerror=, onclick=)
+  /data:\s*text\/html/i, // data: URI carrying HTML
+  /&#x?[0-9a-f]+;?/i, // numeric / hex HTML entities (encoded payloads)
+  /\\x[0-9a-f]{2}|\\u[0-9a-f]{4}/i, // hex / unicode escape payloads
+  /\b(?:union\s+select|insert\s+into|drop\s+table|select\s+.*\s+from|delete\s+from|update\s+.+\s+set)\b/i // SQL
+];
+
+function hasUnsafeContent(value: string) {
+  return UNSAFE_CONTENT_PATTERNS.some((pattern) => pattern.test(value));
+}
 
 export const emptyContactFormValues: ContactFormValues = {
   firstName: "",
@@ -40,6 +60,66 @@ export const emptyContactFormValues: ContactFormValues = {
   subject: "",
   message: ""
 };
+
+// ---------------------------------------------------------------------------
+// Real-time input sanitizers — used by the client to filter characters as the
+// user types so disallowed input never reaches the field in the first place.
+// ---------------------------------------------------------------------------
+
+const NAME_MAX = 15;
+const CONTEXT_MAX = 80;
+export const PHONE_MAX_DIGITS = 15;
+
+/** Keep an optional leading "+" and digits only; cap to E.164 max length. */
+export function sanitizePhoneInput(raw: string) {
+  const hasLeadingPlus = raw.trimStart().startsWith("+");
+  const digits = raw.replace(/\D/g, "").slice(0, PHONE_MAX_DIGITS);
+  return (hasLeadingPlus ? "+" : "") + digits;
+}
+
+/** Keep letters plus internal spaces, apostrophes and hyphens. */
+export function sanitizeNameInput(raw: string) {
+  return stripUnsafeControlChars(raw)
+    .replace(/[^A-Za-z '-]/g, "")
+    .replace(/\s{2,}/g, " ")
+    .slice(0, NAME_MAX);
+}
+
+/** Keep letters, numbers, spaces and the small university punctuation set. */
+export function sanitizeContextInput(raw: string) {
+  return stripUnsafeControlChars(raw)
+    .replace(/[^A-Za-z0-9 &.,'-]/g, "")
+    .replace(/\s{2,}/g, " ")
+    .slice(0, CONTEXT_MAX);
+}
+
+/**
+ * Free-text (message) sanitizer: preserves normal prose and line breaks but
+ * strips code/markup characters that have no place in a message and are common
+ * injection vectors (angle brackets, braces, backtick, backslash).
+ */
+export function sanitizeMessageInput(raw: string) {
+  return stripUnsafeControlChars(raw).replace(/[<>{}`\\]/g, "");
+}
+
+/** Truncate free text to at most `max` words (preserving the original spacing). */
+export function limitWords(raw: string, max: number) {
+  const pattern = /\S+/g;
+  let count = 0;
+  let endIndex = raw.length;
+  let match: RegExpExecArray | null;
+  while ((match = pattern.exec(raw)) !== null) {
+    count += 1;
+    if (count === max) {
+      endIndex = match.index + match[0].length;
+      break;
+    }
+  }
+  if (count < max) return raw;
+  // Keep any trailing whitespace the user just typed after the last allowed word.
+  const trailing = raw.slice(endIndex).match(/^\s+/)?.[0] ?? "";
+  return raw.slice(0, endIndex) + trailing;
+}
 
 function readValue(input: Partial<Record<ContactField, unknown>>, field: ContactField) {
   const value = input[field];
@@ -54,7 +134,17 @@ function normalizeText(value: string) {
   return stripUnsafeControlChars(value).trim().replace(/\s+/g, " ");
 }
 
-function countWords(value: string) {
+// Like normalizeText but preserves line breaks (for textarea fields such as the message).
+function normalizeMultiline(value: string) {
+  return stripUnsafeControlChars(value)
+    .replace(/\r\n?/g, "\n")
+    .replace(/[ \t]+/g, " ")
+    .replace(/[ \t]*\n[ \t]*/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
+export function countWords(value: string) {
   const words = value.match(/[A-Za-z0-9]+(?:['-][A-Za-z0-9]+)?/g);
   return words?.length ?? 0;
 }
@@ -72,12 +162,12 @@ function validateName(value: string, label: string) {
     return `${label} must be at least 2 characters.`;
   }
 
-  if (value.length > 25) {
-    return `${label} must be 25 characters or fewer.`;
+  if (value.length > 15) {
+    return `${label} must be 15 characters or fewer.`;
   }
 
   if (!NAME_PATTERN.test(value)) {
-    return `${label} can contain letters only.`;
+    return `${label} can contain letters, spaces, apostrophes and hyphens only.`;
   }
 
   return undefined;
@@ -163,8 +253,8 @@ function validatePhone(value: string) {
   }
 
   const digits = value.startsWith("+") ? value.slice(1) : value;
-  if (digits.length < 10) {
-    return "Phone number must contain at least 10 digits.";
+  if (digits.length < 7) {
+    return "Phone number must contain at least 7 digits.";
   }
 
   if (digits.length > 15) {
@@ -191,6 +281,10 @@ function validateSubject(value: string) {
     return "Subject must be 20 words or fewer.";
   }
 
+  if (hasUnsafeContent(value)) {
+    return "Subject contains characters that are not allowed.";
+  }
+
   if (hasRepeatedSpam(value)) {
     return "Subject contains spam-like repeated characters.";
   }
@@ -198,21 +292,27 @@ function validateSubject(value: string) {
   return undefined;
 }
 
+export const MESSAGE_MAX_WORDS = 200;
+
 function validateMessage(value: string) {
   if (!value) {
     return "Message is required.";
   }
 
-  if (value.length > 1000) {
+  if (value.length < 5) {
+    return "Message must be at least 5 characters.";
+  }
+
+  if (value.length > 2000) {
     return "Message is too long.";
   }
 
-  if (countWords(value) > 50) {
-    return "Message must be 50 words or fewer.";
+  if (countWords(value) > MESSAGE_MAX_WORDS) {
+    return `Message must be ${MESSAGE_MAX_WORDS} words or fewer.`;
   }
 
-  if (countWords(value) < 3 || value.replace(/[^A-Za-z0-9]/g, "").length < 10) {
-    return "Message must include at least 3 meaningful words.";
+  if (hasUnsafeContent(value)) {
+    return "Message contains characters that are not allowed.";
   }
 
   if (hasRepeatedSpam(value)) {
@@ -222,11 +322,18 @@ function validateMessage(value: string) {
   return undefined;
 }
 
-function validateContext(value: string) {
-  if (!value) return "This field is required.";
-  if (value.length < 2) return "Please enter at least 2 characters.";
-  if (value.length > 150) return "Please keep this under 150 characters.";
-  if (hasRepeatedSpam(value)) return "Contains spam-like repeated characters.";
+export function validateContext(value: string) {
+  const trimmed = normalizeText(value);
+  if (!trimmed) return "This field is required.";
+  if (trimmed.length < 3) return "Please enter between 3 and 80 characters.";
+  if (trimmed.length > 80) return "Please enter between 3 and 80 characters.";
+  if (!CONTEXT_PATTERN.test(trimmed)) {
+    return "Only letters, numbers, spaces and & . , ' - are allowed.";
+  }
+  if (hasUnsafeContent(trimmed)) {
+    return "This field contains characters that are not allowed.";
+  }
+  if (hasRepeatedSpam(trimmed)) return "Contains spam-like repeated characters.";
   return undefined;
 }
 
@@ -268,7 +375,7 @@ export function validateContactForm(input: Partial<Record<ContactField, unknown>
     email: normalizeText(readValue(input, "email")).toLowerCase(),
     phone: normalizeText(readValue(input, "phone")),
     subject: normalizeText(readValue(input, "subject")),
-    message: normalizeText(readValue(input, "message"))
+    message: normalizeMultiline(readValue(input, "message"))
   };
 
   const errors: ContactErrors = {};
